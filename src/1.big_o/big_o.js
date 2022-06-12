@@ -28,6 +28,15 @@ function o1(n) {
   return (n * (n + 1)) / 2;
 }
 
+function logN(n = 8) {
+  // i값이 반복할때마다 2배씩 증가한다.
+  // log8 = 3
+  let sum = 0;
+  for (let i = 0; i <= n; i * 2) {
+    const element = array[i];
+  }
+}
+
 function on(n) {
   // 실행시간은 n의 크기만큼 늘어난다.
   // 2n + 1 -> 실제 2n이든 5n이든 전체적인 큰시간차이는 없다.
@@ -56,4 +65,3 @@ function o2n(n) {
   if (n <= 1) return n;
   return o2n(n - 1) + o2n(n - 2);
 }
-console.log(o2n(4));
