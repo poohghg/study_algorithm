@@ -31,6 +31,7 @@
 - 배열끝에 추가하는 것은 상수시간이다.(push)
 - 이미 만들어진 배열의 중간 또는 앞에 값을 추가,제거 하는 것은 O(n) 선형시간 이다.
   - index를 재정의 하기때문이다.
+  - 변경은 x
 - 배열 메서드의 시간복잡도
 - <img src="/Users/khg/Library/Application Support/typora-user-images/image-20220612174042054.png" alt="image-20220612174042054" style="zoom:50%;" />
 - 출처: https://cs.slides.com/colt_steele/built-in-data-structures-25#/11/0/0**N**
