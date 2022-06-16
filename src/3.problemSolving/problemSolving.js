@@ -15,6 +15,7 @@ function same(arr1, arr2) {
 /**
   빈도수 세기패턴
   O(n2) -> O(3n)  
+  오브젝트 키에 엘레민트를 삽입하고 벨류에 엘레멘트의 숫자를 넣음.
 */
 function refactoringSame(arr1, arr2) {
   if (arr1.length !== arr2.length) return false;
@@ -139,4 +140,7 @@ function refactCountUniqueValues(arr) {
   return i + 1;
 }
 
-console.log(refactCountUniqueValues([1, 1, 1, 1, 2, 3, 3, 4, 5, 10]));
+// console.log(refactCountUniqueValues([1, 1, 1, 1, 2, 3, 3, 4, 5, 10]));
+
+// 특정조건의 슬라이딩 조건
+function slidingWindow() {}
