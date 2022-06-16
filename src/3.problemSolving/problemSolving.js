@@ -142,5 +142,37 @@ function refactCountUniqueValues(arr) {
 
 // console.log(refactCountUniqueValues([1, 1, 1, 1, 2, 3, 3, 4, 5, 10]));
 
-// 특정조건의 슬라이딩 조건
-function slidingWindow() {}
+// 특정 슬라이딩 조건을 만족하는 로직?
+// 주로 왼쪽에서 오른쪽으로 순회
+function slidingWindow(arr, num) {
+  let max = Number.MIN_SAFE_INTEGER;
+  for (let i = 0; i < arr.length + 1 - num; i++) {
+    let curNum = arr[i];
+    for (let j = 1; j < num; j++) {
+      curNum += arr[i + j];
+    }
+    if (curNum > max) max = curNum;
+  }
+  return max;
+}
+
+function refactSlidingWindow(arr, num) {
+  if (arr.length < num) return null;
+  let max = 0,
+    temp = 0;
+
+  for (let i = 0; i < num; i++) {
+    max += arr[i];
+  }
+  temp = max;
+  // console.log(temp);
+  for (let i = num; i < arr.length; i++) {
+    temp = temp + arr[i] - arr[i - num];
+    max = Math.max(max, temp);
+  }
+  return max;
+}
+
+console.log(refactSlidingWindow([1, 2, 5, 2, 8, 1, 5], 2));
+
+//  인전합 가장작은 배열의 길이를 구해라
