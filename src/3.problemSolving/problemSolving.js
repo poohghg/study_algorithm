@@ -173,6 +173,76 @@ function refactSlidingWindow(arr, num) {
   return max;
 }
 
-console.log(refactSlidingWindow([1, 2, 5, 2, 8, 1, 5], 2));
+// console.log(refactSlidingWindow([1, 2, 5, 2, 8, 1, 5], 2));
 
-//  인전합 가장작은 배열의 길이를 구해라
+//인전합 숫자들중 주어진 숫자를 넘는 가장작은 배열의 길이를 구해라
+function minSubArrayLen(arr, num) {
+  let index = 0,
+    sum = 0,
+    temp = 0,
+    minlen = Infinity;
+  while (index <= arr.length) {
+    if (sum < num && temp < arr.length) {
+      sum += arr[index];
+      temp++;
+      index++;
+    } else if (sum >= num) {
+      minlen = Math.min(temp, minlen);
+      sum -= arr[index - temp];
+      temp--;
+    } else {
+      break;
+    }
+  }
+  return minlen === Infinity ? 0 : minlen;
+}
+
+function refactMinSubArrayLen(nums, sum) {
+  let total = 0;
+  let start = 0;
+  let end = 0;
+  let minLen = Infinity;
+
+  while (start < nums.length) {
+    // if current window doesn't add up to the given sum then
+    // move the window to right
+    if (total < sum && end < nums.length) {
+      total += nums[end];
+      end++;
+    }
+    // if current window adds up to at least the sum given then
+    // we can shrink the window
+    else if (total >= sum) {
+      minLen = Math.min(minLen, end - start);
+      total -= nums[start];
+      start++;
+    }
+    // current total less than required total but we reach the end, need this or else we'll be in an infinite loop
+    else {
+      break;
+    }
+  }
+  return minLen === Infinity ? 0 : minLen;
+}
+
+// 분할정복 이진탐색
+
+function search(arr, val) {
+  let min = 0,
+    max = arr.length - 1;
+  while (min <= max) {
+    const middle = Math.floor((min + max) / 2);
+    const curVal = arr[middle];
+
+    if (curVal < val) {
+      min = middle + 1;
+    } else if (curVal > val) {
+      max = middle - 1;
+    } else {
+      return middle;
+    }
+  }
+  return -1;
+}
+
+console.log(search([1, 2, 3, 4, 5, 6, 8, 10, 14, 16, 21, 31], 5));
