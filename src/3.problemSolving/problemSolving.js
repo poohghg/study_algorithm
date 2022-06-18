@@ -50,6 +50,26 @@ function refactoringSame(arr1, arr2) {
 }
 // console.log(refactoringSame([1, 2, 3, 2, 5], [9, 1, 4, 4, 25]));
 
+// 문제풀이
+function sameFrequency(num1, num2) {
+  const strNum1 = String(num1);
+  const strNum2 = String(num2);
+  if (strNum1.length !== strNum2.length) return false;
+
+  const firstObj = {};
+  for (let i = 0; i < strNum1.length; i++) {
+    const v = strNum1[i];
+    firstObj[v] = firstObj[v] + 1 || 1;
+  }
+
+  for (const x of strNum2) {
+    if (!firstObj[x]) return false;
+    firstObj[x] -= 1;
+  }
+  return true;
+}
+
+console.log(sameFrequency(3589578, 5279385));
 /**
  아나그램
  같은 엘레민트를 소유하고 있는지 확인한다,
@@ -226,14 +246,12 @@ function refactMinSubArrayLen(nums, sum) {
 }
 
 // 분할정복 이진탐색
-
 function search(arr, val) {
   let min = 0,
     max = arr.length - 1;
   while (min <= max) {
     const middle = Math.floor((min + max) / 2);
     const curVal = arr[middle];
-
     if (curVal < val) {
       min = middle + 1;
     } else if (curVal > val) {
@@ -244,5 +262,4 @@ function search(arr, val) {
   }
   return -1;
 }
-
-console.log(search([1, 2, 3, 4, 5, 6, 8, 10, 14, 16, 21, 31], 5));
+// console.log(search([1, 2, 3, 4, 5, 6, 8, 10, 14, 16, 21, 31], 5));
