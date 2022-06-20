@@ -51,6 +51,8 @@ function reverse(str) {
   if (str.length === 1) return str;
   return reverse(str.slice(1)) + str[0];
 }
+// console.log(reverse('str'));
+
 function isPalindrome(str) {
   if (str.length === 1) return true;
   if (str.length === 2) return str[0] === str[1];
@@ -60,13 +62,11 @@ function isPalindrome(str) {
 }
 // console.log(isPalindrome('tacocat'));
 
-// console.log(reverse('str'));
 function someRecursive(arr, callback) {
   if (arr.length === 0) return false;
   if (callback(arr[0])) return true;
   return someRecursive(arr.slice(1), callback);
 }
-
 // someRecursive([1,2,3,4], isOdd) // true
-const isOdd = (val) => val % 2 !== 0;
+// const isOdd = (val) => val % 2 !== 0;
 // console.log(someRecursive([2, 4, 8, 4], isOdd));
