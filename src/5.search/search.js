@@ -13,7 +13,7 @@ function binarySearch(arr, num) {
   let end = arr.length - 1;
   while (start <= end) {
     // 일관된 방식을 사용만 하면됨.
-    let middle = Math.floor((start + end) / 2, 10);
+    let middle = Math.floor((start + end) / 2);
     if (num > arr[middle]) {
       start = middle + 1;
     } else if (num < arr[middle]) {
@@ -24,4 +24,17 @@ function binarySearch(arr, num) {
   }
   return -1;
 }
-console.log(binarySearch([5, 6, 8], 8));
+// console.log(binarySearch([5, 6, 8], 8));
+
+function naiveSearch(long, short) {
+  let answer = 0;
+  for (let i = 0; i < long.length; i++) {
+    for (let j = 0; j < short.length; j++) {
+      if (short[j] !== long[i + j]) break;
+      if (j === short.length - 1) answer++;
+    }
+  }
+  return answer;
+}
+
+console.log(naiveSearch('tt agtagttqasgtaggtag', 'tag'));
