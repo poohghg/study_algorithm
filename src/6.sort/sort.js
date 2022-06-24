@@ -56,9 +56,9 @@ function selectionSort(arr) {
     let minIndex = i;
     for (let j = i + 1; j < arr.length; j++) {
       if (arr[minIndex] > arr[j]) minIndex = j;
-      if (j === arr.length - 1 && i !== minIndex) {
-        swap(arr, i, minIndex);
-      }
+    }
+    if (i !== minIndex) {
+      swap(arr, i, minIndex);
     }
   }
   return arr;
@@ -79,11 +79,84 @@ function insertionSort(arr) {
     for (let j = i - 1; j >= 0 && arr[j] > curV; j--) {
       arr[j + 1] = arr[j];
       lastJ = j;
-      console.log(arr);
     }
     if (lastJ >= 0) arr[lastJ] = curV;
   }
   return arr;
 }
-console.log(insertionSort([1, 2, 3, 0]));
-1, 2, 0, 3;
+// console.log(insertionSort([1, 0, 1, 2, 3, 0]));
+// 1, 2, 0, 3;
+
+function mergeSort(arr) {
+  function merge(arr1, arr2) {
+    let i = 0,
+      j = 0,
+      newArr = [];
+    while (newArr.length < arr1.length + arr2.length) {
+      if (i < arr1.length && arr1[i] < (arr2[j] || arr2[j - 1])) {
+        newArr.push(arr1[i]);
+        i++;
+      } else if (j < arr2.length && arr2[j] < (arr1[i] || arr1[i - 1])) {
+        newArr.push(arr1[j]);
+        j++;
+      } else {
+        if (i < arr1.length) {
+          newArr.push(arr1[i]);
+          i++;
+        } else if (j < arr2.length) {
+          newArr.push(arr2[j]);
+          j++;
+        }
+      }
+      // console.log('i', i);
+      // console.log('j', j);
+    }
+    console.log(newArr);
+    return newArr;
+  }
+
+  // while (condition) {}
+  // }
+  merge([1, 3, 4], [2, 5, 6, 10, 15, 19]);
+  return null;
+}
+
+// console.log(mergeSort([1, 0, 1, 2, 3, 0]));
+
+function refactMergeSort(arr) {
+  function merge(arr1, arr2) {
+    let i = 0,
+      j = 0,
+      newArr = [];
+
+    while (i < arr1.length && j < arr2.length) {
+      if (arr1[i] < arr2[j]) {
+        newArr.push(arr1[i]);
+        i++;
+      } else {
+        newArr.push(arr2[j]);
+        j++;
+      }
+    }
+    while (i < arr1.length) {
+      newArr.push(arr1[i]);
+      i++;
+    }
+    while (j < arr2.length) {
+      newArr.push(arr2[j]);
+      j++;
+    }
+    return newArr;
+  }
+
+  function splitArr(arr) {
+    console.log(arr);
+    if (arr.length <= 1) return arr;
+    const middle = Math.floor(arr.length) / 2;
+    const left = splitArr(arr.slice(0, middle));
+    const right = splitArr(arr.slice(middle));
+    return merge(left, right);
+  }
+  return splitArr(arr);
+}
+console.log(refactMergeSort([1, 0, 1, 2]));
