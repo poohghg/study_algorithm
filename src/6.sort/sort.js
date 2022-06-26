@@ -92,37 +92,39 @@ function mergeSort(arr) {
     let i = 0,
       j = 0,
       newArr = [];
-    while (newArr.length < arr1.length + arr2.length) {
-      if (i < arr1.length && arr1[i] < (arr2[j] || arr2[j - 1])) {
+
+    while (i < arr1.length && j < arr2.length) {
+      if (arr1[i] < arr2[j]) {
         newArr.push(arr1[i]);
         i++;
-      } else if (j < arr2.length && arr2[j] < (arr1[i] || arr1[i - 1])) {
-        newArr.push(arr1[j]);
-        j++;
       } else {
-        if (i < arr1.length) {
-          newArr.push(arr1[i]);
-          i++;
-        } else if (j < arr2.length) {
-          newArr.push(arr2[j]);
-          j++;
-        }
+        newArr.push(arr2[j]);
+        j++;
       }
-      // console.log('i', i);
-      // console.log('j', j);
     }
-    console.log(newArr);
+    while (i < arr1.length) {
+      newArr.push(arr1[i]);
+      i++;
+    }
+    while (j < arr2.length) {
+      newArr.push(arr2[j]);
+      j++;
+    }
+
     return newArr;
   }
 
-  // while (condition) {}
-  // }
-  merge([1, 3, 4], [2, 5, 6, 10, 15, 19]);
-  return null;
+  function sort(arr) {
+    console.log(arr);
+    if (arr.length <= 1) return arr;
+    const middle = Math.floor(arr.length / 2);
+    const left = sort(arr.slice(0, middle));
+    const right = sort(arr.slice(middle));
+    return merge(left, right);
+  }
+  return sort(arr);
 }
-
 // console.log(mergeSort([1, 0, 1, 2, 3, 0]));
-
 function refactMergeSort(arr) {
   function merge(arr1, arr2) {
     let i = 0,
@@ -150,13 +152,68 @@ function refactMergeSort(arr) {
   }
 
   function splitArr(arr) {
-    console.log(arr);
+    // console.log(arr);
     if (arr.length <= 1) return arr;
-    const middle = Math.floor(arr.length) / 2;
+    const middle = Math.floor(arr.length / 2);
     const left = splitArr(arr.slice(0, middle));
     const right = splitArr(arr.slice(middle));
     return merge(left, right);
   }
   return splitArr(arr);
 }
-console.log(refactMergeSort([1, 0, 1, 2]));
+// console.log(refactMergeSort([1, 0, 1, 2]));
+function quickSort(arr) {
+  function pivot(arr) {
+    if (arr.length <= 1) return arr;
+    const selectedPivot = arr[0];
+    let index = 0;
+    for (let i = 1; i < arr.length; i++) {
+      // 피벗값보다 작은면 왼쪽
+      // 아니면 오른쪽으로 배열을 정렬하자
+      if (arr[i] < selectedPivot) {
+        arr[index] = arr[i];
+        arr[i] = arr[index + 1];
+        index++;
+      }
+    }
+    arr[index] = selectedPivot;
+    return index;
+  }
+  pivot([5, 1, 7, 9, 1]);
+}
+
+function refactQuickSort(arr) {
+  function swap(arr, i, j) {
+    const temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+
+  function pivot(arr, start = 0, end = arr.length - 1) {
+    const selectedPivot = arr[start];
+    // 피봇의 index, 피봇값의 자리
+    let swapIdx = start;
+    for (let i = start + 1; i <= end; i++) {
+      if (selectedPivot > arr[i]) {
+        swapIdx++;
+        swap(arr, swapIdx, i);
+      }
+    }
+    swap(arr, start, swapIdx);
+    return swapIdx;
+  }
+
+  function main(arr, left = 0, right = arr.length - 1) {
+    if (left < right) {
+      let pivotIndex = pivot(arr, left, right);
+      main(arr, left, pivotIndex - 1);
+      main(arr, pivotIndex + 1, right);
+      \
+      console.log(arr);
+    }
+    return arr;
+  }
+  main(arr);
+  return arr;
+}
+console.log(refactQuickSort([3, 4, 1, 6]));
