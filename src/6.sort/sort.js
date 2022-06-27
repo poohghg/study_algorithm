@@ -189,13 +189,14 @@ function refactQuickSort(arr) {
     arr[j] = temp;
   }
 
-  function pivot(arr, start = 0, end = arr.length - 1) {
+  function pivot(arr, start, end) {
     const selectedPivot = arr[start];
     // 피봇의 index, 피봇값의 자리
     let swapIdx = start;
     for (let i = start + 1; i <= end; i++) {
       if (selectedPivot > arr[i]) {
         swapIdx++;
+        if (swapIdx === i) continue;
         swap(arr, swapIdx, i);
       }
     }
@@ -203,17 +204,60 @@ function refactQuickSort(arr) {
     return swapIdx;
   }
 
-  function main(arr, left = 0, right = arr.length - 1) {
+  function main(arr, left, right) {
     if (left < right) {
       let pivotIndex = pivot(arr, left, right);
       main(arr, left, pivotIndex - 1);
       main(arr, pivotIndex + 1, right);
-      \
-      console.log(arr);
     }
     return arr;
   }
-  main(arr);
+  main(arr, 0, arr.length - 1);
   return arr;
 }
-console.log(refactQuickSort([3, 4, 1, 6]));
+
+function qsort(arr) {
+  function swap(arr, i, j) {
+    if (i === j) return;
+    const temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+
+  function pivot(arr, start, end) {
+    let middle = Math.floor((start + end) / 2);
+    const curPivot = arr[middle];
+    let index = middle;
+    for (let i = start; i <= end; i++) {
+      if (i < middle && arr[i] > curPivot) {
+        index--;
+        swap(arr, index, i);
+      } else if (i > middle && arr[i] < curPivot) {
+        index++;
+        swap(arr, index, i);
+      } else if (i === middle) {
+        swap(arr, middle, index);
+        // 현재 인덱스
+        middle = index;
+      }
+    }
+    swap(arr, middle, index);
+    return index;
+  }
+  function main(arr, left, right) {
+    if (left < right) {
+      let pivotIndex = pivot(arr, left, right);
+      console.log('pivotIndex', pivotIndex);
+      main(arr, left, pivotIndex - 1);
+      main(arr, pivotIndex + 1, right);
+    }
+    return arr;
+  }
+  main(arr, 0, arr.length - 1);
+  return arr;
+}
+
+console.clear();
+console.log(qsort([1, 5, 3, 4, 5, 1, 3, 12, 312, 31]));
+
+// 0,1,3,10
