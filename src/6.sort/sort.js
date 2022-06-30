@@ -115,7 +115,6 @@ function mergeSort(arr) {
   }
 
   function sort(arr) {
-    console.log(arr);
     if (arr.length <= 1) return arr;
     const middle = Math.floor(arr.length / 2);
     const left = sort(arr.slice(0, middle));
@@ -163,30 +162,31 @@ function refactMergeSort(arr) {
 }
 // console.log(refactMergeSort([1, 0, 1, 2]));
 function quickSort(arr) {
-  function pivot(arr) {
-    if (arr.length <= 1) return arr;
-    const selectedPivot = arr[0];
-    let index = 0;
-    for (let i = 1; i < arr.length; i++) {
-      // 피벗값보다 작은면 왼쪽
-      // 아니면 오른쪽으로 배열을 정렬하자
-      if (arr[i] < selectedPivot) {
-        arr[index] = arr[i];
-        arr[i] = arr[index + 1];
-        index++;
-      }
+  function refactQuickSort(arr) {
+    function swap(arr, i, j) {
+      if (i === j) return;
+      const temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
     }
-    arr[index] = selectedPivot;
-    return index;
-  }
-  pivot([5, 1, 7, 9, 1]);
-}
 
-function refactQuickSort(arr) {
-  function swap(arr, i, j) {
-    const temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    function pivot(arr) {
+      if (arr.length <= 1) return arr;
+      const selectedPivot = arr[0];
+      let index = 0;
+      for (let i = 1; i < arr.length; i++) {
+        // 피벗값보다 작은면 왼쪽
+        // 아니면 오른쪽으로 배열을 정렬하자
+        if (arr[i] < selectedPivot) {
+          arr[index] = arr[i];
+          arr[i] = arr[index + 1];
+          index++;
+        }
+      }
+      arr[index] = selectedPivot;
+      return index;
+    }
+    pivot([5, 1, 7, 9, 1]);
   }
 
   function pivot(arr, start, end) {
@@ -196,7 +196,6 @@ function refactQuickSort(arr) {
     for (let i = start + 1; i <= end; i++) {
       if (selectedPivot > arr[i]) {
         swapIdx++;
-        if (swapIdx === i) continue;
         swap(arr, swapIdx, i);
       }
     }
@@ -244,6 +243,7 @@ function qsort(arr) {
     swap(arr, middle, index);
     return index;
   }
+
   function main(arr, left, right) {
     if (left < right) {
       let pivotIndex = pivot(arr, left, right);
@@ -257,7 +257,41 @@ function qsort(arr) {
   return arr;
 }
 
-console.clear();
-console.log(qsort([1, 5, 3, 4, 5, 1, 3, 12, 312, 31]));
+// console.clear();
+// console.log(qsort([1, 5, 3, 4, 5, 1, 3, 12, 312, 31]));
 
-// 0,1,3,10
+function radixSort(arr) {
+  // 수와 자릿수를 입력받아
+  // 해당 자릿수의 수를 리턴해주는 함수
+  function getDigit(num, digit) {
+    return Math.floor((Math.abs(num) / 10 ** digit) % 10);
+  }
+  function getMaxCnt(arr) {
+    let max = 0;
+    // 해당수가 몇의 자리수인지 구한다.
+    function digitCount(num) {
+      if (num === 0) return 1;
+      return Math.floor(Math.log10(Math.abs(num)) + 1);
+      // return num.toString().length;
+    }
+    arr.forEach((i) => {
+      const cnt = digitCount(i);
+      if (cnt > max) max = cnt;
+    });
+    return max;
+  }
+  const maxCnt = getMaxCnt(arr);
+  // const cnt
+  for (let i = 0; i < maxCnt; i++) {
+    const buffer = Array.from({ length: 10 }, () => []);
+    for (let j = 0; j < arr.length; j++) {
+      const digit = getDigit(arr[j], i);
+      buffer[digit].push(arr[j]);
+    }
+    arr = [].concat(...buffer);
+  }
+  console.log(arr);
+  return arr;
+}
+
+radixSort([1, 321, 12, 5, 3, 27, 1]);
