@@ -290,8 +290,36 @@ function radixSort(arr) {
     }
     arr = [].concat(...buffer);
   }
+  return arr;
+}
+radixSort([1, 321, 12, 5, 3, 27, 1]);
+
+function rSort(arr) {
+  const getDigit = (nums, digit) =>
+    Math.floor((Math.abs(nums) / 10 ** digit) % 10);
+  const getMaxCnt = (arr) => {
+    let max = 0;
+    const getNumsLen = (num) => num.toString().length;
+    arr.forEach((v) => {
+      const curVLen = getNumsLen(v);
+      if (curVLen > max) max = curVLen;
+    });
+    return max;
+  };
+
+  // 최대 자릿수
+  const maxCnt = getMaxCnt(arr);
+  for (let k = 0; k < maxCnt; k++) {
+    const buffer = Array.from({ length: 10 }, () => []);
+    for (let i = 0; i < arr.length; i++) {
+      const digit = getDigit(arr[i], k);
+      buffer[digit].push(arr[i]);
+    }
+    // flatten
+    arr = [].concat(...buffer);
+  }
   console.log(arr);
   return arr;
 }
 
-radixSort([1, 321, 12, 5, 3, 27, 1]);
+rSort([3, 1, 3, 41, 312]);
