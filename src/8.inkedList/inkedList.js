@@ -43,14 +43,18 @@ class LinkedList {
     if (!this.head) return undefined;
     let curNode = this.head;
     let newTail = curNode;
-    while (newTail.next) {
+    while (curNode.next) {
       newTail = curNode;
-      curNode = newTail.next;
+      curNode = curNode.next;
     }
-    this.tail = preNode;
+    this.tail = newTail;
     this.tail.next = null;
     this.length--;
-    return returnVal;
+    if (this.length === 0) {
+      this.tail = null;
+      this.head = null;
+    }
+    return curNode.val;
   }
 }
 
@@ -58,3 +62,4 @@ let List = new LinkedList();
 
 List.push(1);
 console.log(List.pop());
+console.log(List);
