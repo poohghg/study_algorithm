@@ -123,6 +123,26 @@ class LinkedList {
     preNode.next = preNode.next.next;
     this.length--;
   }
+  //
+  reverse() {
+    // 1 -> 2 -> 3 -> 4
+    // 1 <- 2 <- 3 <- 4
+    // swap head and tail
+    let node = this.head;
+    this.head = this.tail;
+    this.tail = node;
+
+    let prev = null;
+    let next;
+
+    for (let i = 0; i < this.length; i++) {
+      next = node.next;
+      node.next = prev;
+      prev = node;
+      node = next;
+    }
+    console.log(this);
+  }
 }
 
 let List = new LinkedList();
@@ -130,10 +150,12 @@ let List = new LinkedList();
 List.push(1);
 List.push(2);
 List.push(3);
+List.push(4);
 // List.push(4);
 // console.log(List.get(0));
 // console.log(List.get());
 console.log(List.printVal());
+console.log(List.reverse());
 // console.log(List.get(1));
 // console.log(List.pop());
 // console.log(List.pop());
