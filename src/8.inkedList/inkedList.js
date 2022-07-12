@@ -9,6 +9,7 @@ class Node {
   }
 }
 
+// 삽입과 삭제 시간이 중요하고 임의 접근에 대한 필요성이 없을때 주로 사용
 class LinkedList {
   constructor() {
     this.head = null;
