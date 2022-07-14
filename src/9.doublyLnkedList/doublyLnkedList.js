@@ -101,20 +101,64 @@ class DoublyLinkedList {
     let node;
     if (index > this.#length / 2) {
       console.log('up');
-      cnt = this.#length - 1 - index;
       node = this.#tail;
+      cnt = this.#length - 1 - index;
       for (let i = 0; i < cnt; i++) {
         node = node.prev;
       }
     } else {
       console.log('down');
-      cnt = index;
       node = this.#head;
+      cnt = index;
       for (let i = 0; i < cnt; i++) {
         node = node.next;
       }
     }
+    // node.log();
     return node;
+  }
+  // 해당 인덱스의 데이터를 업데이트 한다.
+  set(index, val) {
+    if (index !== 0 && !index) return false;
+    if (val !== 0 && !val) return false;
+    const node = this.get(index);
+    if (node) {
+      node.val = val;
+      return true;
+    }
+    return false;
+  }
+  // 해당인덱스에 새로운 노드를 추가한다.
+  insert(index, val) {
+    //  1 2 3 4 5
+    if (index < 0 || index >= this.length || (index !== 0 && !index))
+      return false;
+    if (val !== 0 && !val) return false;
+    if (this.#length - 1 === index) return !!this.push(val);
+    if (index === 0) return !!this.unshift(val);
+    const prevNode = this.get(index - 1);
+    const newNode = new Node(val);
+    newNode.prev = prevNode;
+    newNode.next = prevNode.next;
+    prevNode.next = newNode;
+    prevNode.next.prev = newNode;
+    this.#length++;
+    return false;
+  }
+  // remove 해당인덱스를 제거한다.
+  remove(index) {
+    //  1 2 3 4 5
+    if (index < 0 || index >= this.length || (index !== 0 && !index))
+      return false;
+    if (index === 0) return !!this.shift();
+    if (index === this.#length - 1) return !!this.pop;
+    const preNode = this.get(index);
+    preNode.prev.next = preNode.next;
+    preNode.next.prev = preNode.prev;
+    preNode.prev = null;
+    preNode.next = null;
+    this.#length--;
+    return true;
   }
 
   toString() {
@@ -147,5 +191,19 @@ list.push(4);
 list.push(5);
 // list.printVal();
 // list.push(3);
-console.log(list.get(0));
+// console.log(list.set(0, 100));
+list.printVal();
+list.insert(3, 100);
+list.printVal();
+list.remove(0);
+list.printVal();
+list.remove(1);
+list.printVal();
+const n = list.get(1);
+console.log(n.prev);
+console.log(n.next);
+// console.log(p);
+// console.log(p.prev);
+// console.log(p.next);
+// console.log(list.get(5));
 // list.toString();
