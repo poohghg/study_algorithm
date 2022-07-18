@@ -114,7 +114,6 @@ class DoublyLinkedList {
         node = node.next;
       }
     }
-    // node.log();
     return node;
   }
   // 해당 인덱스의 데이터를 업데이트 한다.
