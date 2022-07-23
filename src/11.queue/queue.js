@@ -2,7 +2,6 @@
 const queueInArray = () => {
   // 큐는 선입선출이다.
   const q = [];
-  //  js의 내장메서드인 push와 pop만 사용한다면 스택처럼 배열을 관리 할 수 있다.
   q.unshift(1);
   q.unshift(2);
   q.unshift(3);

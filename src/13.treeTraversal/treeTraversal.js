@@ -9,6 +9,7 @@ class Node {
 // 바이너러 서치 트리는 검색과 삽입시 로그시간이다.
 class BST {
   root = null;
+
   insert(val) {
     const newNode = new Node(val);
     if (!this.root) {
@@ -34,17 +35,6 @@ class BST {
         return this;
       }
     }
-    // let parent = this.root;
-    // let curNode = this.root;
-    // while (curNode) {
-    //   parent = curNode;
-    //   if (val > curNode.val) curNode = curNode.rigth;
-    //   else curNode = curNode.left;
-    // }
-
-    // if (val > parent.val) parent.rigth = newNode;
-    // else parent.left = newNode;
-    // return this;
   }
 
   find(val) {
@@ -52,23 +42,34 @@ class BST {
     let current = this.root;
     while (current) {
       if (current.val === val) return true;
-      if (val < current.val) current = current.left;
+      else if (val < current.val) current = current.left;
       else current = current.rigth;
     }
     return false;
   }
+  // 넓이 우선탐색
+  BFS() {
+    // 큐를 사용해 방문해야할곳의 목록을 저정하여 사용한다.
+    if (!this.root) return [];
+    let data = [],
+      queue = [],
+      node;
+    queue.push(this.root);
+    while (queue.length) {
+      node = queue.shift();
+      data.push(node.val);
+      if (node.left) queue.push(node.left);
+      if (node.rigth) queue.push(node.rigth);
+    }
+    return data;
+  }
 }
 
 const tree = new BST();
-tree.insert(5);
-// tree.insert(8);
-// tree.insert(10);
-// tree.insert(12);
-// tree.insert(15);
-// tree.insert(11);
-// tree.insert(1);
-// tree.insert(3);
-// tree.insert(4);
-
-// console.log(tree.root.rigth.rigth.rigth);
-console.log(tree.find(55));
+tree.insert(10);
+tree.insert(6);
+tree.insert(15);
+tree.insert(3);
+tree.insert(8);
+tree.insert(20);
+console.log(tree.BFS());
