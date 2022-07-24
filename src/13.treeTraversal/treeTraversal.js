@@ -63,13 +63,62 @@ class BST {
     }
     return data;
   }
+  // 깊이우선탐색(전위 우선탐색)
+  // 노드부터 방문하여 왼쪽에서 오른쪽으로 순회한다.
+  // 전위 순회는 뿌리->왼쪽 자식->오른쪽 자식 순
+  DFSpreOrder() {
+    if (!this.root) return [];
+    const data = [];
+    const travers = (node) => {
+      data.push(node.val);
+      if (node.left) travers(node.left);
+      if (node.rigth) travers(node.rigth);
+      return undefined;
+    };
+    travers(this.root);
+    return data;
+  }
+  // 후위 우선탐색
+  // 후위 순회는 왼쪽자식->오른쪽 자식-> 뿌리
+  DFSpostORder() {
+    if (!this.root) return [];
+    const data = [];
+    const travers = (node) => {
+      if (node.left) travers(node.left);
+      if (node.rigth) travers(node.rigth);
+      return data.push(node.val);
+    };
+    travers(this.root);
+    return data;
+  }
+  // 중위 순위
+  // 중위 순회는 왼쪽자식-> 뿌리-> 오른쪽 자식
+  DFSinOrder() {
+    if (!this.root) return [];
+    const data = [];
+    const travers = (node) => {
+      if (node.left) travers(node.left);
+      data.push(node.val);
+      if (node.rigth) travers(node.rigth);
+      return undefined;
+    };
+    travers(this.root);
+    return data;
+  }
 }
 
 const tree = new BST();
 tree.insert(10);
-tree.insert(6);
+// tree.insert(6);
 tree.insert(15);
-tree.insert(3);
-tree.insert(8);
-tree.insert(20);
-console.log(tree.BFS());
+// tree.insert(3);
+// tree.insert(4);
+// tree.insert(8);
+tree.insert(12);
+tree.insert(13);
+tree.insert(17);
+//     10
+//   6      15
+// 3  8   12   17
+//
+console.log(tree.DFSpreOrder());
