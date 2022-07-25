@@ -50,14 +50,26 @@ class BST {
   // 넓이 우선탐색
   BFS() {
     // 큐를 사용해 방문해야할곳의 목록을 저정하여 사용한다.
+    // if (!this.root) return [];
+    // let data = [],
+    //   queue = [],
+    //   node;
+    // queue.push(this.root);
+    // while (queue.length) {
+    //   node = queue.shift();
+    //   data.push(node.val);
+    //   if (node.left) queue.push(node.left);
+    //   if (node.rigth) queue.push(node.rigth);
+    // }
+
     if (!this.root) return [];
-    let data = [],
-      queue = [],
-      node;
-    queue.push(this.root);
+    const data = [],
+      queue = [];
+    let node = this.root;
+    queue.push(node);
     while (queue.length) {
       node = queue.shift();
-      data.push(node.val);
+      data.push(node);
       if (node.left) queue.push(node.left);
       if (node.rigth) queue.push(node.rigth);
     }
