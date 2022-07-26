@@ -1,6 +1,6 @@
 class MaxBinaryHeap {
   #value = [];
-
+  name = '12345';
   get value() {
     return this.#value;
   }
@@ -29,6 +29,7 @@ class MaxBinaryHeap {
       } else return;
     }
   }
+
   /**
    * 최대값추출또는 제거
    * 배열의 마지막값을 루트로 올린후 버블다운을 한다.
@@ -38,23 +39,25 @@ class MaxBinaryHeap {
     const v = this.#value[0];
     const lastNode = this.#value[this.#value.length - 1];
     this.#value[0] = lastNode;
-
-    let root = this.#value[0];
-    let swapNode;
+    // let root = this.#value[0];
+    let index = 0;
     let swapIndex;
-
-    function getSwapNode() {
+    const calSwapInfo = (idx) => {
       const nodeLeftIndex = Math.floor(index * 2 + 1);
       const nodeRightIndex = Math.floor(index * 2 + 2);
-      if (nodeLeft > nodeRight) swapNode = nodeLeft;
-      else swapNode = nodeRight;
-    }
+      if (this.#value[nodeLeftIndex] > this.#value[nodeRightIndex])
+        swapIndex = nodeLeftIndex;
+      else swapIndex = nodeRightIndex;
+    };
     while (true) {
-      getSwapNode();
-      if (swapNode > root) {
-      }
+      calSwapInfo();
+      if (swapIndex > this.#value.length - 1) break;
+      if (this.#value[swapIndex] < this.#value[index]) break;
+      const temp = this.#value[index];
+      this.#value[index] = this.#value[swapIndex];
+      this.#value[swapIndex] = temp;
+      index = swapIndex;
     }
-
     return v;
   }
 }
@@ -65,4 +68,7 @@ maxBinaryHeap.insert(10);
 maxBinaryHeap.insert(15);
 maxBinaryHeap.insert(100);
 maxBinaryHeap.insert(105);
+maxBinaryHeap.insert(20);
+console.log(maxBinaryHeap.value);
+maxBinaryHeap.remove();
 console.log(maxBinaryHeap.value);
