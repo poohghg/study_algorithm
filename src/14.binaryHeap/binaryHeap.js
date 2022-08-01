@@ -34,10 +34,10 @@ class MaxBinaryHeap {
    */
   remove() {
     if (!this.#value.length) return false;
-    const max = this.#value[0];
     const lastNode = this.value.pop();
+    if (!this.#value.length) return lastNode;
+    const max = this.#value[0];
     this.#value[0] = lastNode;
-
     let index = 0;
     let swapIndex;
 
@@ -64,14 +64,14 @@ class MaxBinaryHeap {
 const maxBinaryHeap = new MaxBinaryHeap();
 maxBinaryHeap.insert(5);
 maxBinaryHeap.insert(10);
-maxBinaryHeap.insert(15);
-maxBinaryHeap.insert(100);
-maxBinaryHeap.insert(105);
-maxBinaryHeap.insert(20);
-maxBinaryHeap.insert(1);
-maxBinaryHeap.insert(1000);
+// maxBinaryHeap.insert(15);
+// maxBinaryHeap.insert(100);
+// maxBinaryHeap.insert(105);
+// maxBinaryHeap.insert(20);
+// maxBinaryHeap.insert(1);
+// maxBinaryHeap.insert(1000);
 console.log(maxBinaryHeap.value);
 maxBinaryHeap.remove();
 maxBinaryHeap.remove();
-maxBinaryHeap.remove();
+// maxBinaryHeap.remove();
 console.log(maxBinaryHeap.value);
