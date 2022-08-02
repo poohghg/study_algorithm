@@ -24,7 +24,7 @@ class PriorityQueue {
 
   enqueue(val, priority) {
     if (!val && val !== 0) throw Error('val is not undefined');
-    if (isNaN(priority)) throw Error('priority is NAN');
+    if (isNaN(priority)) throw Error('priority is NaN');
 
     const newNode = new Node(val, priority);
     this.#value.push(newNode);
