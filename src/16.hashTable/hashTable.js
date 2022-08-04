@@ -17,13 +17,43 @@ class HashTable {
     return total;
   }
   set(key, value) {
-    let index = this._hash(key);
+    const index = this._hash(key);
     if (!this.keyMap[index]) this.keyMap[index] = [];
+    const indexArr = this.keyMap[index];
+    for (let i = 0; i < indexArr.length; i++) {
+      const element = indexArr[i];
+      if (element[0] === key) {
+        element[1] = value;
+        return;
+      }
+    }
     this.keyMap[index].push([key, value]);
+  }
+  get(key) {
+    const index = this._hash(key);
+    const indexArr = this.keyMap[index];
+    if (!indexArr) return undefined;
+    return indexArr.find((v) => v[0] === key);
+  }
+  keys() {
+    return [].concat(...this.keyMap).reduce((prev, curr) => {
+      if (curr) prev.push(curr[0]);
+      return prev;
+    }, []);
+  }
+  values() {
+    return [].concat(...this.keyMap).reduce((prev, curr) => {
+      if (curr) prev.add(curr[1]);
+      return prev;
+    }, new Set());
   }
 }
 
 const hashTable = new HashTable(13);
 hashTable.set('a', 1);
-hashTable.set('a', 12);
-console.log(hashTable);
+hashTable.set('a', 13);
+hashTable.set('aaaa', 12);
+hashTable.set('aaaa', 12);
+console.log(hashTable.get('a'));
+console.log(hashTable.values());
+console.log(hashTable.keys());
