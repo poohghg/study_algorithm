@@ -25,18 +25,47 @@ class Grape {
     });
     delete this.list[vertex];
   }
+  //하나의 간선노드를 먼저 탐색한다.
+  DFS(start) {
+    if (!this.list[start]) return;
+    const result = [];
+    // 넓이 우선탐색에서는 방문했던 버택스를 기록해야한다.
+    const visited = {};
+    const recursive = (vertex) => {
+      console.log('vertex', vertex);
+      if (!vertex) return;
+      visited[vertex] = true;
+      result.push(vertex);
+      this.list[vertex].forEach((neighbor) => {
+        if (!visited[neighbor]) return recursive(neighbor);
+      });
+      return undefined;
+    };
+    recursive(start);
+    return result;
+  }
 }
 
-const grape = new Grape();
-grape.addVertex('a');
-grape.addVertex('b');
-grape.addVertex('c');
-grape.addVertex('d');
-grape.addEdge('a', 'b');
-grape.addEdge('a', 'c');
-// grape.addEdge('a', 'd');
-grape.addEdge('b', 'd');
-grape.addEdge('c', 'd');
-console.log(grape);
-grape.removeVertex('d');
-console.log(grape);
+const g = new Grape();
+g.addVertex('A');
+g.addVertex('B');
+g.addVertex('C');
+g.addVertex('D');
+g.addVertex('E');
+g.addVertex('F');
+g.addEdge('A', 'B');
+g.addEdge('A', 'C');
+g.addEdge('B', 'D');
+g.addEdge('C', 'E');
+g.addEdge('D', 'E');
+g.addEdge('D', 'F');
+g.addEdge('E', 'F');
+g.DFS('A');
+
+//          A
+//        /   \
+//       B     C
+//       |     |
+//       D --- E
+//        \   /
+//          F
