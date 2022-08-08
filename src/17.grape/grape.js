@@ -10,7 +10,7 @@ class Grape {
     this.list[vertex1].push(vertex2);
     this.list[vertex2].push(vertex1);
   }
-  // 두 버텍스이 간선을 제거한다.
+  // 두 버텍스의 간선을 제거한다.
   removeEdge(vertex1, vertex2) {
     if (!this.list[vertex1] || !this.list[vertex2] || vertex1 === vertex2)
       return;
@@ -32,7 +32,6 @@ class Grape {
     // 넓이 우선탐색에서는 방문했던 버택스를 기록해야한다.
     const visited = {};
     const recursive = (vertex) => {
-      console.log('vertex', vertex);
       if (!vertex) return;
       visited[vertex] = true;
       result.push(vertex);
@@ -43,6 +42,25 @@ class Grape {
     };
     recursive(start);
     return result;
+  }
+  // 깊이우선탐색 반복형
+  DFSIterative(start) {
+    if (!this.list[start]) return;
+    // const data = [];
+    const stack = [];
+    const visited = {};
+    let vertex;
+    stack.push(start);
+    while (stack.length) {
+      vertex = stack.pop();
+      if (!visited[vertex]) {
+        visited[vertex] = true;
+        this.list[vertex].forEach((neighbor) => {
+          stack.push(neighbor);
+        });
+      }
+    }
+    return visited;
   }
 }
 
@@ -60,8 +78,9 @@ g.addEdge('C', 'E');
 g.addEdge('D', 'E');
 g.addEdge('D', 'F');
 g.addEdge('E', 'F');
-g.DFS('A');
-
+console.log(g.DFS('A'));
+console.log(g.DFSIterative('A'));
+const a = { a: 'a' };
 //          A
 //        /   \
 //       B     C

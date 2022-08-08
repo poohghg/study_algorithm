@@ -36,6 +36,7 @@ class MaxBinaryHeap {
     if (!this.#value.length) return false;
     const lastNode = this.value.pop();
     if (!this.#value.length) return lastNode;
+
     const max = this.#value[0];
     this.#value[0] = lastNode;
     let index = 0;
