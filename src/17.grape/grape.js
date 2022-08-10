@@ -12,8 +12,7 @@ class Grape {
   }
   // 두 버텍스의 간선을 제거한다.
   removeEdge(vertex1, vertex2) {
-    if (!this.list[vertex1] || !this.list[vertex2] || vertex1 === vertex2)
-      return;
+    if (!this.list[vertex1] || !this.list[vertex2]) return;
     this.list[vertex1] = this.list[vertex1].filter((v) => v !== vertex2);
     this.list[vertex2] = this.list[vertex2].filter((v) => v !== vertex1);
   }
