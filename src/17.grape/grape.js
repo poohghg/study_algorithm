@@ -62,6 +62,23 @@ class Grape {
     }
     return visited;
   }
+  // 넓이 우선탐색 아다
+  BFS(start) {
+    if (!this.list[start]) return;
+    const visited = {};
+    const queue = [start];
+    let vertex;
+    while (queue.length) {
+      vertex = queue.shift();
+      if (!visited[vertex]) {
+        visited[vertex] = true;
+        this.list[vertex].forEach((neighbor) => {
+          queue.push(neighbor);
+        });
+      }
+    }
+    return Object.keys(visited);
+  }
 }
 
 const g = new Grape();
@@ -78,9 +95,9 @@ g.addEdge('C', 'E');
 g.addEdge('D', 'E');
 g.addEdge('D', 'F');
 g.addEdge('E', 'F');
-console.log(g.DFS('A'));
-console.log(g.DFSIterative('A'));
-const a = { a: 'a' };
+// console.log(g.DFS('A'));
+// console.log(g.DFSIterative('A'));
+console.log(g.BFS('A'));
 //          A
 //        /   \
 //       B     C
