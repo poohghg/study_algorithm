@@ -34,6 +34,7 @@ class PriorityQueue {
     while (index) {
       parentIdx = Math.floor((index - 1) / 2);
       parentNode = this.#value[parentIdx];
+      if (parentIdx < 0) break;
       if (priority > parentNode.priority) break;
       this.swap(index, parentIdx);
       index = parentIdx;
