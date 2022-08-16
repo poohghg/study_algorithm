@@ -19,7 +19,6 @@ class PriorityQueue {
     return this.#value.shift();
   }
 }
-
 class WeightedGraph {
   #list = {};
 
@@ -40,47 +39,54 @@ class WeightedGraph {
   }
 
   Dijkstra(start, end) {
-    if (!this.#list[start] || !this.#list[end]) return false;
-    // 우선순위큐 방문해야할 버텍스중 가장가까운값.
+    if (!this.#list[start] || !this.#list[end]) return undefined;
+    // 우선순위큐 방문해야할 버텍스중 가장가까운 다음 노드.
     const nodes = new PriorityQueue();
+    // 시작점부터의 각노드의 거리를 표기한다.
     const distances = {};
+    // 최적의 경로를 표기한다.
     const previous = {};
+
     // 초기값 세팅
-    for (let vertex in this.#list) {
-      if (vertex === start) {
+    for (const vertex in this.#list) {
+      if (start === vertex) {
+        // 시작점과 같은장소
         distances[vertex] = 0;
-        nodes.enqueue(vertex, 0);
+        nodes.enqueue(start, 0);
       } else {
         distances[vertex] = Infinity;
         nodes.enqueue(vertex, Infinity);
       }
       previous[vertex] = null;
     }
-    let smallest;
+    let shortest;
     while (nodes.value.length) {
-      smallest = nodes.dequeue().val;
-      if (smallest === end) {
+      shortest = nodes.dequeue().val;
+      if (shortest === end) {
         let path = [];
-        while (previous[smallest]) {
-          path.unshift(smallest);
-          smallest = previous[smallest];
+        // console.log('previous', previous);
+        while (shortest) {
+          path.unshift(shortest);
+          shortest = previous[shortest];
         }
-        return [smallest, ...path];
+        return path;
       }
-      if (smallest || distances[smallest] === Infinity) {
-        this.#list[smallest].forEach((neighbor) => {
-          let cadidate = distances[smallest] + neighbor.weigth;
-          // 최단거리 객체를 업데이트
-          if (cadidate < distances[neighbor.node]) {
-            distances[neighbor.node] = cadidate;
-            // 최단거리를 업데이트 했으면 연결된 최단경로도 업데이트 해야한다.
-            previous[neighbor.node] = smallest;
-            nodes.enqueue(neighbor.node, cadidate);
-          }
-        });
-      }
+      // const nodeDist = distances[shortest];
+      this.#list[shortest].forEach((neighbor) => {
+        const { node, weigth } = neighbor;
+        const curDist = distances[shortest] + weigth;
+        // 기존 거리보다 해당간선으로 가는 거리가 짧다면 업데이트.
+        if (distances[node] > curDist) {
+          // 거리 객체 업데이트
+          distances[node] = curDist;
+          // 경로업데이트
+          previous[node] = shortest;
+          // 다음에 가야할 가장짧은거리 업데이트
+          nodes.enqueue(node, curDist);
+        }
+      });
     }
-    console.log(distances);
+    return undefined;
   }
 }
 
@@ -91,6 +97,7 @@ graph.addVertex('C');
 graph.addVertex('D');
 graph.addVertex('E');
 graph.addVertex('F');
+graph.addVertex('G');
 
 graph.addEdge('A', 'B', 4);
 graph.addEdge('A', 'C', 2);
@@ -103,4 +110,4 @@ graph.addEdge('E', 'F', 1);
 
 // console.log(graph.list);
 
-console.log(graph.Dijkstra('A', 'E'));
+console.log(graph.Dijkstra('A', 'G'));

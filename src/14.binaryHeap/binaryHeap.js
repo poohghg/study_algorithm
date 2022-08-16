@@ -16,7 +16,7 @@ class MaxBinaryHeap {
    * 자식의 값은 부모의 값보다 클수 없다.
    */
   insert(v) {
-    if (!v && v !== 0) return;
+    if (v == null) return;
     this.#value.push(v);
     let index = this.#value.length - 1;
     while (index) {
