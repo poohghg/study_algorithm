@@ -64,27 +64,30 @@ class WeightedGraph {
       shortest = nodes.dequeue().val;
       if (shortest === end) {
         let path = [];
-        // console.log('previous', previous);
-        while (shortest) {
+        while (shortest && distances[shortest] !== Infinity) {
           path.unshift(shortest);
           shortest = previous[shortest];
         }
-        return path;
+        return { path, distance: distances[end] };
       }
-      // const nodeDist = distances[shortest];
-      this.#list[shortest].forEach((neighbor) => {
-        const { node, weigth } = neighbor;
-        const curDist = distances[shortest] + weigth;
-        // 기존 거리보다 해당간선으로 가는 거리가 짧다면 업데이트.
-        if (distances[node] > curDist) {
-          // 거리 객체 업데이트
-          distances[node] = curDist;
-          // 경로업데이트
-          previous[node] = shortest;
-          // 다음에 가야할 가장짧은거리 업데이트
-          nodes.enqueue(node, curDist);
-        }
-      });
+      // console.log(shortest);
+      if (shortest && distances[shortest] !== Infinity) {
+        // console.log('   ', shortest);
+        // const nodeDist = distances[shortest];
+        this.#list[shortest].forEach((neighbor) => {
+          const { node, weigth } = neighbor;
+          const curDist = distances[shortest] + weigth;
+          // 기존 거리보다 해당간선으로 가는 거리가 짧다면 업데이트.
+          if (distances[node] > curDist) {
+            // 거리 객체 업데이트
+            distances[node] = curDist;
+            // 경로업데이트
+            previous[node] = shortest;
+            // 다음에 가야할 가장짧은거리 업데이트
+            nodes.enqueue(node, curDist);
+          }
+        });
+      }
     }
     return undefined;
   }
@@ -110,4 +113,4 @@ graph.addEdge('E', 'F', 1);
 
 // console.log(graph.list);
 
-console.log(graph.Dijkstra('A', 'G'));
+console.log(graph.Dijkstra('A', 'E'));
