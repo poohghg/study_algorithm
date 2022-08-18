@@ -43,7 +43,7 @@ function recursiveRange(num) {
 
 // 수학에서, 피보나치 수(영어: Fibonacci numbers)는 첫째 및 둘째 항이 1이며 그 뒤의 모든 항은 바로 앞 두 항의 합인 수열이다.
 function fib(num) {
-  if (num <= 2) return 1;
+  if (num < 2) return 1;
   return fib(num - 1) + fib(num - 2);
 }
 // console.log(fib(4));
