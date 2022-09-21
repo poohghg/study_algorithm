@@ -132,5 +132,5 @@ tree.insert(17);
 //     10
 //   6      15
 // 3  8   12   17
-//
+//   7 9
 console.log(tree.DFSpreOrder());

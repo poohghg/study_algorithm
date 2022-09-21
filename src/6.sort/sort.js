@@ -322,5 +322,4 @@ function rSort(arr) {
   console.log(arr);
   return arr;
 }
-
 rSort([3, 1, 3, 41, 312]);

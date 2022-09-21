@@ -1,6 +1,5 @@
 class MaxBinaryHeap {
   #value = [];
-  name = '12345';
   get value() {
     return this.#value;
   }

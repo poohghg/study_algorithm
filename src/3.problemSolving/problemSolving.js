@@ -24,8 +24,6 @@ function refactoringSame(arr1, arr2) {
   const arr2Obj = {};
   // 각 엘레멘트가 몇개인지 오브젝트에 기록한다
   for (const x of arr1) {
-    // 논리형 단축평가
-    // falsy라면 0
     arr1Obj[x] = (arr1Obj[x] || 0) + 1;
   }
 
@@ -56,15 +54,15 @@ function sameFrequency(num1, num2) {
   const strNum2 = String(num2);
   if (strNum1.length !== strNum2.length) return false;
 
-  const firstObj = {};
+  const firstObj1 = {};
   for (let i = 0; i < strNum1.length; i++) {
     const v = strNum1[i];
-    firstObj[v] = firstObj[v] + 1 || 1;
+    firstObj1[v] = firstObj1[v] + 1 || 1;
   }
 
   for (const x of strNum2) {
-    if (!firstObj[x]) return false;
-    firstObj[x] -= 1;
+    if (!firstObj1[x]) return false;
+    firstObj1[x] -= 1;
   }
   return true;
 }
