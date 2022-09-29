@@ -28,7 +28,7 @@ class Grape {
   DFS(start) {
     if (!this.list[start]) return;
     const result = [];
-    // 넓이 우선탐색에서는 방문했던 버택스를 기록해야한다.
+    // 방문했던 버택스를 기록해야한다.
     const visited = {};
     const recursive = (vertex) => {
       if (!vertex) return;
@@ -37,7 +37,7 @@ class Grape {
       this.list[vertex].forEach((neighbor) => {
         if (!visited[neighbor]) return recursive(neighbor);
       });
-      return undefined;
+      return;
     };
     recursive(start);
     return result;
