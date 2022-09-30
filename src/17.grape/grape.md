@@ -24,3 +24,9 @@
 - 모든 엣지를 더빠르게 순회할수 있다.
 - 허지만 특정 엣지를 확인하는데는 느리다.
 - <img src="/Users/khg/Library/Application Support/typora-user-images/image-20220806174533202.png" alt="image-20220806174533202" style="zoom:25%;" />
+
+
+
+> 출처
+>
+> https://sarah950716.tistory.com/12

@@ -37,7 +37,6 @@ class Grape {
       this.list[vertex].forEach((neighbor) => {
         if (!visited[neighbor]) return recursive(neighbor);
       });
-      return;
     };
     recursive(start);
     return result;
