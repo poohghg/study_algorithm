@@ -1,5 +1,6 @@
 class PriorityQueue {
   #value = [];
+
   get value() {
     return this.#value;
   }
@@ -30,7 +31,7 @@ class WeightedGraph {
     if (!vertex && vertex !== 0) return;
     if (!this.#list[vertex]) this.#list[vertex] = [];
   }
-  // 안녕하세요
+
   // weigth눈 두 버텍스사이의 거리이다.
   addEdge(vertex1, vertex2, weigth) {
     if (!this.#list[vertex1] || !this.#list[vertex2] || isNaN(weigth)) return;
@@ -59,6 +60,7 @@ class WeightedGraph {
       }
       previous[vertex] = null;
     }
+    console.log(distances);
     let shortest;
     while (nodes.value.length) {
       shortest = nodes.dequeue().val;
@@ -70,9 +72,7 @@ class WeightedGraph {
         }
         return { path, distance: distances[end] };
       }
-      // console.log(shortest);
       if (shortest && distances[shortest] !== Infinity) {
-        // console.log('   ', shortest);
         // const nodeDist = distances[shortest];
         this.#list[shortest].forEach((neighbor) => {
           const { node, weigth } = neighbor;
