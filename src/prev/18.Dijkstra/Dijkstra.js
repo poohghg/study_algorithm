@@ -20,6 +20,7 @@ class PriorityQueue {
     return this.#value.shift();
   }
 }
+
 class WeightedGraph {
   #list = {};
 
@@ -60,7 +61,6 @@ class WeightedGraph {
       }
       previous[vertex] = null;
     }
-    console.log(distances);
     let shortest;
     while (nodes.value.length) {
       shortest = nodes.dequeue().val;
@@ -72,6 +72,7 @@ class WeightedGraph {
         }
         return { path, distance: distances[end] };
       }
+
       if (shortest && distances[shortest] !== Infinity) {
         // const nodeDist = distances[shortest];
         this.#list[shortest].forEach((neighbor) => {
