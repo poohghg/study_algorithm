@@ -156,4 +156,143 @@ const solution8 = (arr: number[]) => {
   return indexArrOfFakeDwarf ? filterFakeDwarf(indexArrOfFakeDwarf) : [];
 };
 
-console.log(solution8([20, 7, 23, 19, 10, 15, 25, 8, 13]));
+// console.log(solution8([20, 7, 23, 19, 10, 15, 25, 8, 13]));
+
+/**
+ * 대문자로 이루어진 영어단어가 입력되면 단어에 포함된 ‘A'를 모두 ’#‘으로 바꾸어 출력하는 프로그램을 작성하세요.
+ */
+const solution9 = (input: string) => {
+  let result: string = '';
+  for (const str of input) {
+    if (str === 'A') result += '#';
+    else result += str;
+  }
+
+  return result;
+};
+
+// console.log(solution9('BANANA'));
+
+/**
+ * 한 개의 문자열을 입력받고, 특정 문자를 입력받아 해당 특정문자가 입력받은 문자열에 몇 개 존재하는지 알아내는 프로그램을 작성하세요.
+ * 문자열의 길이는 100을 넘지 않습니다.
+ */
+
+const solution10 = (str: string, keyword: string) => {
+  // 구분자를 통해서도 가능
+  return str.split(keyword).length - 1;
+
+  // let result = 0;
+
+  // for (const strElement of str) {
+  //   if (strElement === keyword) result++;
+  // }
+  //
+  // return result;
+};
+
+// console.log(solution10('COMPUTERPROGRAMMING', 'R'));
+
+/**
+ * 한 개의 문자열을 입력받아 해당 문자열에 알파벳 대문자가 몇 개 있는지 알아내는 프로그램 을 작성하세요
+ */
+
+const solution11 = (str: string) => {
+  let result = 0;
+
+  for (const strElement of str) {
+    if (strElement === strElement.toUpperCase()) result++;
+  }
+
+  return result;
+};
+
+// console.log(solution11('KoreaTimeGood'));
+
+/**
+ * 대문자와 소문자가 같이 존재하는 문자열을 입력받아 대문자는 소문자로 소문자는 대문자로 변환하여 출력하는 프로그램을 작성하세요.
+ */
+const solution12 = (str: string) => {
+  const isUpperCase = (s: string) => {
+    return s === s.toUpperCase();
+  };
+
+  let result: string = '';
+
+  for (const strElement of str) {
+    if (isUpperCase(strElement)) result += strElement.toLowerCase();
+    else result += strElement.toUpperCase();
+  }
+
+  return result;
+};
+
+// console.log(solution12('StuDY'));
+
+/**
+ * N개의 문자열이 입력되면 그 중 가장 긴 문자열을 출력하는 프로그램을 작성하세요.
+ */
+const solution13 = (arr: string[]) => {
+  return arr.reduce(
+    (result, currStr) => (currStr.length > result.length ? currStr : result),
+    '',
+  );
+};
+
+// console.log(solution13(['teacher', 'time', 'student', 'beautiful', 'good']));
+
+/**
+ * 소문자로 된 단어(문자열)가 입력되면 그 단어의 가운데 문자를 출력하는 프로그램을 작성하세
+ * 요. 단 단어의 길이가 짝수일 경우 가운데 2개의 문자를 출력합니다.
+ */
+
+const solution14 = (str: string): string => {
+  const len = str.length;
+  const isEvenNumber = len % 2 === 0;
+  const midIndex = Math.floor(len / 2);
+  return isEvenNumber
+    ? str.substring(midIndex - 1, midIndex + 1)
+    : str[midIndex];
+};
+
+// console.log(solution14('goaaod'));
+
+/**
+ * 소문자로 된 한개의 문자열이 입력되면 중복된 문자를 제거하고 출력하는 프로그램을 작성하 세요.
+ * 제거된 문자열의 각 문자는 원래 문자열의 순서를 유지합니다.
+ */
+
+const solution15 = (str: string) => {
+  let result = '';
+  const strObject: Record<string, boolean> = {};
+
+  for (const strElement of str) {
+    // index of를 사용해도 가능 index of 를 통해 현재 인덱스와 index of의 반환값이 다르면 중복 문자가 존재하는것
+    if (strObject[strElement]) continue;
+
+    strObject[strElement] = true;
+    result += strElement;
+  }
+
+  return result;
+};
+
+// console.log(solution15('ksekkset'));
+
+/**
+ * N개의 문자열이 입력되면 중복된 문자열은 제거하고 출력하는 프로그램을 작성하세요. 출력하는 문자열은 원래의 입력순서를 유지합니다.
+ */
+const solution16 = (arr: string[]) => {
+  return arr.filter((str, index) => arr.indexOf(str) === index).join(' ');
+
+  // const strObject: Record<string, boolean> = {};
+  // return arr
+  //   .reduce((result, str) => {
+  //     if (strObject[str]) return result;
+  //     strObject[str] = true;
+  //     return `${result} ${str}`;
+  //   }, '')
+  //   .trimLeft();
+};
+
+console.log(solution16(['good', 'time', 'good', 'time', 'student']));
