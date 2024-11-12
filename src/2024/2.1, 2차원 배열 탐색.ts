@@ -145,3 +145,120 @@ const solution5 = (arr: number[]) => {
 };
 
 // console.log(solution5([87, 89, 92, 100, 76]));
+
+/**
+ * N*N의 격자판이 주어지면 각 행의 합, 각 열의 합, 두 대각선의 합 중 가 장 큰 합을 출력합 니다.
+ */
+const solution6 = (arr: number[][]) => {
+  const len = arr.length;
+  let max: number = Number.MIN_SAFE_INTEGER;
+
+  const calcMax = (num: number) => {
+    max = Math.max(max, num);
+  };
+
+  const calcRowMax = () => {
+    const sum = (arr: number[]) =>
+      arr.reduce((acc, value) => (acc += value), 0);
+
+    for (let i = 0; i < len; i++) {
+      const sumRow = sum(arr[i]);
+      calcMax(sumRow);
+    }
+  };
+
+  const calcColumnMax = () => {
+    for (let i = 0; i < len; i++) {
+      let temp: number = 0;
+      for (let j = 0; j < len; j++) {
+        temp += arr[i][j];
+      }
+      calcMax(temp);
+    }
+  };
+
+  const calcDiagonalMax = () => {
+    let sum1 = 0;
+    let sum2 = 0;
+    for (let i = 0; i < len; i++) {
+      sum1 += arr[i][i];
+      sum2 += arr[i][len - i - 1];
+    }
+    calcMax(sum1);
+    calcMax(sum2);
+  };
+
+  calcRowMax();
+  calcColumnMax();
+  calcDiagonalMax();
+
+  return max;
+};
+
+// console.log(
+//   solution6([
+//     [10, 13, 10, 12, 15],
+//     [12, 39, 30, 23, 11],
+//     [11, 25, 50, 53, 15],
+//     [19, 27, 29, 37, 27],
+//     [19, 13, 30, 13, 19],
+//   ]),
+// );
+
+/**
+ * 지도 정보가 N*N 격자판에 주어집니다. 각 격자에는 그 지역의 높이가 쓰여있습니다. 각 격자 판의 숫자 중 자신의 상하좌우 숫자보다 큰 숫자는 봉우리 지역입니다. 봉우리 지역이 몇 개 있는 지 알아내는 프로그램을 작성하세요.
+ * 격자의 가장자리는 0으로 초기화 되었다고 가정한다.
+ * 만약 N=5 이고, 격자판의 숫자가 다음과 같다면 봉우리의 개수는 10개입니다.
+ */
+
+const solution7 = (arr: number[][]) => {
+  const parseSafeValue = (
+    row: number,
+    column: number,
+    arr: number[][],
+  ): number => {
+    if (typeof arr[row] === 'undefined') return 0;
+    return arr[row][column] ?? 0;
+  };
+
+  const getNearValues = (row: number, column: number) => {
+    const upValue = parseSafeValue(row - 1, column, arr);
+    const downValue = parseSafeValue(row + 1, column, arr);
+    const leftValue = parseSafeValue(row, column - 1, arr);
+    const rightValue = parseSafeValue(row, column + 1, arr);
+
+    return [upValue, downValue, leftValue, rightValue];
+  };
+
+  const calcMax = (arr: number[]): number => {
+    return Math.max(...arr);
+  };
+
+  const len = arr.length;
+  let result = 0;
+
+  arr.forEach((_, i) => {
+    const row = arr[i];
+    row.forEach((value, j) => {
+      // 데이터 양이 많아지면 좋지 않을 수 있음.
+      // break 사용이 필요할 수 도 있음.
+      if (value > calcMax(getNearValues(i, j))) {
+        result++;
+      }
+    });
+  });
+
+  return result;
+};
+
+//53723 37161 72534 43641 87352
+
+console.log(
+  solution7([
+    [5, 3, 7, 2, 3],
+    [3, 7, 1, 6, 1],
+    [7, 2, 5, 3, 4],
+    [4, 3, 6, 4, 1],
+    [8, 7, 3, 5, 2],
+  ]),
+);
