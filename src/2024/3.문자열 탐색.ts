@@ -1,3 +1,5 @@
+import { parseInt } from 'lodash';
+
 export {};
 
 /**
@@ -38,4 +40,91 @@ const solution2 = (str: string) => {
   return solution1(trimmedStr);
 };
 
-console.log(solution2('found7, time: study; Yduts; emit, 7Dnuof'));
+// console.log(solution2('found7, time: study; Yduts; emit, 7Dnuof'));
+
+/**
+ * 숫자만 추출
+ * 문자와 숫자가 섞여있는 문자열이 주어지면 그 중 숫자만 추출하여 그 순서대로 자연수를 만 듭니다.
+ * 만약 “tge0a1h205er”에서 숫자만 추출하면 0, 1, 2, 0, 5이고 이것을 자연수를 만들면 1205 이 됩니다.
+ * 추출하여 만들어지는 자연수는 100,000,000을 넘지 않습니다.
+ */
+
+const solution3 = (str: string) => {
+  // const distinguishNumber = (str: string) => {
+  //   return str.split('').reduce<number[]>((acc, curr) => {
+  //     const convertedStr = parseInt(curr, 10);
+  //
+  //     if (Number.isInteger(convertedStr)) {
+  //       acc.push(convertedStr);
+  //     }
+  //
+  //     return acc;
+  //   }, []);
+  // };
+  // const toNumber = (nums: number[]): number => {
+  //   const size = nums.length;
+  //
+  //   return nums.reduce((result, curr, index) => {
+  //     const digits = 10 ** (size - (index + 1));
+  //     return (result += curr * digits);
+  //   }, 0);
+  // };
+  //
+  // const numbersOfStr = distinguishNumber(str);
+  //
+  // return toNumber(numbersOfStr);
+
+  let result = 0;
+
+  for (const strElement of str) {
+    if (!Number.isNaN(parseInt(strElement, 10))) {
+      // 한자리 씩 더하기
+      result = result * 10 + parseInt(strElement, 10);
+    }
+  }
+
+  return result;
+};
+
+// console.log(solution3('tge0a1h205er'));
+// console.log(solution3('g0en2T0s8eSoft'));
+
+/**
+ * 가장 짧은 문자거리
+ * 한 개의 문자열 s와 문자 t가 주어지면 문자열 s의 각 문자가 문자 t와 떨어진 최소거리를 출 력하는 프로그램을 작성하세요.
+ * 문자열과 문자는 소문자로만 주어집니다.
+ */
+const solution4 = (str: string, target: string) => {
+  const strArray = str.split('');
+
+  const targetIndexs = strArray.reduce<number[]>((acc, curr, index) => {
+    if (curr === target) acc.push(index);
+    return acc;
+  }, []);
+
+  const len = str.length;
+
+  const getForwardDistances = (targetIndex: number): number[] => {
+    return targetIndexs.map((index) => {
+      if (index >= targetIndex) return index - targetIndex;
+      return len - targetIndex + index;
+    });
+  };
+
+  const getReversDistances = (targetIndex: number): number[] => {
+    return targetIndexs.map((index) => {
+      if (targetIndex >= index) return targetIndex - index;
+      return len - index + targetIndex;
+    });
+  };
+
+  return strArray.map((_, index) => {
+    const distances = [
+      ...getForwardDistances(index),
+      ...getReversDistances(index),
+    ];
+    return Math.min(...distances);
+  });
+};
+
+console.log(solution4('teachermode', 'a'));
