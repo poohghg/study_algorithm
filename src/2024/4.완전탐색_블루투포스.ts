@@ -109,41 +109,122 @@ const solution3 = (scores: number[][]) => {
   const canMentor = (mentor: number, mentee: number) => {
     for (const score of scores) {
       const mentorRank = score.indexOf(mentor);
-      const memteeRank = score.indexOf(mentee);
+      const menteeRank = score.indexOf(mentee);
 
-      if (mentorRank > memteeRank) {
+      if (mentorRank > menteeRank) {
         return false;
       }
     }
     return true;
   };
 
-  const studnetSzie = scores[0].length;
-  const initCadinate = Array.from({ length: studnetSzie }, () => false);
+  const studentSize = scores[0].length;
+  const initCandidate = Array.from({ length: studentSize }, () => false);
+
   let result = 0;
 
-  for (let i = 1; i <= studnetSzie; i++) {
-    const cadinate = [...initCadinate];
+  for (let i = 1; i <= studentSize; i++) {
+    const candidate = [...initCandidate];
 
-    for (let j = 1; j <= studnetSzie; j++) {
+    for (let j = 1; j <= studentSize; j++) {
       if (i === j) continue;
 
       if (canMentor(i, j)) {
-        cadinate[j - 1] = true;
-      } else if (cadinate[j - 1]) {
-        cadinate[j - 1] = false;
+        candidate[j - 1] = true;
+      } else if (candidate[j - 1]) {
+        candidate[j - 1] = false;
       }
     }
-    result += cadinate.filter(Boolean).length;
+    result += candidate.filter(Boolean).length;
   }
 
   return result;
 };
 
-console.log(
-  solution3([
-    [3, 4, 1, 2],
-    [4, 3, 2, 1],
-    [3, 1, 4, 2],
-  ]),
-);
+// console.log(
+//   solution3([
+//     [3, 4, 1, 2],
+//     [4, 3, 2, 1],
+//     [3, 1, 4, 2],
+//   ]),
+// );
+
+/**
+ * 선생님은 올해 졸업하는 반 학생들에게 졸업선물을 주려고 합니다.
+ * 학생들에게 인터넷 쇼핑몰에서 각자 원하는 상품을 골라 그 상품의 가격과 배송비를 제출하라 고 했습니다. 선생님이 가지고 있는 예산은 한정되어 있습니다.
+ * 현재 예산으로 최대 몇 명의 학생에게 선물을 사줄 수 있는지 구하는 프로그램을 작성하세요.
+ * 선생님은 상품 하나를 50% 할인해서(반 가격) 살 수 있는 쿠폰을 가지고 있습니다. 배송비는 할인에 포함되지 않습니다.
+ *
+ *  N줄에 걸쳐 각 학생들이 받고 싶은 상품의 가격과 배송비가 입력됩니다.
+ *  상품가격과 배송비는 각각 100,000을 넘지 않습니다. 상품가격은 짝수로만 입력됩니다.
+ */
+
+const solution4 = (budget: number, priceInfo: [number, number][]) => {
+  const size = priceInfo.length;
+  let result: number = 0;
+
+  priceInfo.forEach((currPriceInfo, index) => {
+    let currBudget = budget;
+    let cnt = 0;
+
+    const halfPrice = currPriceInfo[0] / 2;
+    currBudget -= halfPrice + currPriceInfo[1];
+
+    for (let i = 0; i < size; i++) {
+      if (i === index) continue;
+
+      currBudget -= priceInfo[i][0] + priceInfo[i][1];
+
+      if (currBudget > 0) cnt++;
+      else break;
+    }
+
+    result = Math.max(result, cnt);
+  });
+
+  return result;
+};
+
+// console.log(
+//   solution4(66, [
+//     [6, 6],
+//     [2, 2],
+//     [4, 3],
+//     [4, 5],
+//     [10, 3],
+//   ]),
+// );
+
+function nestedLoops(n: number, depth = 0, result: number[] = []) {
+  if (depth === n) {
+    console.log(result); // 각 루프 결과 출력
+    return;
+  }
+
+  for (let i = 0; i < 3; i++) {
+    // 각 루프에서 3번 반복
+    result[depth] = i;
+    nestedLoops(n, depth + 1, result);
+  }
+}
+
+const solution5 = (k: number, nums: number[]) => {
+  const n = 3;
+
+  function nestedLoops(index: number, depth: number, sum: number) {
+    // console.log(sum);
+
+    if (3 <= depth) {
+      return sum;
+    }
+
+    for (let i = index + depth; i < nums.length; i++) {
+      const num = nestedLoops(i, depth + 1, sum + nums[i]);
+      console.log(num);
+    }
+  }
+
+  nestedLoops(0, 0, 0);
+};
+
+console.log(solution5(3, [1, 2]));
