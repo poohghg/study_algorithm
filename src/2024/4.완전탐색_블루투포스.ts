@@ -221,4 +221,4 @@ const solution5 = (k: number, nums: number[]) => {
   return sortedResult[k - 1];
 };
 
-console.log(solution5(3, [13, 15, 34, 23, 45, 65, 33, 11, 26, 42]));
+// console.log(solution5(3, [13, 15, 34, 23, 45, 65, 33, 11, 26, 42]));
