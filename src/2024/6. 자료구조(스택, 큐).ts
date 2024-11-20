@@ -43,4 +43,55 @@ const solution2 = (str: string) => {
   return stack.join('');
 };
 
-console.log(solution2('(A(BC)D)EF(G(H)(IJ)K)LM(N)'));
+// console.log(solution2('(A(BC)D)EF(G(H)(IJ)K)LM(N)'));
+
+/**
+ * 크레인 인형뽑기
+ */
+
+const solution3 = (boards: number[][], moves: number[]) => {
+  const getTopOfColumn = (index: number): number => {
+    const y = index - 1;
+
+    for (const board of boards) {
+      if (board[y] !== 0) {
+        const yValue = board[y];
+        board[y] = 0;
+        return yValue;
+      }
+    }
+
+    return 0;
+  };
+
+  const stack: number[] = [];
+  let result = 0;
+
+  for (let index = 0; index < moves.length; index++) {
+    const selectedValue = getTopOfColumn(moves[index]);
+    if (selectedValue === 0) continue;
+
+    if (stack[stack.length - 1] === selectedValue) {
+      result += 2;
+      stack.pop();
+    } else {
+      stack.push(selectedValue);
+    }
+  }
+
+  return result;
+};
+
+console.log(
+  solution3(
+    [
+      [0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 3],
+      [0, 2, 5, 0, 1],
+      [4, 2, 4, 4, 2],
+      [3, 5, 1, 3, 1],
+    ],
+    [1, 5, 3, 5, 1, 2, 1, 4],
+  ),
+);
+// 4311324;
