@@ -152,26 +152,6 @@ const solution4 = (arr: number[], k: number) => {
  */
 
 const solution5 = (arr: number[], k: number) => {
-  const getPeriodSum = (start: number) => {
-    let result = 0;
-
-    for (let i = start; i < start + k; i++) {
-      result += arr[i];
-    }
-
-    return result;
-  };
-
-  let result = 0;
-
-  for (let i = 0; i <= arr.length - k; i++) {
-    result = Math.max(result, getPeriodSum(i));
-  }
-
-  return result;
-};
-
-const solution5_1 = (arr: number[], k: number) => {
   let sum = arr.slice(0, k).reduce((acc, curr) => acc + curr);
   let result = sum;
 
@@ -245,4 +225,71 @@ const solution7 = (str1: string, str2: string) => {
   return true;
 };
 
-console.log(solution7('AbaAeCe', 'baeeACA'));
+// console.log(solution7('AbaAeCe', 'baeeACA'));
+
+/**
+ * 모든 아나그램 찾기(해쉬, 투포인터, 슬라이딩 윈도우)
+ * S문자열에서 T문자열과 아나그램이 되는 S의 부분문자열의 개수를 구하는 프로그램을 작성하세요.
+ * 아나그램 판별시 대소문자가 구분됩니다. 부분문자열은 연속된 문자열이어야 합니다.
+ */
+
+const solution8 = (str: string, target: string) => {
+  const makeHashMap = (str: string) => {
+    const strArray = str.split('');
+    const hashMap = new Map<string, number>();
+
+    strArray.forEach((value) => {
+      if (hashMap.has(value)) {
+        hashMap.set(value, (hashMap.get(value) ?? 0) + 1);
+      } else {
+        hashMap.set(value, 1);
+      }
+    });
+
+    return hashMap;
+  };
+
+  const isSameAnagram = (
+    hashMap1: Map<string, number>,
+    hashMap2: Map<string, number>,
+  ) => {
+    if (hashMap1.size !== hashMap2.size) return false;
+
+    for (const [key, value] of hashMap1) {
+      if (hashMap2.get(key) !== value) return false;
+    }
+
+    return true;
+  };
+
+  const updateLtSlidingHashMap = (ltIndex: number) => {
+    const key = str[ltIndex];
+    const value = slidingHashMap.get(key);
+
+    if (value === 1) {
+      slidingHashMap.delete(key);
+    } else {
+      slidingHashMap.set(key, value! - 1);
+    }
+  };
+
+  const targetSize = target.length;
+  const targetHashMap = makeHashMap(target);
+  const slidingHashMap = makeHashMap(str.slice(0, targetSize - 1));
+  let result = 0;
+  let lt = 0;
+
+  for (let rt = targetSize - 1; rt < str.length; rt++) {
+    const value = str[rt];
+    slidingHashMap.set(value, (slidingHashMap.get(value) ?? 0) + 1);
+
+    if (isSameAnagram(slidingHashMap, targetHashMap)) result++;
+
+    updateLtSlidingHashMap(lt);
+    lt++;
+  }
+
+  return result;
+};
+
+// console.log(solution8('bacaAacba', 'abc'));
