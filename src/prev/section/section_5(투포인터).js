@@ -16,14 +16,17 @@ function merge(arr1, arr2) {
       arr.push(arr2[j++]);
     }
   }
+
   while (i < arr1.length) {
     arr.push(arr1[i++]);
   }
+
   while (j < arr2.length) {
     arr.push(arr2[j++]);
   }
   return arr;
 }
+
 // console.log(merge([1, 3, 5], [2, 4, 6, 8, 10]));
 
 // mergeSort
@@ -63,6 +66,7 @@ function solution_2(arr1, arr2) {
   }
   return arr;
 }
+
 // console.log(solution_2([1, 3, 5, 7], [1, 2, 3, 4, 5]));
 /**
  * 연속 부분수열
@@ -201,6 +205,7 @@ function solution_7(str1, str2) {
   console.log(strObj);
   return true;
 }
+
 // console.log(solution_7('AbaAeCey', 'baeeACAyy'));
 
 /**
