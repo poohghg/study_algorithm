@@ -1,6 +1,6 @@
-import { cloneDeep } from 'lodash';
-
 export default {};
+
+import { cloneDeep } from 'lodash';
 
 const swapArrayIndex = (
   arr: number[],
@@ -157,4 +157,60 @@ const solution2 = (arr: [number, number][]) => {
 //     [3, 6],
 //   ]),
 // );
-s;
+
+/**
+ * https://www.acmicpc.net/problem/18870
+ * 좌표 압축
+ * 수직선 위에 N개의 좌표 X1, X2, ..., XN이 있다. 이 좌표에 좌표 압축을 적용하려고 한다.
+ * Xi를 좌표 압축한 결과 X'i의 값은 Xi > Xj를 만족하는 서로 다른 좌표 Xj의 개수와 같아야 한다.
+ * X1, X2, ..., XN에 좌표 압축을 적용한 결과 X'1, X'2, ..., X'N를 출력해보자.
+ */
+
+const solution3 = (arr: number[]) => {
+  const rank = new Map<number, number>();
+  const uniqueArr = Array.from(new Set(arr)).sort((a, b) => a - b);
+
+  uniqueArr.forEach((value, index) => {
+    rank.set(value, index);
+  });
+
+  return arr.map((value) => rank.get(value));
+};
+
+// console.log(solution3([1000, 999, 1000, 999, 1000, 999]));
+
+/**
+ * https://www.acmicpc.net/problem/1427
+ * 소트인사이드
+ * 배열을 정렬하는 것은 쉽다. 수가 주어지면, 그 수의 각 자리수를 내림차순으로 정렬해보자.
+ */
+
+const solution4 = (num: number) => {
+  const getNumDigits = (num: number): number => {
+    let n = 0;
+    let restNum = num / (10 * n);
+
+    while (restNum > 0) {
+      n++;
+      restNum = Math.floor(num / 10 ** n);
+    }
+
+    return n;
+  };
+
+  const getArrOfDigits = (num: number): number[] => {
+    const result: number[] = [];
+    let restNum = num;
+    let n = getNumDigits(num) - 1;
+
+    while (restNum > 0) {
+      result.push(Math.floor(restNum / 10 ** n));
+      restNum = restNum % 10 ** n;
+      n--;
+    }
+
+    return result;
+  };
+};
+
+// console.log(solution4(2143));
