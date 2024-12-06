@@ -5,6 +5,7 @@ class Node {
     this.val = val;
     this.priority = priority;
   }
+
   // get Info() {
   //   return { val: this.#val, priority: this.#priority };
   // }
@@ -56,13 +57,15 @@ class PriorityQueue {
   sinkDown() {
     let idx = 0;
     let swapIdx;
+
     while (true) {
       let leftNodeIdx = idx * 2 + 1;
-      let rigthNodeIdx = idx * 2 + 2;
+      let rightNodeIdx = idx * 2 + 2;
+
       if (
-        this.#value[leftNodeIdx]?.priority > this.#value[rigthNodeIdx]?.priority
+        this.#value[leftNodeIdx]?.priority > this.#value[rightNodeIdx]?.priority
       )
-        swapIdx = rigthNodeIdx;
+        swapIdx = rightNodeIdx;
       else swapIdx = leftNodeIdx;
 
       if (swapIdx >= this.#value.length) break;
