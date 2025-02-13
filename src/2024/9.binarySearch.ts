@@ -68,7 +68,7 @@ const boundaryArrange = (arr: number[], target: number) => {
   // console.log(upperBound(0,));
 };
 
-console.log(boundaryArrange([3, 4, 5, 5, 5, 7, 9], 5));
+// console.log(boundaryArrange([3, 4, 5, 5, 5, 7, 9], 5));
 
 /**
  * 예산
@@ -110,9 +110,9 @@ const solution1 = (budgets: number[], total: number) => {
  */
 
 const solution2 = (nums: number[], total: number) => {
-  const sum = (heigth: number) => {
+  const sum = (height: number) => {
     return nums.reduce((acc, curr) => {
-      return (acc += Math.max(curr - heigth, 0));
+      return (acc += Math.max(curr - height, 0));
     }, 0);
   };
 
@@ -127,11 +127,89 @@ const solution2 = (nums: number[], total: number) => {
     } else {
       start = mid + 1;
     }
-
-    console.log(start, end);
   }
 
   return Math.floor((start + end) / 2);
 };
 
-console.log(solution2([20, 15, 10, 17], 7));
+// console.log(solution2([20, 15, 10, 17], 7));
+
+// 결정 알고리즘
+
+const solution3 = (num: number, recodes: number[]) => {
+  const getCount = (time: number) => {
+    let cnt = 1;
+    let sum = 0;
+
+    for (const recode of recodes) {
+      if (sum + recode > time) {
+        cnt++;
+        sum = recode;
+      } else {
+        sum += recode;
+      }
+    }
+
+    return cnt;
+  };
+
+  let [min, max] = [num * Math.min(...recodes), num * Math.max(...recodes)];
+  let mid = Math.floor((min + max) / 2);
+
+  while (min <= max) {
+    mid = Math.floor((min + max) / 2);
+    let result = getCount(mid);
+
+    if (result > num) {
+      min = mid + 1;
+    } else {
+      max = mid - 1;
+    }
+  }
+  return mid;
+};
+
+// console.log(solution3(3, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
+
+/**
+ * C마리의 말을 N개의 마구간에 배치했을 때 가장 가까운 두 말의 거리가 최대가 되는 그 최대
+ * 값을 출력하는 프로그램을 작성하세요.
+ * ▣ 입력설명
+ * 첫 줄에 자연수 N(3<=N<=200,000)과 C(2<=C<=N)이 공백을 사이에 두고 주어집니다.
+ * 둘째 줄에 마구간의 좌표 xi(0<=xi<=1,000,000,000)가 차례로 주어집니다.
+ */
+
+const solution4 = (nums: number, positions: number[]) => {
+  const getCount = (distance: number) => {
+    let cnt = 1;
+    let prevPosition = 0;
+
+    for (const p of positions) {
+      if (p - prevPosition > distance) {
+        cnt++;
+        prevPosition = p;
+      }
+    }
+
+    return cnt;
+  };
+
+  let [min, max] = [Math.min(...positions), Math.max(...positions)];
+  let answer = 0;
+
+  while (min <= max) {
+    const mid = Math.floor((min + max) / 2);
+    const result = getCount(mid);
+
+    if (result >= nums) {
+      min = mid + 1;
+      answer = mid;
+    } else {
+      max = mid - 1;
+    }
+  }
+
+  return answer;
+};
+
+console.log(solution4(3, [1, 2, 4, 8, 9]));

@@ -14,6 +14,7 @@ export {};
 const solution1 = (arr: number[], ranges: [number, number][]) => {
   const getPrefixSum = (arr: number[]) => {
     let sum = 0;
+
     return arr.reduce(
       (acc, curr) => {
         sum += curr;

@@ -68,6 +68,7 @@ const solution3 = (str: string) => {
   };
 
   const array = str.split('-');
+
   let result = sum(array[0]);
 
   for (let i = 1; i < array.length; i++) {
@@ -149,5 +150,3 @@ const solution5 = (a: number, b: number) => {
 
   return rest === a ? result : -1;
 };
-
-console.log(solution5(100, 40021));

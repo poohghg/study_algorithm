@@ -27,8 +27,7 @@ const solution1 = (nums: number[]) => {
 
     while (divisionValue > 0) {
       result += divisionValue % 10;
-      const quotient = Math.floor(divisionValue / 10);
-      divisionValue = quotient;
+      divisionValue = Math.floor(divisionValue / 10);
     }
 
     return result;

@@ -3,6 +3,7 @@ class Node {
   left = null;
   rigth = null;
   count = 1;
+
   constructor(val) {
     this.val = val;
   }
@@ -10,6 +11,7 @@ class Node {
 
 class BST {
   root = null;
+
   insert(val) {
     const newNodw = new Node(val);
     if (!this.root) {
@@ -37,6 +39,7 @@ class BST {
       }
     }
   }
+
   find(val) {
     let curNode = this.root;
     while (curNode) {
@@ -44,8 +47,8 @@ class BST {
       else if (curNode.val > val) curNode = curNode.left;
       else curNode = curNode.rigth;
     }
-    return;
   }
+
   // 전위우선순위
   /**
    * 전위 순회
@@ -54,14 +57,17 @@ class BST {
   preOrder() {
     const data = [];
     if (!this.root) return data;
+
     function travers(node) {
       data.push(node.val);
       if (node.left) travers(node.left);
       if (node.rigth) travers(node.rigth);
     }
+
     travers(this.root);
     return data;
   }
+
   /**
    * 중위순위
    * 왼쪽 자식 노드  -> 부모노드 -> 오른쪽 자식 노드
@@ -69,14 +75,17 @@ class BST {
   inOrder() {
     const data = [];
     if (!this.root) return data;
+
     function travers(node) {
       if (node.left) travers(node.left);
       data.push(node.val);
       if (node.rigth) travers(node.rigth);
     }
+
     travers(this.root);
     return data;
   }
+
   /**
    * 후위순위
    * 왼쪽 자식 노드 -> 오른쪽 자식 노드 -> 부모노드
@@ -84,11 +93,13 @@ class BST {
   postOrder() {
     const data = [];
     if (!this.root) return data;
+
     function travers(node) {
       if (node.left) travers(node.left);
       if (node.rigth) travers(node.rigth);
       data.push(node.val);
     }
+
     travers(this.root);
     return data;
   }
@@ -118,6 +129,7 @@ function solution_1(n) {
   solution_1(n - 1);
   console.log(n);
 }
+
 // console.log(solution_1(3));
 
 /**
@@ -130,6 +142,7 @@ function solution_2(n) {
   let answer = solution_2(Math.floor(n / 2));
   return answer.toString() + (n % 2);
 }
+
 // console.log(solution_2(27));
 
 /**
@@ -138,6 +151,7 @@ function solution_2(n) {
 function solution_3(n) {
   const ch = Array.from({ length: n + 1 }).map(() => 0);
   const answer = [];
+
   function travers(v) {
     if (v === n + 1) {
       let tmp = '';
@@ -152,6 +166,7 @@ function solution_3(n) {
     ch[v] = 0;
     travers(v + 1);
   }
+
   travers(1);
   return answer.join('\n');
   //        0
@@ -161,6 +176,7 @@ function solution_3(n) {
   // travers(1);
   // return;
 }
+
 // console.log(solution_3(3));
 /**
  * 철수는 그의 바둑이들을 데리고 시장에 가려고 한다. 그런데 그의 트럭은 C킬로그램 넘게 태 울수가 없다. 철수는 C를 넘지 않으면서 그의 바둑이들을 가장 무겁게 태우고 싶다.
@@ -168,6 +184,7 @@ function solution_3(n) {
  */
 function solution_4(c, n, arr) {
   let max = Number.MIN_SAFE_INTEGER;
+
   // console.log(copy);
   function travers(l, sum) {
     if (sum > c) return;
@@ -178,9 +195,11 @@ function solution_4(c, n, arr) {
     travers(l + 1, sum + arr[l]);
     travers(l + 1, sum);
   }
+
   travers(0, 0);
   return max;
 }
+
 // console.log(solution_4(259, 3, [81, 58, 42]));
 /**
  * N개의 원소로 구성된 자연수 집합이 주어지면, 이 집합을 두 개의 부분집합으로 나누었을 때 두 부분집합의 원소의 합이 서로 같은 경우가 존재하면 “YES"를 출력하고, 그렇지 않으면 ”NO"를 출력하는 프로그램을 작성하세요.
@@ -190,6 +209,7 @@ function solution_5(n, arr) {
   const halfSum = arr.reduce((a, b) => a + b, 0) / 2;
   // console.log(halfSum);
   let answer = 'NO';
+
   function travers(L, sum) {
     if (answer === 'YES') return;
     if (L === n) {
@@ -199,12 +219,15 @@ function solution_5(n, arr) {
     travers(L + 1, sum + arr[L]);
     travers(L + 1, sum);
   }
+
   travers(0, 0);
   return answer;
 }
+
 // console.log(solution_5(6, [1, 3, 5, 6, 7, 10]));
 function solution_6(n, m, arr) {
   let max = Number.MIN_SAFE_INTEGER;
+
   function travers(L, sum, time) {
     if (time > m) return;
     if (L === n) {
@@ -215,9 +238,11 @@ function solution_6(n, m, arr) {
     travers(L + 1, sum + arr[L][0], time + arr[L][1]);
     travers(L + 1, sum, time);
   }
+
   travers(0, 0, 0);
   return max;
 }
+
 // console.log(
 //   solution_6(5, 20, [
 //     [10, 5],
@@ -246,10 +271,12 @@ function solution_7(n, m) {
       travers(L + 1, arr.concat(oriArr[i]));
     }
   }
+
   travers(0, []);
   console.log(answer.join('\n'));
   console.log(answer.length);
 }
+
 // console.log(solution_7(3, 2));
 
 /**
@@ -258,6 +285,7 @@ function solution_7(n, m) {
  */
 function solution_8(n, k, m) {
   let min = Number.MAX_SAFE_INTEGER;
+
   function travers(L, sum) {
     if (L > min) return;
     if (sum >= m) {
@@ -270,9 +298,11 @@ function solution_8(n, k, m) {
       travers(L + 1, sum + x);
     }
   }
+
   travers(0, 0);
   return min;
 }
+
 // console.log(solution_8(3, [1, 2, 5], 15));
 
 /**
@@ -284,6 +314,7 @@ function solution_9(n, m, arr) {
   const answer = [];
   const ch = Array.from({ length: n }).map(() => 0);
   const tmp = Array.from({ length: m }).map(() => 0);
+
   function travers(L) {
     if (L === m) return answer.push([...tmp]);
     for (let i = 0; i < arr.length; i++) {
@@ -295,15 +326,18 @@ function solution_9(n, m, arr) {
       }
     }
   }
+
   travers(0);
   console.log(answer);
 }
+
 // console.log(solution_9(3, 3, [3, 6, 9]));
 
 function solution_10(n) {
   if (n === 1) return 1;
   return n * solution_10(n - 1);
 }
+
 // console.log(solution_10(3));
 /**
  * 조합
@@ -317,6 +351,7 @@ function combination(n, r) {
   // 뽑히는 경우와 뽑히지 않는경우를 더한다.
   return combination(n - 1, r - 1) + combination(n - 1, r);
 }
+
 // console.log(combination(5, 3));
 /**
  * N개의 정수가 주어지면 그 숫자들 중 K개를 뽑는 조합의 합이
@@ -329,6 +364,7 @@ function solution_11(n, k, arr, m) {
   // const ch = Array.from({ length: n }).map(() => 0);
   let answer = [];
   const tmp = Array.from({ length: k });
+
   function travers(L, index) {
     console.log(tmp);
     if (L === k) {
@@ -340,19 +376,21 @@ function solution_11(n, k, arr, m) {
       travers(L + 1, i + 1);
     }
   }
+
   travers(0, 0);
   return answer;
 }
+
 // console.log(solution_11(5, 3, [2, 4, 5, 8, 12], 6));
 
 /**
- * 가장 윗줄에 1부터 N까지의 숫자가 한 개씩 적혀 있다. 
- * 그리고 둘째 줄부터 차례대로 파스칼 의 삼각형처럼 위의 두개를 더한 값이 저장되게 된다. 
+ * 가장 윗줄에 1부터 N까지의 숫자가 한 개씩 적혀 있다.
+ * 그리고 둘째 줄부터 차례대로 파스칼 의 삼각형처럼 위의 두개를 더한 값이 저장되게 된다.
  * 예를 들어 N이 4 이고 가장 윗 줄에 3 1 2 4 가 있다고 했을 때, 다음과 같은 삼각형이 그려진다.
-  3 1 2 4 
-   4 3 6 
-    7 9  
-    16
+ 3 1 2 4
+ 4 3 6
+ 7 9
+ 16
  */
 function solution_12(n, f) {
   // 4c2
@@ -361,6 +399,7 @@ function solution_12(n, f) {
       if (N === R || R === 0) return 1;
       return combination(N - 1, R - 1) + combination(N - 1, R);
     }
+
     for (let i = 0; i < n; i++) {
       arr[i] = combination(n - 1, i);
     }
@@ -378,6 +417,7 @@ function solution_12(n, f) {
   let flage = false;
   // 1,2,3,4
   console.log('combiArr', combiArr);
+
   function travers(L) {
     // if (flage) return;
     if (L === n) {
@@ -397,9 +437,11 @@ function solution_12(n, f) {
       }
     }
   }
+
   travers(0);
   return tmp;
 }
+
 // console.log(solution_12(4, 16));
 /**
  * 조합구하기
@@ -409,6 +451,7 @@ function solution_12(n, f) {
 function solution_13(n, m) {
   const answer = [];
   const tmp = [];
+
   function travers(L, s) {
     if (L === m) {
       console.log(tmp);
@@ -420,7 +463,9 @@ function solution_13(n, m) {
       travers(L + 1, i + 1);
     }
   }
+
   travers(0, 1);
   console.log(answer);
 }
+
 console.log(solution_13(4, 2));
