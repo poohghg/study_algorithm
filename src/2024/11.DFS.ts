@@ -66,4 +66,61 @@ const solution3 = (num: number) => {
   dfs(1);
 };
 
-console.log(solution3(3));
+// console.log(solution3(3));
+
+/**
+ * 두 부분집합의 원소의 합이 서로 같은 경우가 존재하면 “YES"를 출력하고, 그렇지 않으면
+ * ”NO"를 출력하는 프로그램을 작성하세요.
+ */
+
+const solution4 = (nums: number[]) => {
+  let result = false;
+  const totalSum = nums.reduce((a, b) => a + b);
+
+  const dfs = (level: number, sum: number = 0) => {
+    if (result) return;
+
+    if (level === nums.length) {
+      if (totalSum - sum === sum) result = true;
+      return;
+    }
+    // 있는 경우
+    dfs(level + 1, sum + nums[level]);
+    // 없는 경우
+    dfs(level + 1, sum);
+  };
+
+  dfs(0);
+  return result;
+};
+
+// console.log(solution4([1, 3, 5, 6, 7, 10]));
+
+/**
+ * 철수는 C를 넘지 않으면서 그의 바둑이들을 가장 무겁게 태우고 싶다.
+ * N마리의 바둑이와 각 바둑이의 무게 W가 주어지면, 철수가 트럭C에 태울 수 있는 가장 무거운
+ * 무게를 구하는 프로그램을 작성하세요.
+ */
+
+const solution5 = (weight: number, dogs: number[]) => {
+  let result: number = 0;
+
+  const dfs = (level: number, sumOfWeight: number) => {
+    if (sumOfWeight > weight) return;
+
+    if (level === dogs.length) {
+      result = Math.max(result, sumOfWeight);
+      return;
+    }
+
+    // 무게 포함
+    dfs(level + 1, sumOfWeight + dogs[level]);
+    // 미포함
+    dfs(level + 1, sumOfWeight);
+  };
+
+  dfs(0, 0);
+  return result;
+};
+
+console.log(solution5(259, [81, 58, 42, 33, 61]));

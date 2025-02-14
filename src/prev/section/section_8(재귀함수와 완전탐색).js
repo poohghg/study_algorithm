@@ -317,6 +317,7 @@ function solution_9(n, m, arr) {
 
   function travers(L) {
     if (L === m) return answer.push([...tmp]);
+
     for (let i = 0; i < arr.length; i++) {
       if (ch[i] === 0) {
         ch[i] = 1;
