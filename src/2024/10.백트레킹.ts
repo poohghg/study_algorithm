@@ -95,4 +95,6 @@ const solution3 = (n: number) => {
   console.log(combinationsOfFormulas.length);
 };
 
-console.log(solution3(5));
+// console.log(solution3(5));
+
+const solution4 = () => {};

@@ -123,4 +123,103 @@ const solution5 = (weight: number, dogs: number[]) => {
   return result;
 };
 
-console.log(solution5(259, [81, 58, 42, 33, 61]));
+// console.log(solution5(259, [81, 58, 42, 33, 61]));
+/**
+ * 제한시간 M안에 N개의 문제 중 최대점수를 얻을 수 있도록 해야 합니다.
+ * 첫 번째 줄에 문제의 개수N(1<=N<=20)과 제한 시간 M(10<=M<=300)이 주어집니다.
+ * 두 번째 줄부터 N줄에 걸쳐 문제를 풀었을 때의 점수와 푸는데 걸리는 시간이 주어집니다.
+ * 해당 시간 내에 선택할것인가? -> 부분집합이다.
+ */
+const solution6 = (time: number, problems: [number, number][]) => {
+  const isTimeOver = (records: [number, number][]) => {
+    const totalTime = records.reduce((acc, curr) => acc + curr[1], 0);
+    return totalTime > time;
+  };
+
+  // 점수,시간
+  const records: [number, number][] = [];
+  let result = 0;
+
+  const dfs = (level: number) => {
+    if (isTimeOver(records)) return;
+
+    if (level === problems.length) {
+      const sums = records.reduce((acc, curr) => acc + curr[0], 0);
+      result = Math.max(result, sums);
+      return;
+    }
+
+    records.push(problems[level]);
+    dfs(level + 1);
+    records.pop();
+    dfs(level + 1);
+  };
+
+  dfs(0);
+  return result;
+};
+
+// console.log(
+//   solution6(20, [
+//     [10, 5],
+//     [25, 12],
+//     [15, 8],
+//     [6, 3],
+//     [7, 4],
+//   ]),
+// );
+
+/**
+ * 중복순열 구하기
+ * 1부터 N까지 번호가 적힌 구슬이 있습니다. 이 중 중복을 허락하여 M번을 뽑아 일렬로 나열
+ * 하는 방법을 모두 출력합니다.
+ */
+
+const solution7 = (n: number) => {
+  const result: number[][] = [];
+  const record: number[] = [];
+
+  const dfs = (level: number) => {
+    if (level === n) {
+      result.push([...record]);
+      return;
+    }
+
+    for (let i = 1; i <= n; i++) {
+      record.push(i);
+      dfs(level + 1);
+      record.pop();
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+// console.log(solution7(3));
+
+/**
+ * 첫 번째 줄에는 동전의 종류개수 N(1<=N<=12)이 주어진다. 두 번째 줄에는 N개의 동전의 종
+ * 류가 주어지고, 그 다음줄에 거슬러 줄 금액 M(1<=M<=500)이 주어진다.
+ * 각 동전의 종류는 100원을 넘지 않는다.
+ */
+
+const solution8 = (coins: number[], change: number) => {
+  const queues: number[] = [...coins];
+
+  while (queues.length) {
+    const value = queues.shift()!;
+
+    for (const coin of coins) {
+      const calculatedValue = value + coin;
+
+      if (calculatedValue === change) return true;
+
+      if (calculatedValue < change) queues.push(calculatedValue);
+    }
+  }
+
+  return false;
+};
+
+console.log(solution8([1, 2, 5], 15));
