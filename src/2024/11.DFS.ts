@@ -39,7 +39,7 @@ const solution2 = (nums: number[]) => {
  * 부분집합을 모두 출력하는 프로그램을 작성하세요.
  */
 
-// 참여/미참여로 구분
+// 레프트노드 참여/ 라이트 노드 미참여로 구분
 //        0
 //    1       1
 //  2   2   2   2
@@ -222,4 +222,72 @@ const solution8 = (coins: number[], change: number) => {
   return false;
 };
 
-console.log(solution8([1, 2, 5], 15));
+// console.log(solution8([1, 2, 5], 15));
+
+/**
+ * 순열 구하기
+ * 10이하의 N개의 자연수가 주어지면 이 중 M개를 뽑아 일렬로 나열하는 방법을 모두 출력합
+ * 니다.
+ */
+
+const solution9 = (n: number, nums: number[]) => {
+  const result: number[][] = [];
+  const visited = Array.from({ length: nums.length }).fill(false) as boolean[];
+  const record: number[] = [];
+
+  const dfs = (level: number) => {
+    if (level === n) {
+      result.push([...record]);
+      return;
+    }
+
+    for (let i = 0; i < nums.length; i++) {
+      if (visited[i]) continue;
+
+      visited[i] = true;
+      record.push(nums[i]);
+      dfs(level + 1);
+      visited[i] = false;
+      record.pop();
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+// console.log(solution9(3, [3, 6, 9]));
+
+/**
+ * 팩토리얼
+ * 자연수 N을 입력하면 N!값을 구하세요.
+ * N! = n*(n-1)*(n-2)*
+ * .....
+ * *2*1입니다.
+ * 만약 N=5라면 5!=5*4*3*2*1=120입니다.
+ */
+
+const solution10 = (n: number) => {
+  const dfs = (n: number): number => {
+    if (n === 1) return 1;
+
+    return n * dfs(n - 1);
+  };
+
+  return dfs(n);
+};
+
+// console.log(solution10(5));
+
+/**
+ * 조합
+ * nCr = n!/(n-r)!r!
+ * 4C3 => 4 3 2 / 3 2 1
+ * 24/6
+ */
+
+const solution11 = (n: number, r: number) => {
+  const dfs = (n: number, r: number) => {
+    return dfs;
+  };
+};
