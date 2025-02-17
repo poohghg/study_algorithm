@@ -226,8 +226,7 @@ const solution8 = (coins: number[], change: number) => {
 
 /**
  * 순열 구하기
- * 10이하의 N개의 자연수가 주어지면 이 중 M개를 뽑아 일렬로 나열하는 방법을 모두 출력합
- * 니다.
+ * 10이하의 N개의 자연수가 주어지면 이 중 M개를 뽑아 일렬로 나열하는 방법을 모두 출력합니다.
  */
 
 const solution9 = (n: number, nums: number[]) => {
@@ -281,13 +280,72 @@ const solution10 = (n: number) => {
 
 /**
  * 조합
+ * 1,2,3,4
  * nCr = n!/(n-r)!r!
  * 4C3 => 4 3 2 / 3 2 1
- * 24/6
+ * 24/6 = 4
+ * 4가 무조건 포함되는 수 + 4가 무조건 포함되지 않는 수
+ * 3C2 + 3c3
+ * 3 + 1 = 4
  */
 
 const solution11 = (n: number, r: number) => {
-  const dfs = (n: number, r: number) => {
-    return dfs;
+  const dfs = (n: number, r: number): number => {
+    if (n === r || r === 0) return 1;
+    return dfs(n - 1, r - 1) + dfs(n - 1, r);
   };
 };
+
+/**
+ *
+ * 가장 윗줄에 1부터 N까지의 숫자가 한 개씩 적혀 있다. 그리고 둘째 줄부터 차례대로 파스칼
+ * 의 삼각형처럼 위의 두개를 더한 값이 저장되게 된다. 예를 들어 N이 4 이고
+ * 가장 윗 줄에 3 1 2 4 가 있다고 했을 때, 다음과 같은 삼각형이 그려진다.
+ * 3 1 2 4
+ * 4 3 6
+ * 7 9
+ * 16
+ * N과 가장 밑에 있는 숫자가 주어져 있을 때 가장 윗줄에 있는 숫자를 구하는 프로그램을 작성하
+ * 시오. 단, 답이 여러가지가 나오는 경우에는 사전순으로 가장 앞에 오는 것을 출력하여야 한다
+ */
+
+const solution12 = (n: number, target: number) => {
+  const combination = (n: number, r: number): number => {
+    if (n === r || r === 0) return 1;
+    return combination(n - 1, r - 1) + combination(n - 1, r);
+  };
+
+  let answer = 0;
+  let visited = Array.from({ length: n + 1 }, () => false);
+  let record: number[] = [];
+  // 3c0 3c1 3c2 3c3
+  let weight = Array.from({ length: n }, (a, index) =>
+    combination(n - 1, index),
+  );
+
+  const dfs = (level: number, sum: number = 0) => {
+    if (sum > target) return;
+
+    if (level === n) {
+      if (sum === target) {
+        console.log(record);
+        answer++;
+      }
+      return;
+    }
+
+    for (let i = 1; i <= n; i++) {
+      if (visited[i]) continue;
+
+      visited[i] = true;
+      record.push(i);
+      dfs(level + 1, sum + weight[level] * i);
+      visited[i] = false;
+      record.pop();
+    }
+  };
+
+  dfs(0);
+};
+
+console.log(solution12(4, 16));
