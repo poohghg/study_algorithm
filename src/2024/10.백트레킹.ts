@@ -71,14 +71,36 @@ const solution2 = (n: number, m: number) => {
  * 그리고 '+'나 '-', 또는 ' '(공백)을 숫자 사이에 삽입하자(+는 더하기, -는 빼기, 공백은 숫자를 이어 붙이는 것을 뜻한다). 이렇게 만든 수식의 값을 계산하고 그 결과가 0이 될 수 있는지를 살피자.
  * N이 주어졌을 때 수식의 결과가 0이 되는 모든 수식을 찾는 프로그램을 작성하라.
  */
+
+type FormulasKey<T extends readonly string[]> = T[number];
+
 const solution3 = (n: number) => {
-  const formulas = ['+', '-', ''];
-  const combinationsOfFormulas: string[][] = [];
-  const selected: string[] = [];
+  const nums = Array.from({ length: n }, (_, index) => index + 1);
+  const formulas = ['+', '-', ' '] as const;
+  const combinationsOfFormulas: ('+' | '-' | ' ')[][] = [];
+  const selected: ('+' | '-' | ' ')[] = [];
+
+  const calculateNum = (
+    num1: number,
+    num2: number,
+    formulasKey: FormulasKey<typeof formulas>,
+  ) => {
+    if (formulasKey === '+') return num1 + num2;
+    if (formulasKey === '-') return num1 - num2;
+    return num1 * 10 + num2;
+  };
 
   const dfs = (level: number) => {
     if (level === n - 1) {
-      combinationsOfFormulas.push([...selected]);
+      console.log(selected);
+
+      const sum = nums.reduce((acc, curr, index) => {
+        if (index === 0) return curr;
+        return calculateNum(acc, curr, selected[index - 1]);
+      }, 0);
+
+      if (sum === 0) combinationsOfFormulas.push([...selected]);
+
       return;
     }
 
@@ -89,12 +111,10 @@ const solution3 = (n: number) => {
     }
   };
 
-  // "1 2 3 4"
-  // 3 * 3 * 3
   dfs(0);
-  console.log(combinationsOfFormulas.length);
+  console.log(combinationsOfFormulas);
 };
 
-// console.log(solution3(5));
+console.log(solution3(7));
 
-const solution4 = () => {};
+// const solution4 = () => {};

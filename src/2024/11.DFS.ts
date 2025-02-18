@@ -302,9 +302,9 @@ const solution11 = (n: number, r: number) => {
  * 의 삼각형처럼 위의 두개를 더한 값이 저장되게 된다. 예를 들어 N이 4 이고
  * 가장 윗 줄에 3 1 2 4 가 있다고 했을 때, 다음과 같은 삼각형이 그려진다.
  * 3 1 2 4
- * 4 3 6
- * 7 9
- * 16
+ *  4 3 6
+ *   7 9
+ *   16
  * N과 가장 밑에 있는 숫자가 주어져 있을 때 가장 윗줄에 있는 숫자를 구하는 프로그램을 작성하
  * 시오. 단, 답이 여러가지가 나오는 경우에는 사전순으로 가장 앞에 오는 것을 출력하여야 한다
  */
@@ -316,10 +316,10 @@ const solution12 = (n: number, target: number) => {
   };
 
   let answer = 0;
-  let visited = Array.from({ length: n + 1 }, () => false);
-  let record: number[] = [];
+  const visited = Array.from({ length: n + 1 }, () => false);
+  const record: number[] = [];
   // 3c0 3c1 3c2 3c3
-  let weight = Array.from({ length: n }, (a, index) =>
+  const weight = Array.from({ length: n }, (_, index) =>
     combination(n - 1, index),
   );
 
@@ -328,7 +328,6 @@ const solution12 = (n: number, target: number) => {
 
     if (level === n) {
       if (sum === target) {
-        console.log(record);
         answer++;
       }
       return;
@@ -348,4 +347,70 @@ const solution12 = (n: number, target: number) => {
   dfs(0);
 };
 
-console.log(solution12(4, 16));
+// console.log(solution12(4, 16));
+
+/**
+ * 조합 구하기
+ * 1부터 N까지 번호가 적힌 구슬이 있습니다. 이 중 M개를 뽑는 방법의 수를 출력하는 프로그램을 작성하세요.
+ *
+ * ▣ 입력설명
+ * 첫 번째 줄에 자연수 N(3<=N<=10)과 M(2<=M<=N) 이 주어집니다.
+ */
+
+const solution13 = (n: number, m: number) => {
+  const record: number[] = [];
+  const result: number[][] = [];
+
+  const dfs = (level: number, start: number) => {
+    if (level === m) {
+      result.push([...record]);
+      return;
+    }
+
+    for (let i = start; i <= n; i++) {
+      record.push(i);
+      dfs(level + 1, i + 1);
+      record.pop();
+    }
+  };
+
+  dfs(0, 1);
+  return result;
+};
+
+// console.log(solution13(4, 3));
+/**
+ * 수들의 조합
+ * N개의 정수가 주어지면 그 숫자들 중 K개를 뽑는 조합의 합이 임의의 정수 M의 배수인 개수는 몇 개가 있는지 출력하는 프로그램을 작성하세요.
+ * 예를 들면 5개의 숫자 2 4 5 8 12가 주어지고, 3개를 뽑은 조합의 합이 6의 배수인 조합을
+ * 찾으면 4+8+12 2+4+12로 2가지가 있습니다.
+ */
+
+const solution14 = (n: number, nums: number[], target: number) => {
+  const result: number[] = [];
+
+  const isLackOfNumber = (level: number, start: number) => {
+    // 남은 숫자가 n - level 보다 작으면 더 이상 탐색할 필요가 없다.
+    // nums.length - start: 현재 인덱스에서 끝까지 남은 숫자의 개수
+    // n - level: 앞으로 선택해야 할 숫자의 개수
+    return nums.length - start < n - level;
+  };
+
+  const dfs = (level: number, start: number, sum: number) => {
+    if (isLackOfNumber(level, start)) return;
+
+    if (level === n) {
+      if (sum % target === 0) result.push(sum);
+      return;
+    }
+
+    for (let i = start; i < nums.length; i++) {
+      dfs(level + 1, i + 1, sum + nums[i]);
+    }
+  };
+
+  dfs(0, 0, 0);
+  return result;
+};
+
+console.log(solution14(3, [2, 4, 5, 8, 12], 6));
