@@ -71,6 +71,7 @@ class Grape {
     const visited = {};
     const result = [];
     const t = this;
+
     function travers(vertex) {
       result.push(vertex);
       visited[vertex] = true;
@@ -78,9 +79,11 @@ class Grape {
         if (!visited[neighbor.node]) travers(neighbor.node);
       }
     }
+
     travers(start);
     return result;
   }
+
   // 넓이 우선탐색
   BFS(start) {
     if (!this.list[start]) return;
@@ -147,7 +150,6 @@ class Grape {
         }
       }
     }
-    return;
   }
 }
 
@@ -201,6 +203,7 @@ function solution_1(N, M, info) {
   const path = [];
 
   console.log(list);
+
   function travers(vertex) {
     path.push(vertex);
     visited[vertex] = true;
@@ -216,6 +219,7 @@ function solution_1(N, M, info) {
       }
     }
   }
+
   travers(1);
   console.log(answer);
 }
@@ -238,10 +242,11 @@ function solution_2(N, M, info) {
   let answer = 0;
   const list = Array.from(Array(N + 1), () => Array(N + 1).fill(0));
   const visited = {};
+
   for (const [a, b] of info) {
     list[a][b] = 1;
   }
-  console.log(list);
+
   function travers(vertex) {
     if (vertex === 5) {
       answer++;
@@ -255,9 +260,11 @@ function solution_2(N, M, info) {
       }
     }
   }
+
   travers(1);
   return answer;
 }
+
 // console.log(
 //   solution_2(5, 9, [
 //     [1, 2],
@@ -292,7 +299,6 @@ function solution_3(info, start = [1, 1], end = [7, 7]) {
     visited[x][y] = 1;
     path.push({ x, y });
     if (endX - 1 === x && endY - 1 === y) {
-      console.log(path);
       answer++;
       return;
     }
@@ -301,19 +307,20 @@ function solution_3(info, start = [1, 1], end = [7, 7]) {
       let cY = y - dy[i];
       if (cX < 0 || cX >= info.length || cY < 0 || cY >= info.length) continue;
       if (info[cX][cY] === 0 && visited[cX][cY] === 0) {
-        // console.log('cX', cX, 'cY', cY);
         travers(cX, cY);
         visited[cX][cY] = 0;
         path.pop();
       }
     }
   }
+
   let [startX, startY] = start;
   travers(startX - 1, startY - 1);
   console.log(answer);
 }
 
 function solution_3_1(params) {}
+
 // console.log(
 //   solution_3([
 //     [0, 0, 0, 0, 0, 0, 0],
@@ -356,6 +363,7 @@ function solution_4(s, e) {
     // break;
   }
 }
+
 // console.log(solution_4(5, 14));
 
 /**

@@ -301,4 +301,126 @@ const solution9 = (n: number, nums: number[]) => {
   });
 };
 
-console.log(solution9(10, [3, 7, 12, 18, 21, 27, 33, 38, 42, 45]));
+// console.log(solution9(10, [3, 7, 12, 18, 21, 27, 33, 38, 42, 45]));
+
+/**
+ * 알파벳
+ * https://www.acmicpc.net/problem/1987
+ */
+
+const solution10 = (r: number, c: number, board: string[][]) => {
+  const getNextPositions = (x: number, y: number) => {
+    const moves = [
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0],
+    ];
+
+    return moves
+      .map(([dx, dy]) => [dx + x, dy + y])
+      .filter(([dx, dy]) => dx >= 0 && dx < r && dy >= 0 && dy < c);
+  };
+
+  const main = () => {
+    const visited = Array.from({ length: r }, () => Array(c).fill(false));
+    const record = new Set<string>();
+    let result = 0;
+
+    const dfs = (x: number, y: number, count: number) => {
+      result = Math.max(result, count);
+
+      for (const [nextX, nextY] of getNextPositions(x, y)) {
+        if (visited[nextX][nextY]) continue;
+        if (record.has(board[nextX][nextY])) continue;
+
+        record.add(board[nextX][nextY]);
+        visited[nextX][nextY] = true;
+
+        dfs(nextX, nextY, count + 1);
+
+        visited[nextX][nextY] = false;
+        record.delete(board[nextX][nextY]);
+      }
+    };
+
+    visited[0][0] = true;
+    record.add(board[0][0]);
+    dfs(0, 0, 1);
+
+    return result;
+  };
+
+  return main();
+};
+
+// console.log(
+//   solution10(2, 4, [
+//     ['C', 'A', 'A', 'B'],
+//     ['A', 'D', 'C', 'B'],
+//   ]),
+// );
+
+/**
+ * 부등호
+ * https://www.acmicpc.net/problem/2529
+ */
+
+type Formulas = '<' | '>';
+
+const solution11 = (k: number, formulas: Formulas[]) => {
+  const isPossible = (
+    level: number,
+    prevNumber: number,
+    nextNumber: number,
+  ) => {
+    if (level === 0) return true;
+
+    if (formulas[level - 1] === '>') {
+      return prevNumber > nextNumber;
+    } else {
+      return prevNumber < nextNumber;
+    }
+  };
+
+  const arrayToNumber = (array: number[]) => {
+    return parseInt(array.join(''));
+  };
+
+  const main = () => {
+    const record: number[] = [];
+    const visited = Array.from({ length: 10 }).fill(0);
+    const result: [number, number] = [
+      Number.MAX_SAFE_INTEGER,
+      Number.MIN_SAFE_INTEGER,
+    ];
+
+    const dfs = (level: number) => {
+      if (level === k + 1) {
+        result[0] = Math.min(result[0], arrayToNumber(record));
+        result[1] = Math.max(result[1], arrayToNumber(record));
+        return;
+      }
+
+      for (let i = 0; i < 10; i++) {
+        if (visited[i] === 1) continue;
+        if (!isPossible(level, record[record.length - 1], i)) continue;
+
+        visited[i] = 1;
+        record.push(i);
+
+        dfs(level + 1);
+
+        visited[i] = 0;
+        record.pop();
+      }
+    };
+
+    dfs(0);
+    return result;
+  };
+
+  return main();
+};
+
+console.log(solution11(9, ['>', '<', '<', '<', '>', '>', '>', '<', '<']));
