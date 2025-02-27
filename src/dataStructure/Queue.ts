@@ -1,11 +1,19 @@
 import { Node } from './Node';
 
-class Queue<T> {
+export class Queue<T> {
   public first: Node<T> | null = null;
   public last: Node<T> | null = null;
   public size: number = 0;
 
-  constructor() {}
+  constructor(data?: T | T[]) {
+    if (!data) return;
+
+    if (Array.isArray(data)) {
+      data.forEach((value) => this.enqueue(value));
+    } else {
+      this.enqueue(data);
+    }
+  }
 
   enqueue(value: T) {
     const newNode = new Node<T>(value);
@@ -14,7 +22,7 @@ class Queue<T> {
       this.first = newNode;
       this.last = newNode;
     } else {
-      if (this.last?._right) this.last._right = newNode;
+      this.last!._right = newNode;
       this.last = newNode;
     }
     return this.size++;

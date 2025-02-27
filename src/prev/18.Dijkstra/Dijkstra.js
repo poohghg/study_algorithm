@@ -61,6 +61,7 @@ class WeightedGraph {
       }
       previous[vertex] = null;
     }
+
     let shortest;
     while (nodes.value.length) {
       shortest = nodes.dequeue().val;
