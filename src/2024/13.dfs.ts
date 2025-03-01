@@ -148,12 +148,91 @@ const solution3 = (n: number, m: number, arr: [number, number][]) => {
   return result;
 };
 
+// console.log(
+//   solution3(6, 3, [
+//     [1, 2],
+//     [2, 3],
+//     [2, 5],
+//     [3, 4],
+//     [4, 5],
+//   ]),
+// );
+
+/**
+ * https://www.acmicpc.net/problem/15686
+ * 도시에 있는 치킨집 중에서 최대 M개를 고르고, 나머지 치킨집은 모두 폐업시켜야 한다. 어떻게 고르면, 도시의 치킨 거리가 가장 작게 될지 구하는 프로그램을 작성하시오.
+ * 도시의 정보는 0, 1, 2로 이루어져 있고, 0은 빈 칸, 1은 집, 2는 치킨집을 의미한다
+ */
+
+const solution4 = (n: number, m: number, arr: number[][]) => {
+  // todo 조합을 고리고 해당 나머지 치킨집을 폐업한다.
+
+  const LOCATION = ['empty', 'house', 'chicken'] as const;
+
+  const getLocations = (loc: (typeof LOCATION)[number]) => {
+    const targetValue = LOCATION.indexOf(loc);
+
+    return arr.reduce(
+      (acc, curr, x) => {
+        curr.forEach((value: number, y: number) => {
+          if (value === targetValue) acc.push([x, y]);
+        });
+        return acc;
+      },
+      [] as [number, number][],
+    );
+  };
+
+  const getCombinations = () => {
+    const chickenRestaurants = getLocations('chicken');
+    let result: [number, number][][] = [];
+
+    const dfs = (level: number, start: number, record: [number, number][]) => {
+      if (level === m) {
+        result.push(record);
+        return;
+      }
+
+      for (let i = start; i < chickenRestaurants.length; i++)
+        dfs(level + 1, i + 1, [...record, chickenRestaurants[i]]);
+    };
+
+    dfs(0, 0, []);
+    return result;
+  };
+
+  const chickenCombinations = getCombinations();
+  const houses = getLocations('house');
+  let result = Number.MAX_SAFE_INTEGER;
+
+  chickenCombinations.forEach((chickenSet) => {
+    let sumOfDistance = 0;
+
+    houses.forEach(([x1, y1]) => {
+      let minDistance = Number.MAX_SAFE_INTEGER;
+
+      chickenSet.forEach(([x2, y2]) => {
+        minDistance = Math.min(
+          minDistance,
+          Math.abs(x1 - x2) + Math.abs(y1 - y2),
+        );
+      });
+
+      sumOfDistance += minDistance;
+    });
+
+    result = Math.min(result, sumOfDistance);
+  });
+
+  return result;
+};
+
 console.log(
-  solution3(6, 3, [
-    [1, 2],
-    [2, 3],
-    [2, 5],
-    [3, 4],
-    [4, 5],
+  solution4(5, 2, [
+    [0, 2, 0, 1, 0],
+    [1, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+    [2, 0, 0, 1, 1],
+    [2, 2, 0, 1, 2],
   ]),
 );
