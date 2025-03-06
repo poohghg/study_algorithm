@@ -366,12 +366,12 @@ const solution7 = (n: number, arr: string[][]) => {
   return [main(arr), main(newArr)];
 };
 
-console.log(
-  solution7(5, [
-    ['R', 'R', 'R', 'B', 'B'],
-    ['G', 'G', 'B', 'B', 'B'],
-    ['B', 'B', 'B', 'R', 'R'],
-    ['B', 'B', 'R', 'R', 'R'],
-    ['R', 'R', 'R', 'R', 'R'],
-  ]),
-);
+// console.log(
+//   solution7(5, [
+//     ['R', 'R', 'R', 'B', 'B'],
+//     ['G', 'G', 'B', 'B', 'B'],
+//     ['B', 'B', 'B', 'R', 'R'],
+//     ['B', 'B', 'R', 'R', 'R'],
+//     ['R', 'R', 'R', 'R', 'R'],
+//   ]),
+// );
