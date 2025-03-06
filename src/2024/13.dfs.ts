@@ -116,6 +116,7 @@ const solution2 = (
  * 다음 m개의 줄에는 간선을 나타내는 두 개의 정수가 주어진다. 같은 간선은 여러 번 주어지지 않는다. 정점은 1번부터 n번까지 번호가 매겨져 있다.
  * 입력의 마지막 줄에는 0이 두 개 주어진다
  * 트리: 사이클이 없는 연결요소이다(즉 무방향 그래프에서 사이클이 없는 연결 요소)
+ * 양방향 요소
  */
 const solution3 = (n: number, m: number, arr: [number, number][]) => {
   const makeGraph = () => {
@@ -165,12 +166,9 @@ const solution3 = (n: number, m: number, arr: [number, number][]) => {
  */
 
 const solution4 = (n: number, m: number, arr: number[][]) => {
-  // todo 조합을 고리고 해당 나머지 치킨집을 폐업한다.
-
-  const LOCATION = ['empty', 'house', 'chicken'] as const;
-
-  const getLocations = (loc: (typeof LOCATION)[number]) => {
-    const targetValue = LOCATION.indexOf(loc);
+  const LOCATIONS = ['empty', 'house', 'chicken'] as const;
+  const getLocations = (loc: (typeof LOCATIONS)[number]) => {
+    const targetValue = LOCATIONS.indexOf(loc);
 
     return arr.reduce(
       (acc, curr, x) => {
@@ -201,38 +199,179 @@ const solution4 = (n: number, m: number, arr: number[][]) => {
     return result;
   };
 
-  const chickenCombinations = getCombinations();
-  const houses = getLocations('house');
-  let result = Number.MAX_SAFE_INTEGER;
+  const main = () => {
+    const chickenCombinations = getCombinations();
+    const houses = getLocations('house');
+    let result = Number.MAX_SAFE_INTEGER;
 
-  chickenCombinations.forEach((chickenSet) => {
-    let sumOfDistance = 0;
+    chickenCombinations.forEach((chickenSet) => {
+      let sumOfDistance = 0;
 
-    houses.forEach(([x1, y1]) => {
-      let minDistance = Number.MAX_SAFE_INTEGER;
+      houses.forEach(([x1, y1]) => {
+        let minDistance = Number.MAX_SAFE_INTEGER;
 
-      chickenSet.forEach(([x2, y2]) => {
-        minDistance = Math.min(
-          minDistance,
-          Math.abs(x1 - x2) + Math.abs(y1 - y2),
-        );
+        chickenSet.forEach(([x2, y2]) => {
+          minDistance = Math.min(
+            minDistance,
+            Math.abs(x1 - x2) + Math.abs(y1 - y2),
+          );
+        });
+
+        sumOfDistance += minDistance;
       });
 
-      sumOfDistance += minDistance;
+      result = Math.min(result, sumOfDistance);
     });
 
-    result = Math.min(result, sumOfDistance);
-  });
+    return result;
+  };
+
+  return main();
+};
+
+// console.log(
+//   solution4(5, 2, [
+//     [0, 2, 0, 1, 0],
+//     [1, 0, 1, 0, 0],
+//     [0, 0, 0, 0, 0],
+//     [2, 0, 0, 1, 1],
+//     [2, 2, 0, 1, 2],
+//   ]),
+// );
+
+/**
+ * https://www.acmicpc.net/problem/9466
+ * 싸이클을 이루는 요소
+ */
+
+const solution5 = (n: number, nums: number[]) => {
+  const grape = [0, ...nums];
+  const finished: boolean[] = Array(n + 1).fill(false);
+  const visited: boolean[] = Array(n + 1).fill(false);
+  let result: number[] = [];
+
+  const dfs = (node: number) => {
+    visited[node] = true;
+    let nextNode = grape[node];
+
+    if (!visited[nextNode]) dfs(nextNode);
+    // 다음 노드를 방문했고, 아직 스택에 있다면
+    else if (!finished[nextNode]) {
+      while (nextNode !== node) {
+        result.push(nextNode);
+        nextNode = grape[nextNode];
+      }
+      result.push(node);
+    }
+    finished[node] = true;
+  };
+
+  for (let i = 1; i < grape.length; i++) {
+    if (!visited[i]) dfs(i);
+  }
 
   return result;
 };
 
+// console.log(solution5(7, [3, 1, 3, 7, 3, 4, 6]));
+
+/**
+ * https://www.acmicpc.net/problem/2668
+ * 싸이클을 구성하는 부분 그래프에 포함된 노드의 갯수를 구해보자
+ */
+
+const solution6 = (n: number, nums: number[]) => {
+  const grape = [0, ...nums];
+  const stackDone = Array.from({ length: n + 1 }, () => false);
+  const visited = Array.from({ length: n + 1 }, () => false);
+  const result: number[] = [];
+
+  const dfs = (node: number) => {
+    visited[node] = true;
+
+    let nextNode = grape[node];
+
+    if (!visited[nextNode]) dfs(nextNode);
+    else if (!stackDone[nextNode]) {
+      while (nextNode !== node) {
+        result.push(nextNode);
+        nextNode = grape[nextNode];
+      }
+      result.push(node);
+    }
+
+    stackDone[node] = true;
+  };
+
+  for (let i = 1; i <= n; i++) {
+    if (!visited[i]) dfs(i);
+  }
+
+  return result;
+};
+
+// console.log(solution6(7, [3, 1, 1, 5, 5, 4, 6]));
+
+/**
+ * https://www.acmicpc.net/problem/10026
+ */
+
+const solution7 = (n: number, arr: string[][]) => {
+  const getNextPositions = (() => {
+    const directions = [
+      [1, 0],
+      [-1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    return (x: number, y: number) =>
+      directions
+        .map(([px, py]) => [px + x, py + y])
+        .filter(([px, py]) => px >= 0 && px < n && py >= 0 && py < n);
+  })();
+
+  const main = (map: string[][]) => {
+    const visited = Array.from({ length: n }, (): boolean[] =>
+      Array(n).fill(false),
+    );
+
+    const dfs = (x: number, y: number, value: string) => {
+      visited[x][y] = true;
+
+      for (const [nx, ny] of getNextPositions(x, y)) {
+        if (visited[nx][ny] || map[nx][ny] !== value) continue;
+        dfs(nx, ny, value);
+      }
+    };
+
+    let result = 0;
+
+    for (let x = 0; x < n; x++) {
+      for (let y = 0; y < n; y++) {
+        if (!visited[x][y]) {
+          dfs(x, y, map[x][y]);
+          result++;
+        }
+      }
+    }
+
+    return result;
+  };
+
+  const newArr = arr.map((x) =>
+    x.map((value) => (value === 'G' ? 'R' : value)),
+  );
+
+  return [main(arr), main(newArr)];
+};
+
 console.log(
-  solution4(5, 2, [
-    [0, 2, 0, 1, 0],
-    [1, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0],
-    [2, 0, 0, 1, 1],
-    [2, 2, 0, 1, 2],
+  solution7(5, [
+    ['R', 'R', 'R', 'B', 'B'],
+    ['G', 'G', 'B', 'B', 'B'],
+    ['B', 'B', 'B', 'R', 'R'],
+    ['B', 'B', 'R', 'R', 'R'],
+    ['R', 'R', 'R', 'R', 'R'],
   ]),
 );
