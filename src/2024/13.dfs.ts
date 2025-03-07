@@ -375,3 +375,108 @@ const solution7 = (n: number, arr: string[][]) => {
 //     ['R', 'R', 'R', 'R', 'R'],
 //   ]),
 // );
+
+/**
+ * https://fastcampus.co.kr/classroom/215877
+ *  0은 빈 칸, 1은 벽, 2는 바이러스가 있는 곳
+ *  새로 세울 수 있는 벽의 개수는 3개
+ */
+
+const solution8 = (n: number, m: number, arr: number[][]) => {
+  const getNextPositions = (() => {
+    const directions = [
+      [1, 0],
+      [-1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    return (x: number, y: number) =>
+      directions
+        .map(([px, py]) => [px + x, py + y])
+        .filter(([px, py]) => px >= 0 && px < n && py >= 0 && py < m);
+  })();
+
+  const getVirusArea = (record: [number, number][]) => {
+    const newMap = arr.map((xArr, x) => xArr.slice());
+    const visited = Array.from({ length: n }, (): boolean[] =>
+      Array(m).fill(false),
+    );
+    record.forEach(([x, y]) => (newMap[x][y] = 1));
+
+    const dfs = (x: number, y: number) => {
+      visited[x][y] = true;
+      newMap[x][y] = 2;
+
+      for (const [nx, ny] of getNextPositions(x, y)) {
+        if (newMap[nx][ny] === 0) dfs(nx, ny);
+      }
+    };
+
+    for (let x = 0; x < n; x++) {
+      for (let y = 0; y < m; y++) {
+        if (!visited[x][y] && newMap[x][y] === 2) dfs(x, y);
+      }
+    }
+
+    return newMap.flat().filter((x) => x === 0).length;
+  };
+
+  const main = () => {
+    const tempPositions = arr.reduce(
+      (acc, curr, x) => {
+        curr.forEach((value, y) => {
+          if (value === 0) acc.push([x, y]);
+        });
+        return acc;
+      },
+      [] as [number, number][],
+    );
+
+    const record: [number, number][] = [];
+    let result = Number.MIN_SAFE_INTEGER;
+
+    const dfs = (level: number, start: number) => {
+      if (level === 3) {
+        result = Math.max(result, getVirusArea(record));
+        return;
+      }
+
+      for (let i = start; i < tempPositions.length; i++) {
+        record.push(tempPositions[i]);
+        dfs(level + 1, i + 1);
+        record.pop();
+      }
+    };
+
+    dfs(0, 0);
+    return result;
+  };
+
+  return main();
+};
+
+console.log(
+  solution8(7, 7, [
+    [2, 0, 0, 0, 1, 1, 0],
+    [0, 0, 1, 0, 1, 2, 0],
+    [0, 1, 1, 0, 1, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1],
+    [0, 1, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0],
+  ]),
+);
+
+console.log(
+  solution8(8, 8, [
+    [2, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+  ]),
+);
