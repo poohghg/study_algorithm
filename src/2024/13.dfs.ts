@@ -398,12 +398,6 @@ const solution8 = (n: number, m: number, arr: number[][]) => {
   })();
 
   const getVirusArea = (record: [number, number][]) => {
-    const newMap = arr.map((xArr, x) => xArr.slice());
-    const visited = Array.from({ length: n }, (): boolean[] =>
-      Array(m).fill(false),
-    );
-    record.forEach(([x, y]) => (newMap[x][y] = 1));
-
     const dfs = (x: number, y: number) => {
       visited[x][y] = true;
       newMap[x][y] = 2;
@@ -412,6 +406,12 @@ const solution8 = (n: number, m: number, arr: number[][]) => {
         if (newMap[nx][ny] === 0) dfs(nx, ny);
       }
     };
+
+    const newMap = arr.map((xArr, x) => xArr.slice());
+    const visited = Array.from({ length: n }, (): boolean[] =>
+      Array(m).fill(false),
+    );
+    record.forEach(([x, y]) => (newMap[x][y] = 1));
 
     for (let x = 0; x < n; x++) {
       for (let y = 0; y < m; y++) {
@@ -423,19 +423,6 @@ const solution8 = (n: number, m: number, arr: number[][]) => {
   };
 
   const main = () => {
-    const tempPositions = arr.reduce(
-      (acc, curr, x) => {
-        curr.forEach((value, y) => {
-          if (value === 0) acc.push([x, y]);
-        });
-        return acc;
-      },
-      [] as [number, number][],
-    );
-
-    const record: [number, number][] = [];
-    let result = Number.MIN_SAFE_INTEGER;
-
     const dfs = (level: number, start: number) => {
       if (level === 3) {
         result = Math.max(result, getVirusArea(record));
@@ -449,6 +436,19 @@ const solution8 = (n: number, m: number, arr: number[][]) => {
       }
     };
 
+    const tempPositions = arr.reduce(
+      (acc, curr, x) => {
+        curr.forEach((value, y) => {
+          if (value === 0) acc.push([x, y]);
+        });
+        return acc;
+      },
+      [] as [number, number][],
+    );
+
+    const record: [number, number][] = [];
+    let result = Number.MIN_SAFE_INTEGER;
+
     dfs(0, 0);
     return result;
   };
@@ -456,27 +456,143 @@ const solution8 = (n: number, m: number, arr: number[][]) => {
   return main();
 };
 
-console.log(
-  solution8(7, 7, [
-    [2, 0, 0, 0, 1, 1, 0],
-    [0, 0, 1, 0, 1, 2, 0],
-    [0, 1, 1, 0, 1, 0, 0],
-    [0, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 1, 1],
-    [0, 1, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 0],
-  ]),
-);
+// console.log(
+//   solution8(7, 7, [
+//     [2, 0, 0, 0, 1, 1, 0],
+//     [0, 0, 1, 0, 1, 2, 0],
+//     [0, 1, 1, 0, 1, 0, 0],
+//     [0, 1, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 1, 1],
+//     [0, 1, 0, 0, 0, 0, 0],
+//     [0, 1, 0, 0, 0, 0, 0],
+//   ]),
+// );
+//
+// console.log(
+//   solution8(8, 8, [
+//     [2, 0, 0, 0, 0, 0, 0, 2],
+//     [2, 0, 0, 0, 0, 0, 0, 2],
+//     [2, 0, 0, 0, 0, 0, 0, 2],
+//     [2, 0, 0, 0, 0, 0, 0, 2],
+//     [2, 0, 0, 0, 0, 0, 0, 2],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0],
+//   ]),
+// );
 
-console.log(
-  solution8(8, 8, [
-    [2, 0, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 0, 2],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-  ]),
-);
+/**
+ * https://www.acmicpc.net/problem/10819
+ */
+
+const solution9 = (nums: number[]) => {
+  const sumOfRecord = (record: number[]) => {
+    let sum = 0;
+    for (let i = 0; i < record.length - 1; i++) {
+      sum += Math.abs(record[i] - record[i + 1]);
+    }
+    return sum;
+  };
+
+  const visited = Array.from({ length: nums.length }, () => false);
+  const record: number[] = [];
+  let result = 0;
+
+  const dfs = (level: number) => {
+    if (level === nums.length) {
+      result = Math.max(result, sumOfRecord(record));
+      return;
+    }
+
+    for (let i = 0; i < nums.length; i++) {
+      if (visited[i]) continue;
+
+      visited[i] = true;
+      record.push(nums[i]);
+
+      dfs(level + 1);
+
+      visited[i] = false;
+      record.pop();
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+// console.log(solution9([20, 1, 15, 8, 4, 10]));
+// console.log(solution9([1, 2, 3, 4, 5]));
+/**
+ * https://www.acmicpc.net/problem/14888
+ * https://yoongrammer.tistory.com/109 참조
+ * @param operators // 덧셈(+)의 개수, 뺄셈(-)의 개수, 곱셈(×)의 개수, 나눗셈(÷)의 개수이다.
+ */
+
+type Operator = '+' | '-' | 'x' | '/';
+
+const solution10 = (nums: number[], operators: number[]) => {
+  const generateOperators = () => {
+    const opTypes: Operator[] = ['+', '-', 'x', '/'];
+    return operators.flatMap((count, index) =>
+      Array(count).fill(opTypes[index]),
+    );
+  };
+
+  const calcImpl = (num1: number, num2: number, operator: Operator) => {
+    switch (operator) {
+      case '+':
+        return num1 + num2;
+      case '-':
+        return num1 - num2;
+      case 'x':
+        return num1 * num2;
+      case '/': {
+        if (num1 < 0) return -Math.trunc(Math.abs(num1) / num2);
+        return Math.trunc(num1 / num2);
+      }
+    }
+  };
+
+  const calcNums = (operators: Operator[]) => {
+    return nums.reduce((acc, curr, index) => {
+      if (index === 0) return curr;
+      return calcImpl(acc, curr, operators[index - 1]);
+    }, nums[0]);
+  };
+
+  const operatorStrings = generateOperators();
+  const visited = Array.from({ length: operatorStrings.length }, () => false);
+  const record: Operator[] = [];
+  // min, max
+  const result: [number, number] = [
+    Number.MAX_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER,
+  ];
+
+  const dfs = (level: number) => {
+    if (level === operatorStrings.length) {
+      const value = calcNums(record);
+      result[0] = Math.min(result[0], value);
+      result[1] = Math.max(result[1], value);
+      return;
+    }
+
+    for (let i = 0; i < operatorStrings.length; i++) {
+      if (visited[i]) continue;
+
+      visited[i] = true;
+      record.push(operatorStrings[i]);
+
+      dfs(level + 1);
+
+      visited[i] = false;
+      record.pop();
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+console.log(solution10([1, 2, 3, 4, 5, 6], [2, 1, 1, 1]));
