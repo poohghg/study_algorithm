@@ -206,7 +206,6 @@ const solution4 = (s: number, t: number) => {
       for (const operator of ['*', '+', '-', '/'] as Operator[]) {
         const nextNum = calcImpl(num, operator);
         if (!isValidNum(nextNum)) continue;
-
         if (nextNum === t) return makeResult(num, operator).reverse();
 
         queue.enqueue(nextNum);
@@ -220,4 +219,166 @@ const solution4 = (s: number, t: number) => {
   return bfs();
 };
 
-console.log(solution4(7, 9));
+// console.log(solution4(7, 9));
+
+/**
+ * https://www.acmicpc.net/problem/18405
+ * 첫째 줄에 자연수 N, K가 공백을 기준으로 구분되어 주어진다. (1 ≤ N ≤ 200, 1 ≤ K ≤ 1,000) 둘째 줄부터 N개의 줄에 걸쳐서 시험관의 정보가 주어진다.
+ * 각 행은 N개의 원소로 구성되며, 해당 위치에 존재하는 바이러스의 번호가 공백을 기준으로 구분되어 주어진다.
+ * 단, 해당 위치에 바이러스가 존재하지 않는 경우 0이 주어진다. 또한 모든 바이러스의 번호는 K이하의 자연수로만 주어진다. N+2번째 줄에는 S, X, Y가 공백을 기준으로 구분되어 주어진다. (0 ≤ S ≤ 10,000, 1 ≤ X, Y ≤ N)
+ * 3
+ * 1 0 2
+ * 0 0 0
+ * 3 0 0
+ * 2 3 2
+ */
+
+const solution5 = (
+  n: number,
+  arr: number[][],
+  [s, x, y]: [number, number, number],
+) => {
+  const getNextPositions = (() => {
+    const directions = [
+      [1, 0],
+      [-1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    return (x: number, y: number) =>
+      directions
+        .map(([px, py]) => [px + x, py + y])
+        .filter(([px, py]) => px >= 0 && px < n && py >= 0 && py < n);
+  })();
+
+  const grape = arr
+    .reduce(
+      (acc, cur, x) => {
+        cur.forEach((v, y) => {
+          if (v !== 0) acc.push([v, 0, [x, y]]);
+        });
+        return acc;
+      },
+      [] as [number, number, [number, number]][],
+    )
+    .sort((a, b) => a[0] - b[0]);
+};
+
+// console.log(
+//   solution5(
+//     3,
+//     [
+//       [1, 0, 2],
+//       [0, 0, 0],
+//       [3, 0, 0],
+//     ],
+//     [2, 3, 2],
+//   ),
+// );
+
+/**
+ * https://www.acmicpc.net/problem/18352
+ * 첫째 줄에 도시의 개수 N, 도로의 개수 M, 거리 정보 K, 출발 도시의 번호 X가 주어진다. (2 ≤ N ≤ 300,000, 1 ≤ M ≤ 1,000,000, 1 ≤ K ≤ 300,000, 1 ≤ X ≤ N)
+ * 둘째 줄부터 M개의 줄에 걸쳐서 두 개의 자연수 A, B가 공백을 기준으로 구분되어 주어진다.
+ * 이는 A번 도시에서 B번 도시로 이동하는 단방향 도로가 존재한다는 의미다. (1 ≤ A, B ≤ N) 단, A와 B는 서로 다른 자연수이다.
+ */
+
+const solution6 = (n: number, k: number, x: number, arr: number[][]) => {
+  const grape = arr.reduce(
+    (acc, curr) => {
+      const [node1, node2] = curr;
+      acc.set(node1, [...(acc.get(node1) ?? []), node2]);
+      return acc;
+    },
+    new Map() as Map<number, number[]>,
+  );
+
+  const bsf = (start: number) => {
+    const visited: number[] = Array(n + 1).fill(-1);
+    const queue = new SimpleQueue(start);
+    visited[start] = 0;
+
+    while (!queue.isEmpty) {
+      const node = queue.dequeue()!;
+      const dist = visited[node];
+
+      for (const nextNode of grape.get(node) ?? []) {
+        if (visited[nextNode] !== -1) continue;
+        if (dist + 1 === k) return dist + 1;
+
+        queue.enqueue(nextNode);
+        visited[nextNode] = dist + 1;
+      }
+    }
+
+    return -1;
+  };
+
+  return bsf(x);
+};
+
+// console.log(
+//   solution6(4, 2, 1, [
+//     [1, 2],
+//     [1, 3],
+//     [2, 3],
+//     [2, 4],
+//   ]),
+// );
+
+/**
+ * https://www.acmicpc.net/problem/5567
+ * 상근이는 자신의 결혼식에 학교 동기 중 자신의 친구와 친구의 친구를 초대하기로 했다. 상근이의 동기는 모두 N명이고, 이 학생들의 학번은 모두 1부터 N까지이다. 상근이의 학번은 1이다.
+ * 상근이는 동기들의 친구 관계를 모두 조사한 리스트를 가지고 있다. 이 리스트를 바탕으로 결혼식에 초대할 사람의 수를 구하는 프로그램을 작성하시오.
+ */
+
+const solution7 = (n: number, arr: number[][]) => {
+  const grape = arr.reduce(
+    (acc, curr) => {
+      const [node1, node2] = curr;
+      acc.set(node1, [...(acc.get(node1) ?? []), node2]);
+      return acc;
+    },
+    new Map() as Map<number, number[]>,
+  );
+  const visited: number[] = Array(n + 1).fill(-1);
+
+  let result = 0;
+  const queue = new SimpleQueue(1);
+  visited[1] = 0;
+
+  while (!queue.isEmpty) {
+    const node = queue.dequeue()!;
+    const cnt = visited[node];
+    result = Math.max(result, cnt);
+
+    for (const nextNode of grape.get(node) ?? []) {
+      if (visited[nextNode] !== -1) continue;
+      queue.enqueue(nextNode);
+      visited[nextNode] = cnt + 1;
+    }
+  }
+
+  return result;
+};
+
+// console.log(
+//   solution7(5, [
+//     [1, 2],
+//     [1, 3],
+//     [3, 4],
+//     [2, 3],
+//     [4, 5],
+//   ]),
+// );
+//
+// console.log(
+//   solution7(5, [
+//     [2, 3],
+//     [3, 4],
+//     [4, 5],
+//     [5, 6],
+//     [2, 5],
+//   ]),
+// );
