@@ -315,4 +315,52 @@ const solution6 = (sequence: number[], k: number) => {
   return result;
 };
 
-console.log(solution6([1, 1, 1, 2, 3, 4, 5], 5));
+// console.log(solution6([1, 1, 1, 2, 3, 4, 5], 5));
+
+/**
+ * N개의 정수로 구성된 배열 A가 주어졌을 때, A에 없는 가장 작은 양의 정수(0보다 큰)를 반환합니다.
+ * 예를 들어, A = [1, 3, 6, 4, 1, 2]일 때, 함수는 5를 반환해야 합니다.
+ * A = [1, 2, 3]일 때, 함수는 4를 반환해야 합니다.
+ * A = [−1, −3]일 때, 함수는 1을 반환해야 합니다
+ */
+
+const solution7 = (A: number[]) => {
+  const max = Math.max(...A);
+
+  if (max < 1) return 1;
+
+  const set = new Set(A);
+
+  for (let i = 1; i <= max + 1; i++) {
+    if (set.has(i)) continue;
+    return i;
+  }
+
+  return 1;
+};
+
+/**
+ * https://school.programmers.co.kr/learn/courses/30/lessons/176963
+ *
+ */
+
+const solution8 = (name: string[], yearning: number[], photo: string[][]) => {
+  const scoreMap = name.reduce<Map<string, number>>((map, n, index) => {
+    map.set(n, yearning[index]);
+    return map;
+  }, new Map());
+
+  return photo.map((array) =>
+    array.reduce((sum, name) => {
+      return sum + (scoreMap.get(name) ?? 0);
+    }, 0),
+  );
+};
+
+console.log(
+  solution8(
+    ['may', 'kein', 'kain', 'radi'],
+    [5, 10, 1, 3],
+    [['may'], ['kein', 'deny', 'may'], ['kon', 'coni']],
+  ),
+);
