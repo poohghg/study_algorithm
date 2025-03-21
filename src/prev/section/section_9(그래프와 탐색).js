@@ -12,6 +12,7 @@ class PriorityQueue {
   enqueue(val, priority) {
     if (val == null || isNaN(priority)) return;
     const prevNode = this.#value.find((element) => element.val === val);
+
     if (prevNode) {
       prevNode.priority = priority;
     } else {

@@ -36,12 +36,13 @@ class WeightedGraph {
   // weigth눈 두 버텍스사이의 거리이다.
   addEdge(vertex1, vertex2, weigth) {
     if (!this.#list[vertex1] || !this.#list[vertex2] || isNaN(weigth)) return;
+
     this.#list[vertex1].push({ node: vertex2, weigth });
     this.#list[vertex2].push({ node: vertex1, weigth });
   }
 
   Dijkstra(start, end) {
-    if (!this.#list[start] || !this.#list[end]) return undefined;
+    if (!this.#list[start] || !this.#list[end]) return;
     // 우선순위큐 방문해야할 버텍스중 가장가까운 다음 노드.
     const nodes = new PriorityQueue();
     // 시작점부터의 각노드의 거리를 표기한다.
@@ -63,8 +64,10 @@ class WeightedGraph {
     }
 
     let shortest;
+
     while (nodes.value.length) {
       shortest = nodes.dequeue().val;
+
       if (shortest === end) {
         let path = [];
         while (shortest && distances[shortest] !== Infinity) {

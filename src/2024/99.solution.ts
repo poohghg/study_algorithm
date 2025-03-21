@@ -341,7 +341,6 @@ const solution7 = (A: number[]) => {
 
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/176963
- *
  */
 
 const solution8 = (name: string[], yearning: number[], photo: string[][]) => {
@@ -351,16 +350,105 @@ const solution8 = (name: string[], yearning: number[], photo: string[][]) => {
   }, new Map());
 
   return photo.map((array) =>
-    array.reduce((sum, name) => {
-      return sum + (scoreMap.get(name) ?? 0);
-    }, 0),
+    array.reduce((sum, name) => sum + (scoreMap.get(name) ?? 0), 0),
   );
 };
 
+// console.log(
+//   solution8(
+//     ['may', 'kein', 'kain', 'radi'],
+//     [5, 10, 1, 3],
+//     [['may'], ['kein', 'deny', 'may'], ['kon', 'coni']],
+//   ),
+// );
+
+/**
+ * https://school.programmers.co.kr/learn/courses/30/lessons/258712
+ */
+
+const solution9 = (friends: readonly string[], gifts: string[]) => {
+  const friendSize = friends.length;
+
+  const initArray = Array.from({ length: friendSize }, (): number[] =>
+    Array(friendSize + 1).fill(0),
+  );
+
+  const getIndex = (name: string) =>
+    friends.findIndex((friend) => friend === name);
+
+  const records = gifts.reduce((acc, giftInfo) => {
+    const [giver, receiver] = giftInfo.split(' ');
+    const giverIdx = getIndex(giver);
+    const receiverIdx = getIndex(receiver);
+
+    acc[giverIdx][receiverIdx] = acc[giverIdx][receiverIdx] + 1;
+    acc[giverIdx][friendSize] = acc[giverIdx][friendSize] + 1;
+
+    acc[receiverIdx][giverIdx] = acc[receiverIdx][giverIdx] - 1;
+    acc[receiverIdx][friendSize] = acc[receiverIdx][friendSize] - 1;
+
+    return acc;
+  }, initArray);
+
+  return Math.max(
+    ...records.map((record, i) => {
+      let sum = 0;
+
+      record.forEach((giftPoints, j) => {
+        if (i === j || j === friendSize) return;
+
+        if (giftPoints > 0) sum++;
+        else if (
+          giftPoints === 0 &&
+          records[i][friendSize] > records[j][friendSize]
+        )
+          sum++;
+      });
+
+      return sum;
+    }),
+  );
+};
+
+// console.log(
+//   solution9(
+//     ['joy', 'brad', 'alessandro', 'conan', 'david'],
+//     [
+//       'alessandro brad',
+//       'alessandro joy',
+//       'alessandro conan',
+//       'david alessandro',
+//       'alessandro david',
+//     ],
+//   ),
+// );
+
+/**
+ * https://school.programmers.co.kr/learn/courses/30/lessons/389479
+ */
+
+const solution10 = (players: number[], m: number, k: number) => {
+  let result = 0;
+  const queue: number[] = [];
+
+  players.forEach((player, time) => {
+    while (queue.length && queue[0] + k === time) queue.shift();
+
+    const needServer = Math.floor(player / m);
+
+    while (queue.length < needServer) {
+      queue.push(time);
+      result++;
+    }
+  });
+
+  return result;
+};
+
 console.log(
-  solution8(
-    ['may', 'kein', 'kain', 'radi'],
-    [5, 10, 1, 3],
-    [['may'], ['kein', 'deny', 'may'], ['kon', 'coni']],
+  solution10(
+    [0, 2, 3, 3, 1, 2, 0, 0, 0, 0, 4, 2, 0, 6, 0, 4, 2, 13, 3, 5, 10, 0, 1, 5],
+    3,
+    5,
   ),
 );
