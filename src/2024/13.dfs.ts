@@ -144,20 +144,21 @@ const solution3 = (n: number, m: number, arr: [number, number][]) => {
     return false;
   };
 
-  for (let i = 1; i <= n; i++) if (!visited[i] && !isCycle(i, 0)) result++;
+  for (let i = 1; i <= n; i++)
+    if (!visited[i] && !isCycle(i, 0)) {
+      result++;
+    }
 
   return result;
 };
 
-// console.log(
-//   solution3(6, 3, [
-//     [1, 2],
-//     [2, 3],
-//     [2, 5],
-//     [3, 4],
-//     [4, 5],
-//   ]),
-// );
+console.log(
+  solution3(6, 3, [
+    [1, 2],
+    [2, 3],
+    [3, 4],
+  ]),
+);
 
 /**
  * https://www.acmicpc.net/problem/15686
@@ -167,6 +168,7 @@ const solution3 = (n: number, m: number, arr: [number, number][]) => {
 
 const solution4 = (n: number, m: number, arr: number[][]) => {
   const LOCATIONS = ['empty', 'house', 'chicken'] as const;
+
   const getLocations = (loc: (typeof LOCATIONS)[number]) => {
     const targetValue = LOCATIONS.indexOf(loc);
 
@@ -263,6 +265,7 @@ const solution5 = (n: number, nums: number[]) => {
       }
       result.push(node);
     }
+
     finished[node] = true;
   };
 
@@ -595,4 +598,4 @@ const solution10 = (nums: number[], operators: number[]) => {
   return result;
 };
 
-console.log(solution10([1, 2, 3, 4, 5, 6], [2, 1, 1, 1]));
+// console.log(solution10([1, 2, 3, 4, 5, 6], [2, 1, 1, 1]));

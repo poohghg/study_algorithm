@@ -344,14 +344,12 @@ const solution7 = (n: number, arr: number[][]) => {
   );
   const visited: number[] = Array(n + 1).fill(-1);
 
-  let result = 0;
   const queue = new SimpleQueue(1);
   visited[1] = 0;
 
   while (!queue.isEmpty) {
     const node = queue.dequeue()!;
     const cnt = visited[node];
-    result = Math.max(result, cnt);
 
     for (const nextNode of grape.get(node) ?? []) {
       if (visited[nextNode] !== -1) continue;
@@ -360,25 +358,25 @@ const solution7 = (n: number, arr: number[][]) => {
     }
   }
 
-  return result;
+  return visited.filter((v) => 0 < v && v <= 2).length;
 };
 
-// console.log(
-//   solution7(5, [
-//     [1, 2],
-//     [1, 3],
-//     [3, 4],
-//     [2, 3],
-//     [4, 5],
-//   ]),
-// );
-//
-// console.log(
-//   solution7(5, [
-//     [2, 3],
-//     [3, 4],
-//     [4, 5],
-//     [5, 6],
-//     [2, 5],
-//   ]),
-// );
+console.log(
+  solution7(5, [
+    [1, 2],
+    [1, 3],
+    [3, 4],
+    [2, 3],
+    [4, 5],
+  ]),
+);
+
+console.log(
+  solution7(5, [
+    [2, 3],
+    [3, 4],
+    [4, 5],
+    [5, 6],
+    [2, 5],
+  ]),
+);
