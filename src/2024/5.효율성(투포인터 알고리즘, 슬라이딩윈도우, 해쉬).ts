@@ -293,3 +293,54 @@ const solution8 = (str: string, target: string) => {
 };
 
 // console.log(solution8('bacaAacba', 'abc'));
+
+const solution9 = (nums: number[], target: number) => {
+  const set = new Set();
+  const result: number[][] = [];
+
+  for (const num of nums) {
+    const complement = target - num;
+
+    if (set.has(complement)) {
+      result.push([complement, num]);
+    }
+
+    set.add(num);
+  }
+
+  return result;
+};
+
+// console.log(solution9([1, 2, 3, 4, 5, 6], 7));
+
+const solution10 = (nums: number[], target: number) => {
+  const newNums = Array.from(new Set(nums));
+  newNums.sort((a, b) => a - b);
+
+  const result: number[][] = [];
+  const size = newNums.length;
+
+  for (let i = 0; i < size - 2; i++) {
+    const num = newNums[i];
+    let left = i + 1;
+    let right = size - 1;
+
+    while (left < right) {
+      const sum = num + newNums[left] + newNums[right];
+
+      if (sum === target) {
+        result.push([num, newNums[left], newNums[right]]);
+        left++;
+        right--;
+      } else if (sum < target) {
+        left++;
+      } else if (sum > target) {
+        right--;
+      }
+    }
+  }
+
+  return result;
+};
+
+console.log(solution10([1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7], 10));
