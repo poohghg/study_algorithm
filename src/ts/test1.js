@@ -70,9 +70,7 @@
     let result = [];
 
     for (const value of set) {
-      if (!set.size) return max;
-
-      let currValues = [value];
+      let currValues = value;
       let nextValue = value + 1;
 
       while (set.has(nextValue)) {
@@ -140,5 +138,54 @@
     return sort(arr);
   };
 
-  console.log(mergeSort([3, 2, 4, 1, 5, 6, 7, 100, 12, 5]));
+  // console.log(mergeSort([3, 2, 4, 1, 5, 6, 7, 100, 12, 5]));
+
+  const solution6 = (nums) => {
+    // todo
+    // 1 hash 기반으로 해당 hasg에 해당 값이 있는지 확인한다.
+
+    const map = new Map();
+    const result = [];
+
+    for (const num of nums) {
+      if (map.has(num)) {
+        result.push(num);
+      }
+
+      map.set(num, true);
+    }
+
+    return result;
+  };
+
+  // console.log(solution6([1, 3, 2, 3, 4, 5, 2, 6, 7, 8, 8]));
+
+  // 배열에서 한 번만 등장한 숫자 찾기
+  // 배열 A가 주어졌을 때, 한 번만 등장한 숫자들을 모두 찾아 배열로 반환하는 함수를 작성하세요.
+
+  const solution7 = (nums) => {
+    const map = new Map();
+
+    for (const num of nums) {
+      if (map.has(num)) {
+        map.set(num, map.get(num) + 1);
+        continue;
+      }
+
+      map.set(num, 1);
+    }
+
+    map.entries();
+
+    console.log(Array.from(map));
+
+    const result = [];
+    for (const [num, count] of map) {
+      if (count === 1) result.push(num);
+    }
+
+    return result;
+  };
+
+  console.log(solution7([1, 3, 2, 3, 4, 5, 2, 6, 7, 8, 8])); // [1, 4, 5, 6, 7]
 }
