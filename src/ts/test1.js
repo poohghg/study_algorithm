@@ -175,10 +175,6 @@
       map.set(num, 1);
     }
 
-    map.entries();
-
-    console.log(Array.from(map));
-
     const result = [];
     for (const [num, count] of map) {
       if (count === 1) result.push(num);
