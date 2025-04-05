@@ -5,9 +5,6 @@ export default {};
  * 괄호 회전하기
  */
 const solution1 = (str: string) => {
-  // for 문 구조
-  // stack 관렴 함수 구현
-
   const isValid = (start: number) => {
     const stack: string[] = [];
     const openBrackets = ['(', '{', '['];
@@ -46,4 +43,61 @@ const solution1 = (str: string) => {
   return result;
 };
 
-console.log(solution1('[](){}'));
+// console.log(solution1('[](){}'));
+
+/**
+ * https://school.programmers.co.kr/learn/courses/30/lessons/12973
+ * 짝지어 제거하기
+ */
+
+const solution2 = (str: string) => {
+  const stack: string[] = [];
+
+  for (const s of str) {
+    let top = stack[stack.length - 1];
+
+    if (top === s) {
+      stack.pop();
+      continue;
+    }
+
+    stack.push(s);
+  }
+
+  return stack.length ? 1 : 0;
+};
+
+// console.log(solution2('baabaa'));
+
+/**
+ * https://school.programmers.co.kr/learn/courses/30/lessons/42584
+ */
+
+const solution3 = (prices: number[]) => {
+  const result: number[] = Array(prices.length).fill(0);
+  const stack: number[] = [];
+
+  for (const [index, price] of prices.entries()) {
+    let topIndex: number | undefined = stack[stack.length - 1];
+
+    while (topIndex !== undefined && price < prices[topIndex]) {
+      result[topIndex] = index - topIndex;
+      stack.pop();
+      topIndex = stack[stack.length - 1];
+    }
+
+    stack.push(index);
+  }
+
+  const size = prices.length - 1;
+
+  while (stack.length) {
+    const targetIndex = stack.pop()!;
+    result[targetIndex] = size - targetIndex;
+  }
+
+  return result;
+};
+
+// console.log(solution3([3, 3, 2, 1, 3]));
+console.log(solution3([1, 2, 3, 2, 3]));
