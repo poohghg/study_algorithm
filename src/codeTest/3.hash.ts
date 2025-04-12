@@ -64,8 +64,8 @@ const solution1 = (want: string[], number: number[], discount: string[]) => {
     new Map() as Map<string, number>,
   );
 
-  let result = 0;
   const discountHash = new HashData(discount.slice(0, 10));
+  let result = 0;
 
   for (const [index, discountItem] of discount.entries()) {
     if (index !== 0) {
@@ -80,25 +80,91 @@ const solution1 = (want: string[], number: number[], discount: string[]) => {
   return result;
 };
 
+// console.log(
+//   solution1(
+//     ['banana', 'apple', 'rice', 'pork', 'pot'],
+//     [3, 2, 2, 2, 1],
+//     [
+//       'chicken',
+//       'apple',
+//       'apple',
+//       'banana',
+//       'rice',
+//       'apple',
+//       'pork',
+//       'banana',
+//       'pork',
+//       'rice',
+//       'pot',
+//       'banana',
+//       'apple',
+//       'banana',
+//     ],
+//   ),
+// );
+
+/**
+ * https://school.programmers.co.kr/learn/courses/30/lessons/42888
+ * 오픈채팅방
+ */
+const solution2 = (record: string[]) => {
+  const userIdMap: Record<string, string> = {};
+  const msgRecord: [string, string][] = [];
+
+  for (const info of record) {
+    const [status, id, nickname] = info.split(' ');
+    if (status !== 'Leave') userIdMap[id] = nickname;
+    if (status !== 'Change') {
+      msgRecord.push([id, status]);
+    }
+  }
+
+  return msgRecord.map(([id, status]) => {
+    const msg = status === 'Enter' ? '들어왔습니다.' : '나갔습니다';
+    return `${userIdMap[id]}님이 ${msg}`;
+  });
+};
+
+// console.log(
+//   solution2([
+//     'Enter uid1234 Muzi',
+//     'Enter uid4567 Prodo',
+//     'Leave uid1234',
+//     'Enter uid1234 Prodo',
+//     'Change uid4567 Ryan',
+//   ]),
+// );
+
+const solution3 = (id_list: string[], report: string[], k: number) => {
+  const reportCountMap = new Map(id_list.map((id) => [id, 0]));
+  // 신고한 유저 키 + 신고 목록
+  const reportInfo = new Map(
+    id_list.map((id): [string, Set<string>] => [id, new Set()]),
+  );
+
+  for (const line of report) {
+    const [reporter, recipient] = line.split(' ');
+    if (!reportInfo.get(reporter)!.has(recipient)) {
+      reportCountMap.set(recipient, (reportCountMap.get(recipient) || 0) + 1);
+    }
+
+    reportInfo.set(reporter, reportInfo.get(reporter)!.add(recipient));
+  }
+
+  return id_list.map((id) => {
+    let count = 0;
+    const reportList = reportInfo.get(id)!;
+    reportList.forEach((value) => {
+      if (reportCountMap.get(value)! >= k) count++;
+    });
+    return count;
+  });
+};
+
 console.log(
-  solution1(
-    ['banana', 'apple', 'rice', 'pork', 'pot'],
-    [3, 2, 2, 2, 1],
-    [
-      'chicken',
-      'apple',
-      'apple',
-      'banana',
-      'rice',
-      'apple',
-      'pork',
-      'banana',
-      'pork',
-      'rice',
-      'pot',
-      'banana',
-      'apple',
-      'banana',
-    ],
+  solution3(
+    ['muzi', 'frodo', 'apeach', 'neo'],
+    ['muzi frodo', 'apeach frodo', 'frodo neo', 'muzi neo', 'apeach muzi'],
+    2,
   ),
 );
