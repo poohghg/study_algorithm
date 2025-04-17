@@ -51,7 +51,6 @@ const solution3 = (num: number) => {
 
   const dfs = (level: number) => {
     if (level === num + 1) {
-      console.log(ch);
       return;
     }
 
