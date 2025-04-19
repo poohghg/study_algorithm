@@ -20,6 +20,8 @@ const solution1 = (n: number) => {
   return result;
 };
 
+// console.log(solution1(5));
+
 /**
  * 스도쿠 완성하기
  * 1. 가로줄, 세로줄에는 1부터 9까지의 숫자가 한 번씩 나타나야 합니다.
@@ -85,18 +87,76 @@ const solution2 = (board: number[][]) => {
   return bfs();
 };
 
-console.log(
-  solution2([
-    [5, 3, 0, 0, 7, 0, 0, 0, 0],
-    [6, 0, 0, 1, 9, 5, 0, 0, 0],
-    [0, 9, 8, 0, 0, 0, 0, 6, 0],
-    [8, 0, 0, 0, 6, 0, 0, 0, 3],
-    [4, 0, 0, 8, 0, 3, 0, 0, 1],
-    [7, 0, 0, 0, 2, 0, 0, 0, 6],
-    [0, 6, 0, 0, 0, 0, 2, 8, 0],
-    [0, 0, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 0, 0, 8, 0, 0, 7, 9],
-  ]),
-);
+// console.log(
+//   solution2([
+//     [5, 3, 0, 0, 7, 0, 0, 0, 0],
+//     [6, 0, 0, 1, 9, 5, 0, 0, 0],
+//     [0, 9, 8, 0, 0, 0, 0, 6, 0],
+//     [8, 0, 0, 0, 6, 0, 0, 0, 3],
+//     [4, 0, 0, 8, 0, 3, 0, 0, 1],
+//     [7, 0, 0, 0, 2, 0, 0, 0, 6],
+//     [0, 6, 0, 0, 0, 0, 2, 8, 0],
+//     [0, 0, 0, 4, 1, 9, 0, 0, 5],
+//     [0, 0, 0, 0, 8, 0, 0, 7, 9],
+//   ]),
+// );
 
-// console.log(solution1(5));
+/**
+ * n-queen
+ * https://school.programmers.co.kr/learn/courses/30/lessons/12952
+ */
+
+const solution3 = (n: number) => {
+  // 퀸은 가로 세로 대각선에 놓을수 없다.
+
+  const record: [number, number][] = [];
+  let result = 0;
+
+  const isValid = (x: number, y: number) => {
+    for (const [row, col] of record) {
+      if (row === x || col === y) return false;
+      if (Math.abs(row - x) === Math.abs(col - y)) return false;
+    }
+    return true;
+  };
+
+  const dfs = (x: number) => {
+    if (x === n) {
+      result++;
+      return;
+    }
+
+    for (let y = 0; y < n; y++) {
+      if (isValid(x, y)) {
+        record.push([x, y]);
+        dfs(x + 1);
+        record.pop();
+      }
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+// console.log(solution3(4));
+
+const solution4 = (n: number, info: number[]) => {
+  function combinationsWithRepetition(arr: number[], n: number) {
+    if (n === 1) return arr.map((v) => [v]);
+    const result: number[][] = [];
+
+    arr.forEach((fixed, idx, arr) => {
+      const rest = arr.slice(idx);
+      const combis = combinationsWithRepetition(rest, n - 1);
+      const combine = combis.map((v) => [fixed, ...v]);
+      result.push(...combine);
+    });
+
+    return result;
+  }
+
+  const a = combinationsWithRepetition([...Array(11).keys()], n);
+};
+
+console.log(solution4(5, [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]));

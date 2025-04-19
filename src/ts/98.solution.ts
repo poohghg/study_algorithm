@@ -35,4 +35,4 @@ const solution1 = (nums: number[]) => {
   return result;
 };
 
-console.log(solution1([1, 4, 5, 9, 13, 26, 30, 38, 44, 45, 7, 23]));
+console.log(solution1([1, 44, 7, 14, 23, 28, 33, 41, 45]));
