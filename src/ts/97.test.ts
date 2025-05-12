@@ -2,47 +2,24 @@ export default {};
 
 function getMaxProfit(pnl: number[], k: number): number {
   const n = pnl.length;
-  const prefixSum = Array.from({ length: n + 1 }, () => 0);
+  let max = 0;
 
-  for (let i = 0; i <= n; i++) {
-    prefixSum[i + 1] = prefixSum[i] + pnl[i];
+  for (let i = 0; i < pnl.length; i++) {
+    let sum = 0;
+    for (let j = i; j < pnl.length; j++) {
+      if (j - i === k) break;
+      sum += pnl[j];
+      max = Math.max(max, sum);
+    }
   }
 
-  let max = Number.MIN_SAFE_INTEGER;
-  let dp: number[] = [];
-
-  for (let i = 0; i < n; i++) {
-    while (dp.length > 0 && dp[0] < i - k) {
-      dp.shift();
-    }
-
-    if (dp.length > 0) {
-      max = Math.max(max, prefixSum[i] - prefixSum[dp[0]]);
-    }
-
-    while (dp.length > 0 && prefixSum[dp[dp.length - 1]] >= prefixSum[i]) {
-      dp.pop();
-    }
-
-    dp.push(i);
-  }
-
-  return Math.max(0, max);
+  return max;
 }
 
-// for (let i = 0; i < pnl.length; i++) {
-//   let sum = 0;
-//   for (let j = i; j < pnl.length; j++) {
-//     if (j - i === k) break;
-//     sum += pnl[j];
-//     max = Math.max(max, sum);
-//   }
-// }
-
-// console.log(getMaxProfit([-7, -5, -8, -6, -7], 3));
-// console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6));
-// console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5));
-// console.log(getMaxProfit([-3, 4, 3, -2, 2, 5], 4));
+console.log(getMaxProfit([-7, -5, -8, -6, -7], 3));
+console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6));
+console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5));
+console.log(getMaxProfit([-3, 4, 3, -2, 2, 5], 4));
 
 const solutoin2 = (cost: number[], k: number) => {
   const dp = Array.from({ length: cost.length }, () => Number.MAX_SAFE_INTEGER);
@@ -145,10 +122,10 @@ function findConsistentLogsOptimized(userEvent: number[]): number {
 }
 
 // 테스트 케이스
-console.log(findConsistentLogsOptimized([1, 2, 1, 3, 4, 2, 4, 3, 3, 4])); // 예상 결과: 8
-console.log(findConsistentLogsOptimized([1, 2, 2, 3, 1])); // 예상 결과: 3
-console.log(findConsistentLogsOptimized([4, 4, 4, 4])); // 예상 결과: 4
-console.log(findConsistentLogsOptimized([1, 2, 3, 4])); // 예상 결과: 4
-console.log(findConsistentLogsOptimized([1, 1, 2, 2, 2])); // 예상 결과: 4
-console.log(findConsistentLogsOptimized([])); // 예상 결과: 0
-console.log(findConsistentLogsOptimized([5])); // 예상 결과: 1
+// console.log(findConsistentLogsOptimized([1, 2, 1, 3, 4, 2, 4, 3, 3, 4])); // 예상 결과: 8
+// console.log(findConsistentLogsOptimized([1, 2, 2, 3, 1])); // 예상 결과: 3
+// console.log(findConsistentLogsOptimized([4, 4, 4, 4])); // 예상 결과: 4
+// console.log(findConsistentLogsOptimized([1, 2, 3, 4])); // 예상 결과: 4
+// console.log(findConsistentLogsOptimized([1, 1, 2, 2, 2])); // 예상 결과: 4
+// console.log(findConsistentLogsOptimized([])); // 예상 결과: 0
+// console.log(findConsistentLogsOptimized([5])); // 예상 결과: 1
