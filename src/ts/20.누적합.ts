@@ -128,13 +128,13 @@ const solution3 = (arr: number[][]) => {
   // ]
 };
 
-console.log(
-  solution3([
-    [1, 2, 4], // 7
-    [5, 10, 15], // 30
-    [3, 2, 1], //6
-  ]),
-);
+// console.log(
+//   solution3([
+//     [1, 2, 4], // 7
+//     [5, 10, 15], // 30
+//     [3, 2, 1], //6
+//   ]),
+// );
 
 function getMaxProfit(pnl: number[], k: number): number {
   const getPrefixSum = () => {
@@ -165,3 +165,65 @@ function getMaxProfit(pnl: number[], k: number): number {
 // console.log(getMaxProfit([-7, -5, -8, -6, -7], 3)); //0
 // console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6)); //18
 // console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5)); //8
+
+// https://www.acmicpc.net/problem/1806
+const solution4 = (sequence: number[], k: number) => {
+  let result;
+  let left = 0;
+  let sum = 0;
+
+  for (let right = 0; right < sequence.length; right++) {
+    sum += sequence[right];
+
+    while (sum >= k) {
+      if (sum === k) {
+        if (!result) result = [left, right];
+        else if (right - left < result[1] - result[0]) result = [left, right];
+      }
+
+      sum -= sequence[left];
+      left++;
+    }
+  }
+
+  return result;
+};
+
+// console.log(solution4([1, 1, 1, 2, 3, 4, 5], 5));
+
+const solution5 = (balls: [number, number][]) => {
+  const calcValue = () => {
+    const sumCount: Record<number, number> = {};
+    let sum = 0;
+
+    for (const sortedElement of sorted) {
+      const [key, size] = sortedElement;
+      resultObj[`${key}-${size}`] = sum - (sumCount[key] ?? 0);
+      // 후 처리 로직
+      sum += size;
+      sumCount[key] = (sumCount[key] ?? 0) + size;
+    }
+  };
+
+  const resultObj: { [k: string]: number } = {};
+  const sorted = balls.sort((a, b) => a[1] - b[1]);
+
+  calcValue();
+};
+
+console.log(
+  solution5([
+    [1, 10],
+    [3, 15],
+    [1, 3],
+    [4, 8],
+  ]),
+);
+
+console.log(
+  solution5([
+    [2, 3],
+    [2, 5],
+    [2, 4],
+  ]),
+);
