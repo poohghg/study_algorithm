@@ -202,11 +202,6 @@ const solution4 = (board: number[][]) => {
         const ny = dy + y;
         if (!isValid(nx, ny) || board[nx][ny] === 1) continue;
 
-        if (nx === 1 && ny === 2) {
-          console.log(x, y, d, nextD);
-          // console.log(nextD, d);
-        }
-
         const newCost: number =
           d === -1 || d === nextD ? currentCost + 100 : currentCost + 600;
 
@@ -222,7 +217,6 @@ const solution4 = (board: number[][]) => {
       }
     }
 
-    console.log(distInfo);
     return result;
   };
 
