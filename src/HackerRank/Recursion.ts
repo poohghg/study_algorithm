@@ -79,4 +79,84 @@ function superDigit(n: string, k: number): number {
 }
 
 // 98759875
-console.log(superDigit('9875', 4));
+// console.log(superDigit('9875', 4));
+
+function journeyToMoon(n: number, astronaut: number[][]): number {
+  // Write your code here
+  const list = astronaut.reduce(
+    (acc, curr) => {
+      const [id1, id2] = curr;
+      acc[id1] ? acc[id1].push(id2) : (acc[id1] = [id2]);
+      acc[id2] ? acc[id2].push(id1) : (acc[id2] = [id1]);
+      return acc;
+    },
+    {} as Record<number, number[]>,
+  );
+  const visited = Array.from({ length: astronaut.length }, () => false);
+
+  const getSameCountryCount = (id: number) => {
+    let count = 1;
+    visited[id] = true;
+
+    list[id]?.forEach((nextId) => {
+      if (!visited[nextId]) count += getSameCountryCount(nextId);
+    });
+
+    return count;
+  };
+
+  let result = 0;
+  let sum = 0;
+
+  for (let i = 0; i < n; i++) {
+    if (!visited[i]) {
+      const size = getSameCountryCount(i);
+      result += sum * size;
+      sum += size;
+    }
+  }
+
+  return result;
+}
+
+// 0 1 2 3 [0,2] , 1 ,3 -> 1,3 1,0 1,2 3,0 3,2
+// console.log(journeyToMoon(4, [[0, 2]]));
+
+function appendAndDelete(s: string, t: string, k: number): string {
+  const sameLen = () => {
+    const min = Math.min(s.length, t.length);
+    for (let i = 0; i < min; i++) {
+      if (s[i] !== t[i]) return i;
+    }
+    return min;
+  };
+
+  const dfs = (level: number, str: string) => {
+    if (result === 'Yes') return;
+
+    if (level === len) {
+      if (str === t) result = 'Yes';
+      return;
+    }
+
+    // append
+    dfs(level + 1, str + t[str.length % tLen]);
+    // remove
+    dfs(level + 1, str.substring(0, str.length - 1));
+  };
+
+  let result: string = 'No';
+
+  const removeCount = s.length - sameLen();
+  const len = k - removeCount;
+  const tLen = t.length;
+
+  if (len < 0) return result;
+
+  dfs(0, s.substring(0, sameLen()));
+  return result;
+}
+
+// console.log(appendAndDelete('hackerhappy', 'hackerrank', 9));
+// console.log(appendAndDelete('aba', 'aba', 7));
+console.log(appendAndDelete('qwerty', 'zxcvbn', 100));
