@@ -152,11 +152,68 @@ function appendAndDelete(s: string, t: string, k: number): string {
   const tLen = t.length;
 
   if (len < 0) return result;
-
   dfs(0, s.substring(0, sameLen()));
   return result;
 }
 
 // console.log(appendAndDelete('hackerhappy', 'hackerrank', 9));
 // console.log(appendAndDelete('aba', 'aba', 7));
-console.log(appendAndDelete('qwerty', 'zxcvbn', 100));
+// console.log(appendAndDelete('qwerty', 'zxcvbn', 100));
+
+function kangaroo(x1: number, v1: number, x2: number, v2: number): string {
+  if (v1 <= v2) return 'NO';
+
+  while (x1 <= x2) {
+    if (x1 === x2) return 'YES';
+    x1 += v1;
+    x2 += v2;
+  }
+  return 'NO';
+}
+
+console.log(kangaroo(0, 2, 5, 3));
+console.log(kangaroo(0, 3, 4, 2));
+
+function getRemovableIndices(str1: string, str2: string): number[] {
+  const result: number[] = [];
+
+  for (let i = 0; i < str1.length; i++) {
+    if (str1[i] !== str2[i]) {
+      const c = str1.slice(0, i) + str1.slice(i + 1);
+      if (c.length === str2.length && c !== str2) return [-1];
+
+      const targetChar = str1[i];
+
+      let nextIdx = i;
+      let prevIdx = i;
+
+      while (0 <= prevIdx) {
+        prevIdx--;
+        if (str1[prevIdx] === targetChar) {
+          result.push(prevIdx);
+        } else {
+          break;
+        }
+      }
+
+      result.push(i);
+
+      while (nextIdx < str1.length) {
+        nextIdx++;
+        if (str1[nextIdx] === targetChar) {
+          result.push(nextIdx);
+        } else {
+          break;
+        }
+      }
+
+      break;
+    }
+  }
+
+  return result.length === 0 ? [-1] : result.sort((a, b) => a - b);
+}
+
+// console.log(getRemovableIndices('abdgggda', 'abdggda'));
+console.log(getRemovableIndices('mmgghh', 'mfggh'));
+// console.log(getRemovableIndices('aabbb', 'aabb'));
