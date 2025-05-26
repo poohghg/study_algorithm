@@ -171,8 +171,8 @@ function kangaroo(x1: number, v1: number, x2: number, v2: number): string {
   return 'NO';
 }
 
-console.log(kangaroo(0, 2, 5, 3));
-console.log(kangaroo(0, 3, 4, 2));
+// console.log(kangaroo(0, 2, 5, 3));
+// console.log(kangaroo(0, 3, 4, 2));
 
 function getRemovableIndices(str1: string, str2: string): number[] {
   const result: number[] = [];
@@ -215,5 +215,77 @@ function getRemovableIndices(str1: string, str2: string): number[] {
 }
 
 // console.log(getRemovableIndices('abdgggda', 'abdggda'));
-console.log(getRemovableIndices('mmgghh', 'mfggh'));
+// console.log(getRemovableIndices('mmgghh', 'mfggh'));
 // console.log(getRemovableIndices('aabbb', 'aabb'));
+
+// https://www.hackerrank.com/challenges/2d-array/problem?isFullScreen=true
+
+function hourglassSum(arr: number[][]): number {
+  // Write your code here
+  let result = Number.MIN_SAFE_INTEGER;
+
+  const getSum = (x: number, y: number) => {
+    let sum = 0;
+
+    for (let i = x; i < x + 3; i++) {
+      for (let j = y; j < y + 3; j++) {
+        if (i === x + 1 && (j === y || j === y + 2)) continue;
+        sum += arr[i][j];
+      }
+    }
+
+    return sum;
+  };
+
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 4; j++) {
+      result = Math.max(result, getSum(i, j));
+    }
+  }
+  return result;
+}
+
+// console.log(
+//   hourglassSum([
+//     [-9, -9, -9, 1, 1, 1],
+//     [0, -9, 0, 4, 3, 2],
+//     [-9, -9, -9, 1, 2, 3],
+//     [0, 0, 8, 6, 6, 0],
+//     [0, 0, 0, -2, 0, 0],
+//     [0, 0, 1, 2, 4, 0],
+//   ]),
+// );
+
+function targetSum(numbers: number[], target: number) {
+  const n = numbers.length;
+  let result = 0;
+  const dfs = (level: number, sum: number) => {
+    if (level === n) {
+      if (sum === target) result++;
+      return;
+    }
+
+    dfs(level + 1, sum + numbers[level]);
+    dfs(level + 1, sum - numbers[level]);
+  };
+
+  dfs(0, 0);
+  return result;
+}
+
+// console.log(targetSum([4, 1, 2, 1], 4));
+
+function pickingNumbers(a: number[]): number {
+  const countArray = new Array(11).fill(0);
+
+  for (const number of a) countArray[number]++;
+
+  let maxLength = 0;
+  for (let i = 1; i < 11; i++) {
+    maxLength = Math.max(maxLength, countArray[i] + countArray[i - 1]);
+  }
+
+  return maxLength;
+}
+
+console.log(pickingNumbers([10, 10]));
