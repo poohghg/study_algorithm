@@ -59,6 +59,19 @@ const solution2 = (n: number) => {
   return dy[n];
 };
 
+const solution2_1 = (n: number) => {
+  const dy: number[] = [];
+  dy[0] = 0;
+  dy[1] = 1;
+  dy[2] = 2;
+
+  for (let i = 3; i <= n; i++) {
+    dy[i] = dy[i - 1] + dy[i - 2];
+  }
+
+  return dy[n];
+};
+
 // console.log(solution2(4));
 
 /**
