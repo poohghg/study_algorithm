@@ -22,7 +22,21 @@ const solution1 = (n: number) => {
   return dp(n);
 };
 
-// console.log(solution1(22));
+const fibo = (n: number) => {
+  const dp: [number, number][] = [
+    [1, 0],
+    [0, 1],
+  ];
+
+  for (let i = 2; i <= n; i++) {
+    dp[i] = [dp[i - 2][0] + dp[i - 1][0], dp[i - 2][1] + dp[i - 1][1]];
+  }
+
+  console.log(dp);
+  return dp[n];
+};
+
+console.log(fibo(6));
 
 /**
  * https://www.acmicpc.net/problem/1904
@@ -73,4 +87,4 @@ const solution3 = (nums: number[]) => {
   return Math.max(...dp);
 };
 
-console.log(solution3([6, 10, 13, 9, 8, 1]));
+// console.log(solution3([6, 10, 13, 9, 8, 1]));

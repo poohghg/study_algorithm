@@ -9,7 +9,7 @@ interface QueueImpl<T> {
 }
 
 class Queue<T> implements QueueImpl<T> {
-  private data: T[] = [];
+  private readonly data: T[] = [];
   private headIndex: number = 0;
 
   constructor(init?: T | T[]) {
@@ -286,8 +286,54 @@ const solution5 = (n: number, wires: number[][]) => {
   return result;
 };
 
+const solution6 = (v: number, wires: [number, number][]) => {
+  const grape = wires.reduce(
+    (acc, wire) => {
+      const [node1, node2] = wire;
+      acc[node1] ? acc[node1].push(node2) : (acc[node1] = [node2]);
+      acc[node2] ? acc[node2].push(node1) : (acc[node2] = [node1]);
+      return acc;
+    },
+    {} as Record<number, number[]>,
+  );
+
+  const getGrapeCount = () => {
+    const visited: number[] = new Array(v + 1).fill(0);
+    const queue: number[] = [1];
+    visited[1] = 1;
+
+    while (queue.length) {
+      const currentNode = queue.shift()!;
+      for (const nextNode of grape[currentNode]) {
+        if (visited[nextNode] === 0) {
+          visited[nextNode] = 1;
+          queue.push(nextNode);
+        }
+      }
+    }
+
+    return visited.filter((v) => v === 1).length;
+  };
+
+  let result = Number.MAX_SAFE_INTEGER;
+
+  for (const [node1, node2] of wires) {
+    grape[node1].splice(grape[node1].indexOf(node2), 1);
+    grape[node2].splice(grape[node2].indexOf(node1), 1);
+
+    const cnt = getGrapeCount();
+    const restCount = v - cnt;
+    result = Math.min(Math.abs(cnt - restCount), result);
+
+    grape[node1].push(node2);
+    grape[node2].push(node1);
+  }
+
+  return result;
+};
+
 console.log(
-  solution5(9, [
+  solution6(9, [
     [1, 3],
     [2, 3],
     [3, 4],
@@ -296,5 +342,16 @@ console.log(
     [4, 7],
     [7, 8],
     [7, 9],
+  ]),
+);
+
+console.log(
+  solution6(7, [
+    [1, 2],
+    [2, 7],
+    [3, 7],
+    [3, 4],
+    [4, 5],
+    [6, 7],
   ]),
 );
