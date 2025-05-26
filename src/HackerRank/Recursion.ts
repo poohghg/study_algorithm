@@ -288,4 +288,31 @@ function pickingNumbers(a: number[]): number {
   return maxLength;
 }
 
-console.log(pickingNumbers([10, 10]));
+function climbingLeaderboard(ranked: number[], player: number[]): number[] {
+  // Write your code here
+  let ranking = 1;
+
+  const rank = ranked.map((score, idx) => {
+    if (ranked[idx + 1] === score) return { ranking, score };
+    return { ranking: ranking++, score };
+  });
+
+  let right = ranked.length;
+  const result: number[] = [];
+
+  for (const score of player) {
+    while (right > 0 && score >= rank[right - 1].score) right--;
+    result.push(rank[right - 1]?.ranking + 1 || 1);
+  }
+
+  return result;
+}
+
+// 6 4 2 1
+console.log(
+  climbingLeaderboard([100, 100, 50, 40, 40, 20, 10], [5, 25, 50, 120]),
+);
+// 6 5 4 2 1
+console.log(
+  climbingLeaderboard([100, 90, 90, 80, 75, 60], [50, 65, 77, 90, 102]),
+);
