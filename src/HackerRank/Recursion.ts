@@ -316,3 +316,138 @@ function climbingLeaderboard(ranked: number[], player: number[]): number[] {
 // console.log(
 //   climbingLeaderboard([100, 90, 90, 80, 75, 60], [50, 65, 77, 90, 102]),
 // );
+
+function pageCount(n: number, p: number): number {
+  // Write your code here
+  const back = n - p + (n % 2 === 0 ? 1 : 0);
+  const min = Math.min(back / 2, p / 2);
+  return Math.floor(min);
+}
+
+// 1 23 45
+
+function roadsAndLibraries(
+  n: number,
+  c_lib: number,
+  c_road: number,
+  cities: number[][],
+): number {
+  // Write your code here
+  if (c_lib < c_road) return n * c_lib;
+
+  const grape = cities.reduce(
+    (acc, curr) => {
+      const [node1, node2] = curr;
+      acc[node1] ? acc[node1].push(node2) : (acc[node1] = [node2]);
+      acc[node2] ? acc[node2].push(node1) : (acc[node2] = [node1]);
+      return acc;
+    },
+    {} as Record<number, number[]>,
+  );
+
+  const visited: boolean[] = Array(n + 1).fill(false);
+
+  const bfs = (node: number) => {
+    let count = 1;
+    const queue = [node];
+    visited[node] = true;
+
+    while (queue.length) {
+      const currentNode = queue.shift()!;
+
+      for (const nextNode of grape?.[currentNode] ?? []) {
+        if (visited[nextNode] === false) {
+          visited[nextNode] = true;
+          count++;
+          queue.push(nextNode);
+        }
+      }
+    }
+
+    return count;
+  };
+
+  let result = 0;
+
+  for (let i = 1; i <= n; i++) {
+    if (visited[i] === false) {
+      const count = bfs(i);
+      result += c_lib;
+      result += c_road * (count - 1);
+    }
+  }
+
+  return result;
+}
+
+// console.log(
+//   roadsAndLibraries(5, 2, 1, [
+//     [1, 2],
+//     [3, 1],
+//     [2, 3],
+//     [3, 4],
+//     [4, 5],
+//   ]),
+// );
+
+// 805
+// console.log(
+//   roadsAndLibraries(9, 91, 84, [
+//     [8, 2],
+//     [2, 9],
+//   ]),
+// );
+
+// 9 2 91 84
+// 8 2
+// 2 9
+
+function evenForest(
+  t_nodes: number,
+  t_edges: number,
+  t_from: number[],
+  t_to: number[],
+) {
+  const graph: Record<number, number[]> = {};
+
+  for (let i = 0; i < t_from.length; i++) {
+    const [node1, node2] = [t_from[i], t_to[i]];
+    graph[node1] ? graph[node1].push(node2) : (graph[node1] = [node2]);
+    graph[node2] ? graph[node2].push(node1) : (graph[node2] = [node1]);
+  }
+
+  const visited: boolean[] = Array(t_nodes + 1).fill(false);
+  let removedCount = 0;
+
+  const dfs = (node: number): number => {
+    visited[node] = true;
+    let subtreeSize = 1;
+
+    for (const nextNode of graph[node] ?? []) {
+      if (!visited[nextNode]) {
+        const childSize = dfs(nextNode);
+
+        // 자식 서브트리 크기가 짝수면 간선 제거 가능
+        if (childSize % 2 === 0) {
+          removedCount++;
+        } else {
+          subtreeSize += childSize;
+        }
+      }
+    }
+
+    return subtreeSize;
+  };
+
+  dfs(1);
+  return removedCount;
+}
+
+console.log(
+  evenForest(
+    11,
+    9,
+    [2, 3, 4, 5, 6, 7, 8, 9, 10, 10],
+    [1, 1, 3, 2, 1, 2, 6, 8, 8, 11],
+  ),
+);
