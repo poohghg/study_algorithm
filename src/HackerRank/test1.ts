@@ -232,3 +232,5 @@ console.log(solution2(7, [7, 6, 5, 2, 7, 4, 5, 4]));
 // 9, [5, 3, 8, 1, 8, 7, 7, 6]
 // console.log(solution(9, [5, 3, 8, 1, 8, 7, 7, 6]));
 // console.log(solution(7, [7, 6, 5, 2, 7, 4, 5, 4]));
+
+console.log(11 % 3);
