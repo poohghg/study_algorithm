@@ -118,4 +118,78 @@ const solution3 = (n: number, left: number, right: number) => {
   return result;
 };
 
-console.log(solution3(4, 7, 14));
+// console.log(solution3(4, 7, 14));
+
+const solution4 = (points: number[][], queries: number[][]) => {
+  const ys: number[] = [];
+  const xs: number[] = [];
+
+  for (const [x, y] of points) {
+    xs.push(x);
+    ys.push(y);
+  }
+
+  const top = Math.max(...ys);
+  const bottom = Math.min(...ys);
+  const left = Math.min(...xs);
+  const right = Math.max(...xs);
+
+  console.log(top, bottom, left, right);
+
+  const xLen = top - bottom + 1;
+  const yLen = right - left + 1;
+
+  const map = Array.from({ length: xLen }, () => Array(yLen).fill(0));
+
+  const distY = top;
+  const distX = left;
+
+  console.log(distY, distX);
+
+  for (const [x, y] of points) {
+    // -2,-3
+    const convertedY = y + distY;
+    const convertedX = x + distX;
+
+    console.log(convertedX, convertedX);
+    // 여기서 컨버전이 일어나야함.
+    // -3 > 5
+    // -2 > 0
+  }
+};
+
+// points = [[-2, -3], [0, 0], [1, 2]]
+// queries = [[0, 0], [3, 5], [2, 2]]
+// console.log(
+//   solution4(
+//     [
+//       [2, -2],
+//       [-2, -3],
+//       [0, 0],
+//       [1, 2],
+//     ],
+//     [
+//       [0, 0],
+//       [3, 5],
+//       [2, 2],
+//     ],
+//   ),
+// );
+
+const test = () => {
+  const p = new Promise((resolve, reject) => {
+    console.log('pending');
+    resolve('value');
+    setTimeout(() => {
+      console.log('time');
+    }, 0);
+  });
+
+  console.log('1');
+
+  p.then((v) => {
+    console.log('then', v);
+  });
+};
+
+test();

@@ -100,4 +100,84 @@ const solution3 = (prices: number[]) => {
 };
 
 // console.log(solution3([3, 3, 2, 1, 3]));
-console.log(solution3([1, 2, 3, 2, 3]));
+// console.log(solution3([1, 2, 3, 2, 3]));
+
+interface BalanceInfo {
+  cost: number;
+  from: number;
+}
+
+const solution4 = (
+  balances: number[],
+  transactions: number[][],
+  bans: number[],
+) => {
+  const n = balances.length;
+  const balanceInfos = Array.from({ length: n }, (_, idx): BalanceInfo[] => [
+    {
+      cost: balances[idx],
+      from: idx,
+    },
+  ]);
+
+  for (const [from, to, cost] of transactions) {
+    let outCost = cost;
+    const outInfo = [];
+
+    // 30,40
+    while (outCost > 0 && balanceInfos[from].length) {
+      const { cost: topCost, from: topFrom } = balanceInfos[from].pop()!;
+      if (topCost > outCost) {
+        const restCost = topCost - outCost;
+        balanceInfos[from].push({ cost: restCost, from: topFrom });
+        // 초기화
+        outInfo.push({ cost: outCost, from: topFrom });
+        outCost = 0;
+      } else {
+        outInfo.push({ cost: topCost, from: topFrom });
+        outCost -= topCost;
+      }
+    }
+
+    balanceInfos[to].push(...outInfo);
+  }
+
+  const result = new Array(n).fill(0);
+
+  balanceInfos.forEach((balanceInfo, idx) => {
+    if (bans.includes(idx)) {
+      result[idx] = 0;
+    } else {
+      const balance = balanceInfo.reduce((prev, curr) => {
+        const { cost, from } = curr;
+        if (bans.includes(from)) return prev;
+        return prev + cost;
+      }, 0);
+
+      result[idx] = 0 > balance ? 0 : balance;
+    }
+  });
+
+  return result;
+};
+
+const balances = [10, 300, 10];
+const transactions = [
+  [1, 2, 30], // 사용자 1 → 사용자 2 (30)
+  [2, 0, 10], // 사용자 2 → 사용자 0 (10)
+  [1, 2, 5], // 사용자 1 → 사용자 2 (5)
+];
+const bans = [0];
+
+console.log(solution4(balances, transactions, bans));
+console.log(
+  solution4(
+    [100, 0, 0, 0],
+    [
+      [0, 1, 50],
+      [1, 2, 30],
+      [2, 3, 10],
+    ],
+    [1],
+  ),
+);

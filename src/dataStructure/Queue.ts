@@ -22,33 +22,29 @@ export class Queue<T> {
       this.first = newNode;
       this.last = newNode;
     } else {
-      this.last!._right = newNode;
+      this.last!.right = newNode;
       this.last = newNode;
     }
-    return this.size++;
   }
 
   dequeue() {
     if (!this.first) return null;
 
-    const value = this.first;
+    if (this.first === this.last) this.last = null;
 
-    if (this.first === this.last) {
-      this.last = null;
-    }
-
-    this.first = this.first._right;
+    const returnValue = this.first;
+    this.first = this.first.right;
     this.size--;
 
-    return value.data;
+    return returnValue;
   }
 
   has(value: T) {
     let current = this.first;
 
     while (current) {
-      if (current.data === value) return true;
-      current = current._right;
+      if (current.value === value) return true;
+      current = current.right;
     }
 
     return false;
@@ -59,8 +55,8 @@ export class Queue<T> {
     let current = this.first;
 
     while (current) {
-      result.push(current.data);
-      current = current._right;
+      result.push(current.value);
+      current = current.right;
     }
 
     return result;
