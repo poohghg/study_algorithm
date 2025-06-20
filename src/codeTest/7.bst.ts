@@ -61,14 +61,14 @@ function solution2(
   return Object.values(tree).map((v) => v.result);
 }
 
-console.log(
-  solution2(
-    ['john', 'mary', 'edward', 'sam', 'emily', 'jaimie', 'tod', 'young'],
-    ['-', '-', 'mary', 'edward', 'mary', 'mary', 'jaimie', 'edward'],
-    ['young', 'john', 'tod', 'emily', 'mary'],
-    [12, 4, 2, 5, 10],
-  ),
-);
+// console.log(
+//   solution2(
+//     ['john', 'mary', 'edward', 'sam', 'emily', 'jaimie', 'tod', 'young'],
+//     ['-', '-', 'mary', 'edward', 'mary', 'mary', 'jaimie', 'edward'],
+//     ['young', 'john', 'tod', 'emily', 'mary'],
+//     [12, 4, 2, 5, 10],
+//   ),
+// );
 
 // ["john", "mary", "edward", "sam", "emily", "jaimie", "tod", "young"]	["-", "-", "mary", "edward", "mary", "mary", "jaimie", "edward"]	["sam", "emily", "jaimie", "edward"]	[2, 3, 5, 4]	[0, 110, 378, 180, 270, 450, 0, 0]
 
@@ -80,3 +80,36 @@ console.log(
 //     [2, 3, 5, 4],
 //   ),
 // );
+
+function power(m: number, n: number): number {
+  if (n === 0) return 1;
+  return power(m, n - 1) * 2;
+}
+
+// power(2,0) // 1
+// power(2,2) // 4
+// power(2,4) // 16
+// console.log(power(2, 0));
+// console.log(power(2, 2));
+// console.log(power(2, 4));
+
+function fib(n: number, dp: number[] = []): number {
+  if (dp[n]) return dp[n];
+  if (n <= 2) {
+    dp[n] = 1;
+    return 1;
+  }
+
+  dp[n] = fib(n - 1, dp) + fib(n - 2, dp);
+  return dp[n];
+}
+
+// fib(4) // 3
+// fib(10) // 55
+// fib(28) // 317811
+// fib(35) // 9227465
+console.log(fib(4));
+// console.log(fib(10));
+// console.log(fib(28));
+
+// 0 1 1 2 3 5
