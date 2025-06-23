@@ -108,8 +108,138 @@ function fib(n: number, dp: number[] = []): number {
 // fib(10) // 55
 // fib(28) // 317811
 // fib(35) // 9227465
-console.log(fib(4));
+// console.log(fib(4));
 // console.log(fib(10));
 // console.log(fib(28));
 
 // 0 1 1 2 3 5
+
+class Queue<T> {
+  private readonly data: T[] = [];
+  private headIdx: number = 0;
+  private tailIndex = 0;
+
+  constructor(init?: T | T[]) {
+    if (!init) return;
+
+    if (Array.isArray(init)) {
+      init.forEach((v) => this.enqueue(v));
+    } else {
+      this.data = [init];
+    }
+  }
+
+  get size() {
+    return this.tailIndex - this.headIdx;
+  }
+
+  enqueue(value: T) {
+    this.data.push(value);
+    this.tailIndex++;
+  }
+
+  dequeue(): T | undefined {
+    if (this.size === 0) return;
+    return this.data[this.headIdx++];
+  }
+}
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/92343
+function solution3(info: number[], edges: [number, number][]) {
+  const makeNextData = (
+    nextNode: number,
+    sheepCnt: number,
+    wolfCnt: number,
+    visited: Set<number>,
+  ): [number, number, number, Set<number>] => {
+    const newVisited = new Set(visited);
+    newVisited.delete(nextNode);
+    return [nextNode, sheepCnt, wolfCnt, newVisited];
+  };
+
+  const tree = Array.from({ length: info.length }, (): number[] => []);
+  for (const [from, to] of edges) tree[from].push(to);
+
+  // 큐에 (현재 위치, count, 현재까지 이동한 배열을 넣는다?)
+
+  const queue = new Queue<[number, number, number, Set<number>]>([
+    [0, 1, 0, new Set()],
+  ]);
+
+  let max = 0;
+  while (queue.size) {
+    const [current, sheepCnt, wolfCnt, visited] = queue.dequeue()!;
+
+    max = Math.max(sheepCnt, max);
+    // 갈 수 있는 다음 노드들을 추가한다.
+    for (const next of tree[current]) visited.add(next);
+
+    for (const next of visited) {
+      // 양이라면
+      if (info[next] === 0) {
+        const nextData = makeNextData(next, sheepCnt + 1, wolfCnt, visited);
+        queue.enqueue(nextData);
+      } else if (sheepCnt > wolfCnt + 1) {
+        const nextData = makeNextData(next, sheepCnt, wolfCnt + 1, visited);
+        queue.enqueue(nextData);
+      }
+    }
+  }
+
+  return max;
+}
+
+function solution3_1(info: number[], edges: [number, number][]) {
+  const tree = Array.from({ length: info.length }, (): number[] => []);
+  for (const [from, to] of edges) tree[from].push(to);
+
+  let max = 0;
+
+  const dfs = (
+    node: number,
+    sheep: number,
+    wolf: number,
+    visit: Set<number>,
+  ) => {
+    if (sheep < wolf) return;
+
+    max = Math.max(max, sheep);
+
+    // 현재 노드에서 갈 수 있는 노드를 추가.
+    for (const willMove of tree[node]) visit.add(willMove);
+
+    for (const next of visit) {
+      const newVisit = new Set(visit);
+      newVisit.delete(next);
+      if (info[next] === 0) {
+        dfs(next, sheep + 1, wolf, newVisit);
+      } else {
+        dfs(next, sheep, wolf + 1, newVisit);
+      }
+    }
+  };
+
+  dfs(0, 1, 0, new Set());
+  return max;
+}
+
+console.log(
+  solution3_1(
+    [0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1],
+    [
+      [0, 1],
+      [1, 2],
+      [1, 4],
+      [0, 8],
+      [8, 7],
+      [9, 10],
+      [9, 11],
+      [4, 3],
+      [6, 5],
+      [4, 6],
+      [8, 9],
+    ],
+  ),
+);
+
+const q = new Queue([1]);

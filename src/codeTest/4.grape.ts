@@ -180,7 +180,7 @@ const solution4 = (board: number[][]) => {
   const n = board.length;
   const distInfo = Array.from({ length: n }, () => new Array(n).fill(Infinity));
 
-  const dfs = () => {
+  const bfs = () => {
     const moves = [
       [0, -1],
       [-1, 0],
@@ -220,7 +220,7 @@ const solution4 = (board: number[][]) => {
     return result;
   };
 
-  return dfs();
+  return bfs();
 };
 
 // console.log(
@@ -332,26 +332,93 @@ const solution6 = (v: number, wires: [number, number][]) => {
   return result;
 };
 
-console.log(
-  solution6(9, [
-    [1, 3],
-    [2, 3],
-    [3, 4],
-    [4, 5],
-    [4, 6],
-    [4, 7],
-    [7, 8],
-    [7, 9],
-  ]),
-);
+// console.log(
+//   solution6(9, [
+//     [1, 3],
+//     [2, 3],
+//     [3, 4],
+//     [4, 5],
+//     [4, 6],
+//     [4, 7],
+//     [7, 8],
+//     [7, 9],
+//   ]),
+// );
+//
+// console.log(
+//   solution6(7, [
+//     [1, 2],
+//     [2, 7],
+//     [3, 7],
+//     [3, 4],
+//     [4, 5],
+//     [6, 7],
+//   ]),
+// );
 
-console.log(
-  solution6(7, [
-    [1, 2],
-    [2, 7],
-    [3, 7],
-    [3, 4],
-    [4, 5],
-    [6, 7],
-  ]),
-);
+const solution7 = (maps: string[]) => {
+  const getPosition = (matcher: string): [number, number] | undefined => {
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+        if (map[i][j] === matcher) return [i, j];
+      }
+    }
+  };
+
+  const bfs = (start: [number, number], end: [number, number]) => {
+    const validPos = (nx: number, ny: number) =>
+      -1 < nx && nx < n && -1 < ny && ny < m && map[nx][ny] !== 'X';
+
+    const moves = [
+      [0, 1],
+      [0, -1],
+      [-1, 0],
+      [1, 0],
+    ];
+
+    const visited = Array.from({ length: n }, () => new Array(m).fill(0));
+    const queue = new Queue([start]);
+
+    while (queue.size) {
+      const [currentX, currentY] = queue.dequeue()!;
+      const currentDist = visited[currentX][currentY];
+
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [currentX + dx, currentY + dy];
+        if (validPos(nx, ny) && visited[nx][ny] === 0) {
+          if (nx === end[0] && ny === end[1]) return currentDist + 1;
+          visited[nx][ny] = currentDist + 1;
+          queue.enqueue([nx, ny]);
+        }
+      }
+    }
+
+    return -1;
+  };
+
+  const n = maps.length;
+  const m = maps[0].length;
+  const map = maps.map((m) => m.split(''));
+  let result = 0;
+
+  const start = getPosition('S');
+  const lever = getPosition('L');
+
+  if (start && lever) {
+    const dist = bfs(start, lever);
+    if (dist === -1) return -1;
+    result += dist;
+  }
+
+  const exit = getPosition('E');
+
+  if (lever && exit) {
+    const dist = bfs(lever, exit);
+    if (dist === -1) return -1;
+    result += dist;
+  }
+
+  return result;
+};
+
+// console.log(solution7(['SOOOL', 'XXXXO', 'OOOOO', 'OXXXX', 'OOOOE']));
