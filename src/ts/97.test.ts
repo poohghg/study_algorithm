@@ -16,10 +16,10 @@ function getMaxProfit(pnl: number[], k: number): number {
   return max;
 }
 
-console.log(getMaxProfit([-7, -5, -8, -6, -7], 3));
-console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6));
-console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5));
-console.log(getMaxProfit([-3, 4, 3, -2, 2, 5], 4));
+console.log(getMaxProfit([-7, -5, -8, -6, -7], 3)); // Expected output: -18
+console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6)); // Expected output: 29
+console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5)); // Expected output: 10
+console.log(getMaxProfit([-3, 4, 3, -2, 2, 5], 4)); // Expected output: 12
 
 const solutoin2 = (cost: number[], k: number) => {
   const dp = Array.from({ length: cost.length }, () => Number.MAX_SAFE_INTEGER);

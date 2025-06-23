@@ -158,11 +158,98 @@ const getBoard = (board: number[][]) => {
   return maxValue * maxValue;
 };
 
-console.log(
-  getBoard([
-    [0, 1, 1, 1],
-    [1, 1, 1, 1],
-    [1, 1, 1, 1],
-    [0, 0, 1, 0],
-  ]),
-);
+// console.log(
+//   getBoard([
+//     [0, 1, 1, 1],
+//     [1, 1, 1, 1],
+//     [1, 1, 1, 1],
+//     [0, 0, 1, 0],
+//   ]),
+// );
+
+// const findConsistentLogs = (events: number[]) => {};
+// console.log(findConsistentLogs([1, 1, 2, 2, 3, 3, 1, 1, 2, 2]));
+// console.log(findConsistentLogs([1, 2, 1, 3, 4, 2, 4, 3, 3, 4])); // [1, 2, 1, 3, 4, 2, 4, 3]
+
+// const getMaxProfit = (pnl: number[], k: number): number => {
+//   const n = pnl.length;
+//   let max = 0;
+//
+//   for (let i = 0; i < pnl.length; i++) {
+//     let sum = 0;
+//     for (let j = i; j < pnl.length; j++) {
+//       if (j - i === k) break;
+//       sum += pnl[j];
+//       max = Math.max(max, sum);
+//     }
+//   }
+//
+//   return max;
+// };
+
+function getMaxProfit(pnl: number[], k: number): number {
+  const n = pnl.length;
+
+  // 1. 누적합 배열 생성
+  const prefixSum: number[] = new Array(n + 1).fill(0);
+  for (let i = 0; i < n; i++) {
+    prefixSum[i + 1] = prefixSum[i] + pnl[i];
+  }
+
+  console.log(prefixSum);
+
+  let maxProfit = 0;
+  // Deque for storing indices of prefixSum in increasing order
+  // Deque의 첫 번째 요소는 현재 윈도우 내에서 가장 작은 prefixSum을 가진 인덱스.
+  const deque: number[] = []; // Using a plain array as a deque (push/shift/pop/unshift)
+
+  // 2. 슬라이딩 윈도우 처리
+  for (let i = 0; i <= n; i++) {
+    while (deque.length > 0 && deque[0] < i - k) {
+      deque.shift(); // 윈도우 범위를 벗어난 오래된 인덱스 제거
+    }
+
+    // 덱의 뒤쪽에서 현재 prefixSum[i]보다 큰 값들을 제거
+    // 왜냐하면, prefixSum[i]는 덱에 추가될 것이고, 그 뒤에 오는 어떤 값도
+    // prefixSum[i]보다 작거나 같은 값을 가진 인덱스가 더 좋은 후보가 되기 때문.
+    // 가능한 누적합중에 최솟값을 찾는다.
+    while (
+      deque.length > 0 &&
+      prefixSum[deque[deque.length - 1]] >= prefixSum[i]
+    ) {
+      console.log(deque, i);
+      deque.pop();
+    }
+
+    // 현재 인덱스를 덱에 추가
+    deque.push(i);
+
+    // 현재 윈도우 내에서 최대 이익 계산
+    // prefixSum[i] (현재 끝점)에서 덱의 맨 앞 (윈도우 내 최소 prefixSum)을 뺀다.
+    // prefixSum[i]는 (현재)i번째까지의 합이므로, (pnl[0]...pnl[i-1] 합)
+    // prefixSum[deque[0]]는 j번째까지의 합이므로 (pnl[0]...pnl[j-1] 합)
+    // 뺀 결과는 pnl[j...i-1] 의 합이다.
+    if (deque.length > 0 && i > 0) {
+      // i=0일 때는 prefixSum[0]만 있으므로 계산 의미 없음
+      // prefixSum[i]는 pnl[0]부터 pnl[i-1]까지의 합
+      // deque[0]는 pnl[0]부터 pnl[deque[0]-1]까지의 합
+      // 따라서 maxProfit = prefixSum[i] - prefixSum[deque[0]]
+
+      if (maxProfit < prefixSum[i] - prefixSum[deque[0]]) {
+        console.log(`i: ${i}, deque[0]: ${deque[0]}`);
+        console.log('deque:', deque);
+        maxProfit = prefixSum[i] - prefixSum[deque[0]];
+      }
+
+      // maxProfit = Math.max(maxProfit, prefixSum[i] - prefixSum[deque[0]]);
+    }
+  }
+
+  return maxProfit;
+}
+
+console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5)); // Expected output: 8 // [2, 5, -7, 8,]
+// console.log(getMaxProfit([1, -1, 1, -1, 10, -1, 1 - 1], 3)); // Expected output: 8 // [2, 5, -7, 8,]
+// console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6)); // Expected output: 20 // [9, -4, 2, 7, 6]
+// console.log(getMaxProfit([-7, -5, -8, -6, -7], 3)); // Expected output: 0
+// console.log(getMaxProfit([-3, 4, 3, -2, 2, 5], 4)); // Expected output: 8 // [3, -2, 2, 5]
