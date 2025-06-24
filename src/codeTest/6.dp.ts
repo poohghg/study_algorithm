@@ -187,7 +187,7 @@ const getBoard = (board: number[][]) => {
 //   return max;
 // };
 
-function getMaxProfit(pnl: number[], k: number): number {
+const getMaxProfit = (pnl: number[], k: number): number => {
   const n = pnl.length;
 
   // 1. 누적합 배열 생성
@@ -195,8 +195,6 @@ function getMaxProfit(pnl: number[], k: number): number {
   for (let i = 0; i < n; i++) {
     prefixSum[i + 1] = prefixSum[i] + pnl[i];
   }
-
-  console.log(prefixSum);
 
   let maxProfit = 0;
   // Deque for storing indices of prefixSum in increasing order
@@ -217,7 +215,6 @@ function getMaxProfit(pnl: number[], k: number): number {
       deque.length > 0 &&
       prefixSum[deque[deque.length - 1]] >= prefixSum[i]
     ) {
-      console.log(deque, i);
       deque.pop();
     }
 
@@ -236,8 +233,6 @@ function getMaxProfit(pnl: number[], k: number): number {
       // 따라서 maxProfit = prefixSum[i] - prefixSum[deque[0]]
 
       if (maxProfit < prefixSum[i] - prefixSum[deque[0]]) {
-        console.log(`i: ${i}, deque[0]: ${deque[0]}`);
-        console.log('deque:', deque);
         maxProfit = prefixSum[i] - prefixSum[deque[0]];
       }
 
@@ -246,10 +241,95 @@ function getMaxProfit(pnl: number[], k: number): number {
   }
 
   return maxProfit;
-}
+};
 
-console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5)); // Expected output: 8 // [2, 5, -7, 8,]
+// console.log(getMaxProfit([2, 5, -7, 8, -6, 4, 1 - 9], 5)); // Expected output: 8 // [2, 5, -7, 8,]
 // console.log(getMaxProfit([1, -1, 1, -1, 10, -1, 1 - 1], 3)); // Expected output: 8 // [2, 5, -7, 8,]
 // console.log(getMaxProfit([4, 3, -2, 9, -4, 2, 7, 6], 6)); // Expected output: 20 // [9, -4, 2, 7, 6]
 // console.log(getMaxProfit([-7, -5, -8, -6, -7], 3)); // Expected output: 0
 // console.log(getMaxProfit([-3, 4, 3, -2, 2, 5], 4)); // Expected output: 8 // [3, -2, 2, 5]
+
+/**
+ *  계단 배열 cost와 정수 k가 주어집니다.
+ *  당신은 0번 칸에서 시작하여, 한 번에 최대 k칸까지 앞으로 이동할 수 있습니다.
+ *  각 칸 i에 도달할 때 cost[i]만큼의 비용이 듭니다.
+ *  마지막 칸(cost.length - 1)에 도달할 때까지의 최소 누적 비용을 구하세요.
+ */
+
+// const minCostClimbingStairs = (cost: number[], k: number): number => {
+//   const n = cost.length;
+//   const dp = Array.from({ length: n }, () => Infinity);
+//
+//   for (let i = 0; i < k; i++) {
+//     dp[i] = cost[i];
+//   }
+//
+//   for (let i = k; i < n; i++) {
+//     let min = dp[i];
+//
+//     for (let j = 1; j <= k; j++) {
+//       min = Math.min(dp[i - j], min);
+//     }
+//
+//     dp[i] = min + cost[i];
+//   }
+//
+//   return dp[n - 1];
+// };
+
+// console.log(minCostClimbingStairs([1, 9, 2, 6, 1], 3)); // Expected output: 3
+// console.log(minCostClimbingStairs([10, 15, 20])); // Expected output: 3
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/42898
+const puddlesMn = (m: number, n: number, puddles: [number, number][]) => {
+  const safeParse = (x: number, y: number): number => {
+    return dp?.[x]?.[y] ?? 0;
+  };
+
+  const dp = Array.from({ length: n }, () => new Array(m).fill(0));
+  dp[0][0] = 1;
+
+  for (const [y, x] of puddles) {
+    dp[x - 1][y - 1] = -1;
+  }
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (i === 0 && j === 0) continue;
+      if (dp[i][j] === -1) {
+        dp[i][j] = 0;
+      } else {
+        const top = safeParse(i - 1, j);
+        const left = safeParse(i, j - 1);
+        dp[i][j] = (top + left) % 1_000_000_007;
+      }
+    }
+  }
+
+  return dp[n - 1][m - 1];
+};
+
+// console.log(puddlesMn(4, 3, [[2, 2]]));
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/12983
+
+const matchWord = (strs: string[], t: string) => {
+  const n = t.length;
+  const dp = Array(n + 1).fill(Infinity);
+  dp[0] = 0;
+
+  const sizes = new Set(strs.map((s) => s.length));
+
+  for (let i = 1; i <= n; i++) {
+    for (const size of sizes) {
+      if (i >= size && strs.includes(t.slice(i - size, i))) {
+        dp[i] = Math.min(dp[i], dp[i - size] + 1);
+      }
+    }
+  }
+
+  return dp[n] === Infinity ? -1 : dp[n];
+  console.log(dp);
+};
+
+console.log(matchWord(['ba', 'na', 'n', 'a'], 'banana'));

@@ -422,3 +422,23 @@ const solution7 = (maps: string[]) => {
 };
 
 // console.log(solution7(['SOOOL', 'XXXXO', 'OOOOO', 'OXXXX', 'OOOOE']));
+
+const solution8 = (n: number, result: number[][]) => {
+  const tree = Array.from({ length: n + 1 }, (): number[] => []);
+
+  for (const [win, lose] of result) {
+    tree[win].push(lose);
+  }
+
+  console.log(tree);
+};
+
+// console.log(
+//   solution8(5, [
+//     [4, 3],
+//     [4, 2],
+//     [3, 2],
+//     [1, 2],
+//     [2, 5],
+//   ]),
+// );
