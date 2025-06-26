@@ -1,5 +1,36 @@
 export default {};
 
+function power(m: number, n: number): number {
+  if (n === 0) return 1;
+  return power(m, n - 1) * 2;
+}
+
+// power(2,0) // 1
+// power(2,2) // 4
+// power(2,4) // 16
+// console.log(power(2, 0));
+// console.log(power(2, 2));
+// console.log(power(2, 4));
+
+function fib(n: number, dp: number[] = []): number {
+  if (dp[n]) return dp[n];
+  if (n <= 2) {
+    dp[n] = 1;
+    return 1;
+  }
+
+  dp[n] = fib(n - 1, dp) + fib(n - 2, dp);
+  return dp[n];
+}
+
+// fib(4) // 3
+// fib(10) // 55
+// fib(28) // 317811
+// fib(35) // 9227465
+// console.log(fib(4));
+// console.log(fib(10));
+// console.log(fib(28));
+
 const LIS = (arr: number[]): number => {
   const n = arr.length;
   const dp = Array(n).fill(0);
@@ -329,7 +360,6 @@ const matchWord = (strs: string[], t: string) => {
   }
 
   return dp[n] === Infinity ? -1 : dp[n];
-  console.log(dp);
 };
 
 console.log(matchWord(['ba', 'na', 'n', 'a'], 'banana'));

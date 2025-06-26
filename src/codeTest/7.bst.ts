@@ -81,39 +81,6 @@ function solution2(
 //   ),
 // );
 
-function power(m: number, n: number): number {
-  if (n === 0) return 1;
-  return power(m, n - 1) * 2;
-}
-
-// power(2,0) // 1
-// power(2,2) // 4
-// power(2,4) // 16
-// console.log(power(2, 0));
-// console.log(power(2, 2));
-// console.log(power(2, 4));
-
-function fib(n: number, dp: number[] = []): number {
-  if (dp[n]) return dp[n];
-  if (n <= 2) {
-    dp[n] = 1;
-    return 1;
-  }
-
-  dp[n] = fib(n - 1, dp) + fib(n - 2, dp);
-  return dp[n];
-}
-
-// fib(4) // 3
-// fib(10) // 55
-// fib(28) // 317811
-// fib(35) // 9227465
-// console.log(fib(4));
-// console.log(fib(10));
-// console.log(fib(28));
-
-// 0 1 1 2 3 5
-
 class Queue<T> {
   private readonly data: T[] = [];
   private headIdx: number = 0;
@@ -223,23 +190,62 @@ function solution3_1(info: number[], edges: [number, number][]) {
   return max;
 }
 
-console.log(
-  solution3_1(
-    [0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1],
-    [
-      [0, 1],
-      [1, 2],
-      [1, 4],
-      [0, 8],
-      [8, 7],
-      [9, 10],
-      [9, 11],
-      [4, 3],
-      [6, 5],
-      [4, 6],
-      [8, 9],
-    ],
-  ),
-);
+// console.log(
+//   solution3_1(
+//     [0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1],
+//     [
+//       [0, 1],
+//       [1, 2],
+//       [1, 4],
+//       [0, 8],
+//       [8, 7],
+//       [9, 10],
+//       [9, 11],
+//       [4, 3],
+//       [6, 5],
+//       [4, 6],
+//       [8, 9],
+//     ],
+//   ),
+// );
 
-const q = new Queue([1]);
+// https://school.programmers.co.kr/learn/courses/30/lessons/43236
+// 5만 이하?
+// 바위 두개를 제거했을때 최솟값중 가장 큰값
+function steppingStones(distance: number, rocks: number[], n: number) {
+  const getRemoveCount = (midDist: number) => {
+    let count = 0;
+    let prev = 0;
+    for (let i = 0; i < rocks.length; i++) {
+      const diff = rocks[i] - prev;
+      if (diff < midDist) {
+        count++;
+      } else {
+        prev = rocks[i];
+      }
+    }
+    return count;
+  };
+
+  rocks.push(distance);
+  rocks.sort((a, b) => a - b);
+  let left = 1;
+  let right = distance;
+  let result = 0;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    const removeCount = getRemoveCount(mid);
+
+    if (removeCount > n) {
+      // 최소 간격이 커 최소거리를 줄인다.
+      right = mid - 1;
+    } else {
+      result = mid;
+      left = mid + 1;
+    }
+  }
+  return result;
+}
+
+console.log(steppingStones(25, [2, 11, 14, 17, 21], 2));
