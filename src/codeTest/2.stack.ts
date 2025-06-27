@@ -169,15 +169,128 @@ const transactions = [
 ];
 const bans = [0];
 
-console.log(solution4(balances, transactions, bans));
+// console.log(solution4(balances, transactions, bans));
+// console.log(
+//   solution4(
+//     [100, 0, 0, 0],
+//     [
+//       [0, 1, 50],
+//       [1, 2, 30],
+//       [2, 3, 10],
+//     ],
+//     [1],
+//   ),
+// );
+
+// https://www.hackerrank.com/challenges/equal-stacks/problem?isFullScreen=true
+// function equalStacks(h1: number[], h2: number[], h3: number[]): number {
+//   const sumOfArray = (arr: number[]) => {
+//     return arr.reduce((a, b) => a + b, 0);
+//   };
+//   let h1Sum = sumOfArray(h1);
+//   let h2Sum = sumOfArray(h2);
+//   let h3Sum = sumOfArray(h3);
+//   const arrays = [h1, h2, h3];
+//   const sums = [h1Sum, h2Sum, h3Sum];
+//   while (true) {
+//     let min = Math.min(...sums);
+//     if (min === 0 || sums.every((sum) => sum === min)) {
+//       return min;
+//     }
+//     for (let i = 0; i < sums.length; i++) {
+//       let currentSum = sums[i];
+//       while (arrays[i].length && currentSum > min) {
+//         currentSum -= arrays[i].shift() ?? 0;
+//       }
+//       sums[i] = currentSum;
+//     }
+//   }
+//   return 0;
+// }
+
+function equalStacks(h1: number[], h2: number[], h3: number[]): number {
+  // 각 스택의 누접합을 구한다?
+  const sumOfArray = (arr: number[]) => {
+    const result = [];
+    let currentSum = 0;
+    while (arr.length) {
+      currentSum += arr.pop()!;
+      result.push(currentSum);
+    }
+    return result;
+  };
+
+  const h1SumSet = new Set(sumOfArray(h1));
+  const h2SumSet = new Set(sumOfArray(h2));
+  const h3Sums = sumOfArray(h3);
+
+  for (let i = h3Sums.length - 1; 0 <= i; i--) {
+    const v = h3Sums[i];
+    if (h1SumSet.has(v) && h2SumSet.has(v)) return v;
+  }
+
+  return 0;
+}
+
+// 3 2 1 1 1   h1 = [3, 2, 1, 1, 1]
+// 4 3 2       h2 = [4, 3, 2]
+// 1 1 4 1     h3 = [1, 1, 4, 1]
+
+// console.log(equalStacks([3, 2, 1, 1, 1], [4, 3, 2], [1, 1, 4, 1]));
+
+function twoStacks(maxSum: number, a: number[], b: number[]): number {
+  // 모든 가능 조합을 줄지어 체크해보는 방식
+  const prefixSums = (arr: number[]) => {
+    const result = [];
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (sum + arr[i] > maxSum) return result;
+      sum = sum + arr[i];
+      result.push(sum);
+    }
+    return result;
+  };
+
+  const prefixSumOfA = prefixSums(a);
+
+  let result = prefixSumOfA.length;
+  let bSum = 0;
+
+  for (let i = 0; i < b.length; i++) {
+    bSum += b[i];
+    if (bSum > maxSum) break;
+
+    while (
+      prefixSumOfA.length &&
+      prefixSumOfA[prefixSumOfA.length - 1] + bSum > maxSum
+    ) {
+      prefixSumOfA.pop();
+    }
+
+    if (bSum + (prefixSumOfA[prefixSumOfA.length - 1] ?? 0) < maxSum) {
+      result = Math.max(result, prefixSumOfA.length + i + 1);
+    }
+  }
+
+  return result;
+}
+
+// console.log(twoStacks(10, [4, 2, 4, 6, 1], [2, 1, 8, 5]));
+// 12
+// 1 1 0 0 1 0 1 0 0 1 0 0 1 1 1 0 0
+// 0 0 0 0 0 1 0 1 1 0 1 1 0 1 0 1 1 0 0 0 0 0 0 1 0 1
+
+// 62
+// 7 15 12 0 5 18 17 2 10 15 4 2 9 15 13 12 16
+// 12 16 6 8 16 15 18 3 11 0 17 7 6 11 14 13 15 6 18 6 16 12 16 11 16 11
+
 console.log(
-  solution4(
-    [100, 0, 0, 0],
+  twoStacks(
+    19,
+    [7, 15, 12, 0, 5, 18, 17, 2, 10, 15, 4, 2, 9, 15, 13, 12, 16],
     [
-      [0, 1, 50],
-      [1, 2, 30],
-      [2, 3, 10],
+      12, 16, 6, 8, 16, 15, 18, 3, 11, 0, 17, 7, 6, 11, 14, 13, 15, 6, 18, 6,
+      16, 12, 16, 11, 16, 11,
     ],
-    [1],
   ),
-);
+); // 6
