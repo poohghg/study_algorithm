@@ -248,4 +248,106 @@ function steppingStones(distance: number, rocks: number[], n: number) {
   return result;
 }
 
-console.log(steppingStones(25, [2, 11, 14, 17, 21], 2));
+// console.log(steppingStones(25, [2, 11, 14, 17, 21], 2));
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/389480
+// 완전범죄
+function perfectCrime(info: [number, number][], n: number, m: number) {
+  // A도둑이 훔칠수 있는 최소값을 바이너리 서치형태로 구하고 남은 값을 B도둑이 털 수 있는지 확인한다.
+  // A가 털려고 할때 B가 높은거부터 턴다.
+  info.sort((a, b) => {
+    if (a[1] === b[1]) return a[0] - b[0];
+    return b[1] - a[1];
+  });
+
+  const size = info.length;
+
+  const getRest = (min: number) => {
+    let rest = [];
+    for (let i = 0; i < size; i++) {
+      const currentValue = info[i][0];
+      if (currentValue <= min) {
+        min -= currentValue;
+      } else {
+        rest.push(info[i][1]);
+      }
+    }
+    return rest;
+  };
+
+  const isValid = (arr: number[]) => {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+      sum += arr[i];
+      if (sum >= m) return false;
+    }
+    return true;
+  };
+
+  let left = 0;
+  let right = n - 1;
+  let result = -1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    const rest = getRest(mid);
+    // B가 더 털 수 있다면(조건에 부합한다.) A는 더 적게 턴다.
+    if (isValid(rest)) {
+      result = mid;
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+  return result;
+}
+
+console.log(
+  perfectCrime(
+    [
+      [1, 2],
+      [2, 3],
+      [2, 1],
+    ],
+    4,
+    4,
+  ),
+);
+
+// console.log(
+//   perfectCrime(
+//     [
+//       [1, 4],
+//       [1, 3],
+//       [1, 4],
+//     ],
+//     6,
+//     4,
+//   ),
+// );
+//
+// console.log(
+//   perfectCrime(
+//     [
+//       [3, 3],
+//       [3, 3],
+//     ],
+//     6,
+//     1,
+//   ),
+// );
+//
+// console.log(
+//   perfectCrime(
+//     [
+//       [1, 3],
+//       [1, 3],
+//       [1, 1],
+//       [1, 1],
+//       [1, 1],
+//       [2, 3],
+//       [2, 3],
+//     ],
+//     6,
+//     7,
+//   ),
+// ); // 4
