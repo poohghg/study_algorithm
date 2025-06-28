@@ -1,16 +1,28 @@
 import { Node } from './Node';
 
-class BinarySearchTree<T = any> {
+class BinarySearchTree<T = number> {
+  constructor(data?: T[] | T) {
+    if (!data) return;
+
+    if (Array.isArray(data)) {
+      data.forEach((d) => this.insert(d));
+    } else {
+      this.insert(data);
+    }
+  }
+
   private _root: Node<T> | null = null;
 
   get root() {
     return this._root;
   }
 
-  insert(value: T) {
+  insert(value: T): Node<T> {
+    let node: Node<T>;
+
     if (!this._root) {
       this._root = new Node(value);
-      return;
+      return this._root;
     }
 
     let currentNode: Node<T> = this._root;
@@ -18,14 +30,16 @@ class BinarySearchTree<T = any> {
     while (true) {
       if (value < currentNode.value) {
         if (!currentNode.left) {
-          currentNode.left = new Node(value);
-          break;
+          const newNode = new Node(value);
+          currentNode.left = newNode;
+          return newNode;
         }
         currentNode = currentNode.left;
       } else if (currentNode.value < value) {
         if (!currentNode.right) {
-          currentNode.right = new Node(value);
-          break;
+          const newNode = new Node(value);
+          currentNode.right = newNode;
+          return newNode;
         }
         currentNode = currentNode.right;
       }
@@ -85,17 +99,50 @@ class BinarySearchTree<T = any> {
     this._root = traverse(this._root, value);
   }
 
-  // 가장 작은 원소부터 뽑을때?
-  values(): T[] {
-    const result: T[] = [];
-    const traverse = (node: Node<T> | null) => {
+  preOrder() {
+    const data: T[] = [];
+    const preorderLoop = (node: Node<T> | null) => {
       if (!node) return;
-      traverse(node.left);
-      result.push(node.value);
-      traverse(node.right);
+      data.push(node.value);
+      preorderLoop(node.left);
+      preorderLoop(node.right);
     };
-    traverse(this._root);
-    return result;
+    preorderLoop(this.root);
+    return data;
+  }
+
+  inOrder() {
+    const data: T[] = [];
+    const inOrderLoop = (node: Node<T> | null) => {
+      if (!node) return;
+      inOrderLoop(node.left);
+      data.push(node.value);
+      inOrderLoop(node.right);
+    };
+
+    inOrderLoop(this.root);
+    return data;
+  }
+
+  buildFromPreOrder(arr: T[]): BinarySearchTree<T> {
+    const newBst = new BinarySearchTree<T>();
+
+    let index = 0;
+    const buildLoop = (min: T, max: T): Node<T> | null => {
+      if (index >= arr.length) return null;
+      const value = arr[index];
+      if (value < min || value > max) return null;
+
+      index++;
+      const node = newBst.insert(value);
+
+      node.left = buildLoop(min, value);
+      node.right = buildLoop(value, max);
+
+      return node;
+    };
+
+    return newBst;
   }
 
   private findLargeMinNode(node: Node<T>) {
@@ -118,9 +165,12 @@ bst.insert(1);
 bst.insert(2);
 bst.insert(0);
 
-// console.log(bst.find(11));
-// console.log(bst.find(10));
-console.log(bst.root);
-bst.remove(10);
-console.log('??');
-console.log(bst.root);
+/**
+ *      10
+ *     5  15
+ *   3  14
+ * 1
+ *0 2
+ */
+console.log(bst.preOrder());
+// console.log(bst.inOrder());
