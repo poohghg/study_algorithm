@@ -39,6 +39,7 @@ class LinkedList {
     this.length++;
     return this;
   }
+
   // 리스트의 마지막요소를 반환하고 테일을 테일의 이전노드로 변경한다.
   pop() {
     if (!this.head) return undefined;
@@ -58,6 +59,7 @@ class LinkedList {
     }
     return curNode.val;
   }
+
   // 리스트의 맨앞의 요소를 반환한다.
   shift() {
     if (!this.head) return undefined;
@@ -67,6 +69,7 @@ class LinkedList {
     if (this.length === 0) this.tail = null;
     return returnNode;
   }
+
   // 새로운 요소를 받아, 리스트의 맨 앞에 추가한다.
   unshift(val) {
     const newNode = new Node(val);
@@ -80,6 +83,7 @@ class LinkedList {
     this.length++;
     return this;
   }
+
   // 해당인덱스를 찾아 요소를 반환한다.
   get(index) {
     if (index >= this.length || index < 0) return undefined;
@@ -92,6 +96,7 @@ class LinkedList {
     }
     return curNode;
   }
+
   // index 와 val 를 받아 해당위치에 val값을 업데이트 한다.
   set(index, val) {
     const fNode = this.get(index);
@@ -99,6 +104,7 @@ class LinkedList {
     fNode.val = val;
     return true;
   }
+
   // 해당인덱스에 새로운 노드를 삽압힌다.
   insert(index, val) {
     if (index < 0 || index >= this.length) return false;
@@ -114,6 +120,7 @@ class LinkedList {
     this.length++;
     return true;
   }
+
   // 해당인덱스 요소를 삭제한다.
   remove(index) {
     if (index < 0 || index > this.length) return false;
@@ -124,22 +131,25 @@ class LinkedList {
     preNode.next = preNode.next.next;
     this.length--;
   }
+
   //
   reverse() {
     // 1 -> 2 -> 3 -> 4
-    // 1 <- 2 <- 3 <- 4
+    // 4 -> 3 > 2 -> 1
     // swap head and tail
-    let node = this.head;
     this.head = this.tail;
     this.tail = node;
 
+    let node = this.head;
     let prev = null;
     let next;
 
     for (let i = 0; i < this.length; i++) {
+      // 2
       next = node.next;
       node.next = prev;
       prev = node;
+      // 노드는 2
       node = next;
     }
     console.log(this);

@@ -46,6 +46,12 @@ class BinarySearchTree<T = number> {
     }
   }
 
+  //      15
+  //    10
+  //  9    14
+  // 8    12
+  //7       13
+
   find(value: T) {
     if (!this._root) return undefined;
 
@@ -64,11 +70,6 @@ class BinarySearchTree<T = number> {
     return undefined;
   }
 
-  //      15
-  //    10
-  //  9    14
-  // 8    12
-  //7       13
   //
   remove(value: T) {
     const traverse = (node: Node<T> | null, targetValue: T): Node<T> | null => {
@@ -126,7 +127,6 @@ class BinarySearchTree<T = number> {
 
   buildFromPreOrder(arr: T[]): BinarySearchTree<T> {
     const newBst = new BinarySearchTree<T>();
-
     let index = 0;
     const buildLoop = (min: T, max: T): Node<T> | null => {
       if (index >= arr.length) return null;
@@ -145,6 +145,30 @@ class BinarySearchTree<T = number> {
     return newBst;
   }
 
+  // Binary Search Tree: Lowest Common Ancestor
+  lca(v1: T, v2: T) {
+    let currentNode = this.root;
+    while (currentNode) {
+      if (v1 < currentNode.value && v2 < currentNode.value) {
+        currentNode = currentNode.left;
+      } else if (currentNode.value < v1 && currentNode.value < v2) {
+        currentNode = currentNode.right;
+      } else {
+        return currentNode;
+      }
+    }
+    return currentNode;
+  }
+
+  treeHeight() {
+    const loop = (node: Node<T> | null): number => {
+      if (!node) return -1;
+      return 1 + Math.max(loop(node.left), loop(node.right));
+    };
+
+    return loop(this.root);
+  }
+
   private findLargeMinNode(node: Node<T>) {
     let currentNode = node;
     while (currentNode.left) {
@@ -158,19 +182,19 @@ class BinarySearchTree<T = number> {
 const bst = new BinarySearchTree();
 bst.insert(10);
 bst.insert(5);
+bst.insert(6);
 bst.insert(15);
 bst.insert(14);
 bst.insert(3);
 bst.insert(1);
 bst.insert(2);
 bst.insert(0);
-
 /**
  *      10
  *     5  15
- *   3  14
+ *   3 6  14
  * 1
- *0 2
+ *0  2
  */
-console.log(bst.preOrder());
+console.log(bst.lca(6, 3));
 // console.log(bst.inOrder());

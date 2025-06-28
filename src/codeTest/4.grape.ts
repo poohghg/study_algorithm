@@ -442,3 +442,37 @@ const solution8 = (n: number, result: number[][]) => {
 //     [2, 5],
 //   ]),
 // );
+
+function downToZero(n: number) {
+  if (n === 0) return 0;
+
+  const bfs = (target: number) => {
+    const visited = new Array(target + 1).fill(0);
+    const q = [target];
+
+    while (q.length) {
+      const current = q.shift()!;
+
+      if (current - 1 === 0) return visited[current] + 1;
+
+      if (!visited[current - 1]) {
+        visited[current - 1] = visited[current] + 1;
+        q.push(current - 1);
+      }
+
+      for (let i = 2; i <= Math.sqrt(current); i++) {
+        if (current % i === 0) {
+          const max = Math.max(i, current / i);
+          if (!visited[max]) {
+            visited[max] = visited[current] + 1;
+            q.push(max);
+          }
+        }
+      }
+    }
+  };
+  return bfs(n);
+}
+
+console.log(downToZero(966514)); //8
+console.log(downToZero(0)); //8

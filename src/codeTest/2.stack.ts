@@ -284,13 +284,149 @@ function twoStacks(maxSum: number, a: number[], b: number[]): number {
 // 7 15 12 0 5 18 17 2 10 15 4 2 9 15 13 12 16
 // 12 16 6 8 16 15 18 3 11 0 17 7 6 11 14 13 15 6 18 6 16 12 16 11 16 11
 
+// console.log(
+//   twoStacks(
+//     19,
+//     [7, 15, 12, 0, 5, 18, 17, 2, 10, 15, 4, 2, 9, 15, 13, 12, 16],
+//     [
+//       12, 16, 6, 8, 16, 15, 18, 3, 11, 0, 17, 7, 6, 11, 14, 13, 15, 6, 18, 6,
+//       16, 12, 16, 11, 16, 11,
+//     ],
+//   ),
+// ); // 6
+
+// Queue using Two Stacks
+
+class QueueUsingTwoStacks {
+  private inStack: number[] = [];
+  private outStack: number[] = [];
+
+  constructor() {}
+
+  enqueue(v: number) {
+    this.inStack.push(v);
+  }
+
+  dequeue() {
+    this.fillOutStack();
+    return this.outStack.pop();
+  }
+
+  peek() {
+    this.fillOutStack();
+    return this.outStack[this.outStack.length - 1];
+  }
+
+  private fillOutStack() {
+    if (this.outStack.length === 0) {
+      while (this.inStack.length) {
+        this.outStack.push(this.inStack.pop()!);
+      }
+    }
+  }
+}
+
+function queueUsingTwoStacks(arr: [string, number?][]) {
+  const q = new QueueUsingTwoStacks();
+
+  for (const [impl, value] of arr) {
+    if (impl === 'ENQUEUE') {
+      q.enqueue(value!);
+    } else if (impl === 'DEQUEUE') {
+      q.dequeue();
+    } else if (impl === 'PEEK') {
+      console.log(q.peek());
+    }
+  }
+}
+
+// console.log(
+//   queueUsingTwoStacks([
+//     ['ENQUEUE', 42],
+//     ['ENQUEUE', 14],
+//     ['ENQUEUE', 28],
+//     ['PEEK'],
+//     ['DEQUEUE'],
+//     ['PEEK'],
+//     ['DEQUEUE'],
+//     ['PEEK'],
+//     ['DEQUEUE'],
+//     ['ENQUEUE', 60],
+//   ]),
+// );
+
+// stack 선입후출 lifo
+class StackUsingTwoQueues {
+  private inQueue: number[] = [];
+  private outQueue: number[] = [];
+
+  push(v: number) {
+    this.inQueue.push(v);
+
+    while (this.outQueue.length) {
+      this.inQueue.push(this.outQueue.shift()!);
+    }
+
+    [this.outQueue, this.inQueue] = [this.inQueue, this.outQueue];
+  }
+
+  pop() {
+    return this.outQueue.shift();
+  }
+
+  peek() {
+    if (!this.outQueue.length) return undefined;
+    return this.outQueue[0];
+  }
+}
+
+function stackUsingTwoQueues(arr: [string, number?][]) {
+  const stack = new StackUsingTwoQueues();
+  stack.push(1);
+  stack.push(2);
+  stack.push(3);
+  console.log(stack.pop());
+  console.log(stack.pop());
+  console.log(stack.pop());
+  stack.push(5);
+  console.log(stack.peek());
+}
+
+// console.log(
+//   stackUsingTwoQueues([
+//     ['ENQUEUE', 5],
+//     ['ENQUEUE', 10],
+//     ['PEEK'],
+//     ['DEQUEUE'],
+//     ['PEEK'],
+//     ['DEQUEUE'],
+//     ['PEEK'],
+//     ['DEQUEUE'],
+//     ['ENQUEUE', 42],
+//   ]),
+// );
+
+// a -> b -> c -> a
+function truckTour(petrolpumps: number[][]): number {
+  let totalTank = 0;
+  let currTank = 0;
+  let startIndex = 0;
+
+  for (let i = 0; i < petrolpumps.length; i++) {
+    const [petrol, distance] = petrolpumps[i];
+    const net = petrol - distance;
+
+    currTank += net;
+  }
+
+  return 1;
+}
+
+// [휘발류,거리]
 console.log(
-  twoStacks(
-    19,
-    [7, 15, 12, 0, 5, 18, 17, 2, 10, 15, 4, 2, 9, 15, 13, 12, 16],
-    [
-      12, 16, 6, 8, 16, 15, 18, 3, 11, 0, 17, 7, 6, 11, 14, 13, 15, 6, 18, 6,
-      16, 12, 16, 11, 16, 11,
-    ],
-  ),
-); // 6
+  truckTour([
+    [1, 5],
+    [10, 3],
+    [3, 4],
+  ]),
+);

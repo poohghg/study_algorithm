@@ -15,5 +15,3 @@ const solution1 = (n: number) => {
 
   return count;
 };
-
-console.log(solution1(6));
