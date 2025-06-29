@@ -100,6 +100,11 @@ class BinarySearchTree<T = number> {
     this._root = traverse(this._root, value);
   }
 
+  remove1(value: T) {
+    if (!this.root) return;
+    this._root = this.removeTraverse(this._root, value);
+  }
+
   preOrder() {
     const data: T[] = [];
     const preorderLoop = (node: Node<T> | null) => {
@@ -167,6 +172,30 @@ class BinarySearchTree<T = number> {
     };
 
     return loop(this.root);
+  }
+
+  private removeTraverse(node: Node<T> | null, target: T): Node<T> | null {
+    if (!node) return null;
+
+    if (target < node.value) {
+      node.left = this.removeTraverse(node.left, target);
+    } else if (node.value < target) {
+      node.right = this.removeTraverse(node.right, target);
+    }
+
+    if (target === node.value) {
+      if (!node.left && !node.right) return null;
+      if (!node.left) return node.right;
+      if (!node.right) return node.left;
+
+      let current: Node<T> = node.right;
+      while (current.left) current = current.left;
+
+      node.value = current.value;
+      node.right = this.removeTraverse(node.right, current.value);
+    }
+
+    return node;
   }
 
   private findLargeMinNode(node: Node<T>) {
