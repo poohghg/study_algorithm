@@ -474,5 +474,45 @@ function downToZero(n: number) {
   return bfs(n);
 }
 
-console.log(downToZero(966514)); //8
-console.log(downToZero(0)); //8
+// console.log(downToZero(966514)); //8
+// console.log(downToZero(0)); //8
+
+function shortestReach(n: number, edges: number[][], s: number): number[] {
+  const graph = Array.from({ length: n + 1 }, (): [number, number][] => []);
+
+  for (const [node1, node2, cost] of edges) {
+    graph[node1].push([node2, cost]);
+    graph[node2].push([node1, cost]);
+  }
+
+  const bfs = (s: number) => {
+    const dists = Array.from({ length: n + 1 }, () => Infinity);
+    const unVisited = new Set(graph.keys());
+    dists[s] = 0;
+
+    while (unVisited.size) {
+      const current = Array.from(unVisited).reduce((a, b) => {
+        if (dists[a] > dists[b]) return b;
+        return a;
+      });
+
+      const currentCost = dists[current];
+      if (currentCost === Infinity) break;
+      unVisited.delete(current);
+
+      for (const [nextNode, nextCost] of graph[current] ?? []) {
+        if (currentCost + nextCost < dists[nextNode]) {
+          dists[nextNode] = currentCost + nextCost;
+        }
+      }
+    }
+
+    return dists;
+  };
+
+  const dists = bfs(s);
+  console.log(dists);
+  dists.splice(s, 1);
+  dists.splice(0, 1);
+  return dists;
+}
