@@ -13,6 +13,7 @@ function bubbleSort(arr) {
     arr[inx1] = arr[inx2];
     arr[inx2] = temp;
   }
+
   for (let i = arr.length; i >= 1; i--) {
     for (let j = 0; j < i - 1; j++) {
       if (arr[j] > arr[j + 1]) swap(arr, j, j + 1);
@@ -27,6 +28,7 @@ function refactBubbleSort(arr) {
     arr[inx1] = arr[inx2];
     arr[inx2] = temp;
   }
+
   // 비교를 수행할 횟수.
   for (let i = arr.length; i > 0; i--) {
     // 현재루프에서 스왑을 하고있는지 확인.
@@ -43,6 +45,7 @@ function refactBubbleSort(arr) {
   }
   return arr;
 }
+
 // console.log(refactBubbleSort([1, 2, 3, 5, 6, 3]));
 
 function selectionSort(arr) {
@@ -63,6 +66,7 @@ function selectionSort(arr) {
   }
   return arr;
 }
+
 // console.log(selectionSort([4, 1, 2, 3]));
 
 function insertionSort(arr) {
@@ -84,6 +88,7 @@ function insertionSort(arr) {
   }
   return arr;
 }
+
 // console.log(insertionSort([1, 0, 1, 2, 3, 0]));
 // 1, 2, 0, 3;
 
@@ -121,8 +126,10 @@ function mergeSort(arr) {
     const right = sort(arr.slice(middle));
     return merge(left, right);
   }
+
   return sort(arr);
 }
+
 // console.log(mergeSort([1, 0, 1, 2, 3, 0]));
 function refactMergeSort(arr) {
   function merge(arr1, arr2) {
@@ -158,8 +165,10 @@ function refactMergeSort(arr) {
     const right = splitArr(arr.slice(middle));
     return merge(left, right);
   }
+
   return splitArr(arr);
 }
+
 // console.log(refactMergeSort([1, 0, 1, 2]));
 function quickSort(arr) {
   function refactQuickSort(arr) {
@@ -186,6 +195,7 @@ function quickSort(arr) {
       arr[index] = selectedPivot;
       return index;
     }
+
     pivot([5, 1, 7, 9, 1]);
   }
 
@@ -211,6 +221,7 @@ function quickSort(arr) {
     }
     return arr;
   }
+
   main(arr, 0, arr.length - 1);
   return arr;
 }
@@ -253,6 +264,7 @@ function qsort(arr) {
     }
     return arr;
   }
+
   main(arr, 0, arr.length - 1);
   return arr;
 }
@@ -266,20 +278,24 @@ function radixSort(arr) {
   function getDigit(num, digit) {
     return Math.floor((Math.abs(num) / 10 ** digit) % 10);
   }
+
   function getMaxCnt(arr) {
     let max = 0;
+
     // 해당수가 몇의 자리수인지 구한다.
     function digitCount(num) {
       if (num === 0) return 1;
       return Math.floor(Math.log10(Math.abs(num)) + 1);
       // return num.toString().length;
     }
+
     arr.forEach((i) => {
       const cnt = digitCount(i);
       if (cnt > max) max = cnt;
     });
     return max;
   }
+
   const maxCnt = getMaxCnt(arr);
   // const cnt
   for (let i = 0; i < maxCnt; i++) {
@@ -292,6 +308,7 @@ function radixSort(arr) {
   }
   return arr;
 }
+
 radixSort([1, 321, 12, 5, 3, 27, 1]);
 
 function rSort(arr) {
@@ -322,4 +339,5 @@ function rSort(arr) {
   console.log(arr);
   return arr;
 }
+
 rSort([3, 1, 3, 41, 312]);
