@@ -80,7 +80,7 @@ function insertionSort(arr) {
     const curV = arr[i];
     let lastJ;
     // 순서를 바꿔야 하는 조건
-    for (let j = i - 1; j >= 0 && arr[j] > curV; j--) {
+    for (let j = i - 1; j <= 0 && arr[j] > curV; j--) {
       arr[j + 1] = arr[j];
       lastJ = j;
     }
