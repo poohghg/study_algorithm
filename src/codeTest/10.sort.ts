@@ -371,4 +371,59 @@ const insertionSortCount = (arr: number[]): number => {
 };
 
 // console.log(insertionSortCount([2, 1, 3, 1, 2]));
-console.log(insertionSortCount([12, 15, 1, 5, 6, 14, 11]));
+// console.log(insertionSortCount([12, 15, 1, 5, 6, 14, 11]));
+
+const activityNotifications = (expenditure: number[], d: number): number => {
+  // 앞 d일 평균 2배 이상이상 출금이면 노티
+
+  const findMedianFn = () => {
+    let mid = Math.floor(d / 2) + 1;
+
+    if (d % 2 === 1)
+      return () => {
+        let acc = 0;
+        for (let i = 0; i <= 200; i++) {
+          acc += counts[i];
+          if (mid <= acc) return i;
+        }
+      };
+
+    return () => {
+      let acc = 0;
+      let [mid1, mid2] = [mid - 1, mid];
+      let [m1, m2] = [-1, -1];
+
+      for (let i = 0; i <= 200; i++) {
+        acc += counts[i];
+        if (m1 === -1 && mid1 <= acc) m1 = i;
+        if (mid2 <= acc) {
+          m2 = i;
+          return (m1 + m2) / 2;
+        }
+      }
+    };
+  };
+
+  const counts: number[] = new Array(201).fill(0);
+
+  for (let i = 0; i < d; i++) {
+    const idx = expenditure[i];
+    counts[idx] = counts[idx] + 1;
+  }
+
+  let result = 0;
+  const findMedian = findMedianFn();
+
+  for (let i = d; i < expenditure.length; i++) {
+    const current = expenditure[i];
+    const midian = findMedian()!;
+
+    if (midian * 2 <= current) result++;
+    counts[expenditure[i - d]]--;
+    counts[expenditure[i]]++;
+  }
+
+  return result;
+};
+
+// console.log(activityNotifications([2, 3, 4, 2, 3, 6, 8, 4, 5], 5));
