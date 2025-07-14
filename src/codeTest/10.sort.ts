@@ -427,3 +427,57 @@ const activityNotifications = (expenditure: number[], d: number): number => {
 };
 
 // console.log(activityNotifications([2, 3, 4, 2, 3, 6, 8, 4, 5], 5));
+
+const runningTime = (arr: number[]): number => {
+  let result = 0;
+
+  for (let i = 1; i < arr.length; i++) {
+    const current = arr[i];
+    let j = i - 1;
+
+    while (0 <= j && current < arr[j]) {
+      arr[j + 1] = arr[j];
+      j--;
+      result++;
+    }
+    arr[j + 1] = current;
+  }
+  return result;
+};
+
+// console.log(runningTime([2, 1, 3, 1, 2]));
+// console.log(runningTime([3, 2, 1, 1, 2]));
+
+const countSwap = (arr: number[]): number => {
+  const getMinSwaps = (sortedArr: number[]) => {
+    const copy = arr.slice();
+    const indexMap = new Map<number, number>();
+
+    copy.forEach((v, i) => indexMap.set(v, i));
+
+    let swapCount = 0;
+    for (let i = 0; i < arr.length; i++) {
+      const currentValue = copy[i];
+      const sortValue = sortedArr[i];
+
+      if (currentValue !== sortValue) {
+        swapCount++;
+
+        // 정렬된 값의 인덱스
+        const toSwapIdx = indexMap.get(sortValue)!;
+        // 값 스왑
+        [copy[i], copy[toSwapIdx]] = [copy[toSwapIdx], copy[i]];
+
+        indexMap.set(sortValue, i);
+        indexMap.set(currentValue, toSwapIdx);
+      }
+    }
+
+    return swapCount;
+  };
+
+  const sortedAsc = [...arr].sort((a, b) => a - b);
+  const sortedDesc = [...arr].sort((a, b) => b - a);
+
+  return Math.min(getMinSwaps(sortedAsc), getMinSwaps(sortedDesc));
+};
