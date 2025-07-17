@@ -169,9 +169,69 @@ const balancedSums = (arr: number[]): string => {
 // console.log(balancedSums([2, 0, 0, 0]));
 // console.log(balancedSums([2, 0, 2, 2]));
 
-const maximumSum = (a: number[], m: number): number => {
-  if (m === 1) return Math.max(...a);
-  // Write your code here
+// const maximumSum = (a: number[], m: number): number => {
+//   if (m === 1) return Math.max(...a);
+//   // Write your code here
+// };
+
+// console.log([3, 3, 9, 9, 5], 7);
+
+//https://www.hackerrank.com/challenges/playing-with-numbers/problem?isFullScreen=true
+// 다시
+const playingWithNumbers = (arr: number[], queries: number[]): number[] => {
+  arr.sort((a, b) => a - b);
+  const n = arr.length;
+
+  // 해당 인덱스 까지 음수
+  const getNegIdx = (q: number) => {
+    let left = 0;
+    let right = n - 1;
+    let idx = -1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      if (arr[mid] + q < 0) {
+        idx = mid;
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+
+    return idx;
+  };
+
+  const prefixSum: number[] = arr.reduce((acc, curr, idx) => {
+    acc[idx] = curr + (acc[idx - 1] ?? 0);
+    return acc;
+  }, [] as number[]);
+
+  const result: number[] = [];
+  let querySum = 0;
+
+  for (const query of queries) {
+    querySum += query;
+    let sum = 0;
+    const idx = getNegIdx(querySum);
+
+    if (idx >= 0) {
+      const negSum = prefixSum[idx];
+      const negCount = idx + 1;
+      sum += -negSum + -(querySum * negCount);
+    }
+
+    if (idx < n - 1) {
+      const posSum = prefixSum[n - 1] - (idx === -1 ? 0 : prefixSum[idx]);
+      const posCount = n - (idx + 1);
+      sum += posSum + posCount * querySum;
+    }
+
+    result.push(sum);
+  }
+
+  return result;
 };
 
-console.log([3, 3, 9, 9, 5], 7);
+// console.log(playingWithNumbers([-1, 2, -3], [1, -2, 3]));
+console.log(playingWithNumbers([1, 2, 3], [1, -2, 3]));
+// console.log(playingWithNumbers([-5, -3, -2, 0, 1, 2, 3], [-2]));
