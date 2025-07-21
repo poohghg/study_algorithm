@@ -239,31 +239,75 @@ const playingWithNumbers = (arr: number[], queries: number[]): number[] => {
 // https://www.hackerrank.com/challenges/making-candies/problem?isFullScreen=true
 
 const minimumPasses = (m: number, w: number, p: number, n: number): number => {
+  const restDays = (current: number, m: number, w: number) =>
+    Math.ceil((n - current) / (m * w));
+
   const binarySpend = (current: number) => {
+    let currentM = m;
+    let currentW = w;
+    let minM = m;
+    let minW = w;
+    let minCurrent = current;
+    let min = restDays(current, m, w);
     let rest = Math.floor(current / p);
+
     while (0 < rest) {
-      if (m < w) {
-        m += 1;
+      if (currentM < currentW) {
+        currentM += 1;
         rest--;
       } else {
-        w += 1;
+        currentW += 1;
         rest--;
+      }
+      current -= p;
+
+      const restDay = restDays(current, currentM, currentW);
+
+      if (restDay <= min) {
+        min = restDay;
+        minM = currentM;
+        minW = currentW;
+        minCurrent = current;
       }
     }
 
-    return current - rest * p;
+    return {
+      minM,
+      minW,
+      minCurrent,
+    };
   };
 
-  let result = 0;
-  let current = 0;
+  let low = 1;
+  // let high = 1e18;
+  let high = n;
+  let answer = high;
 
-  while (true) {
-    result++;
-    current += m * w;
-    if (current >= n) return result;
-    current = binarySpend(current);
+  const canReachInDays = (days: number) => {
+    let currentCandies = 0;
+    let currentDay = 0;
+
+    while (currentDay < days) {
+      const dailyProduction = m * w;
+
+      const maxPossible = currentCandies + dailyProduction * days - currentDay;
+      if (maxPossible >= n) return true;
+    }
+  };
+
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    if (true) {
+      answer = mid;
+      high = mid - 1;
+    } else low = mid + 1;
   }
 };
 
 // console.log(minimumPasses(3, 1, 2, 12));
-console.log(minimumPasses(1, 2, 1, 60));
+// console.log(minimumPasses(1, 1, 6, 45));
+// console.log(minimumPasses(1, 1, 1000000000000, 1000000000000));
+console.log(minimumPasses(1, 100, 10000000000, 1000000000000));
+// console.log(minimumPasses(1, 1, 1000000000000, 1000000000000));
+// console.log(minimumPasses(2, 1, 9, 9));
+// console.log(minimumPasses(1, 2, 1, 60));
