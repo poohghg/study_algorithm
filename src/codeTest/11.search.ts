@@ -233,5 +233,37 @@ const playingWithNumbers = (arr: number[], queries: number[]): number[] => {
 };
 
 // console.log(playingWithNumbers([-1, 2, -3], [1, -2, 3]));
-console.log(playingWithNumbers([1, 2, 3], [1, -2, 3]));
+// console.log(playingWithNumbers([1, 2, 3], [1, -2, 3]));
 // console.log(playingWithNumbers([-5, -3, -2, 0, 1, 2, 3], [-2]));
+
+// https://www.hackerrank.com/challenges/making-candies/problem?isFullScreen=true
+
+const minimumPasses = (m: number, w: number, p: number, n: number): number => {
+  const binarySpend = (current: number) => {
+    let rest = Math.floor(current / p);
+    while (0 < rest) {
+      if (m < w) {
+        m += 1;
+        rest--;
+      } else {
+        w += 1;
+        rest--;
+      }
+    }
+
+    return current - rest * p;
+  };
+
+  let result = 0;
+  let current = 0;
+
+  while (true) {
+    result++;
+    current += m * w;
+    if (current >= n) return result;
+    current = binarySpend(current);
+  }
+};
+
+// console.log(minimumPasses(3, 1, 2, 12));
+console.log(minimumPasses(1, 2, 1, 60));
