@@ -175,21 +175,218 @@ const solution4 = (points: number[][], queries: number[][]) => {
 //     ],
 //   ),
 // );
+// https://school.programmers.co.kr/learn/courses/30/lessons/388352/questions
 
-const test = () => {
-  const p = new Promise((resolve, reject) => {
-    console.log('pending');
-    resolve('value');
-    setTimeout(() => {
-      console.log('time');
-    }, 0);
-  });
+const secretCode = (n: number, q: number[][], ans: number[]) => {
+  const dfs = (count: number, arr: number[], subs?: number[][]) => {
+    const res: number[][] = [];
+    const temp: number[] = [];
 
-  console.log('1');
+    const loop = (level: number, start: number) => {
+      if (count === level) {
+        const copy = [...temp];
+        if (subs) {
+          for (const sub of subs) {
+            const candidate = [...sub, ...copy];
+            if (validArray(candidate)) res.push(candidate);
+          }
+        } else {
+          res.push(copy);
+        }
+        return;
+      }
 
-  p.then((v) => {
-    console.log('then', v);
-  });
+      for (let i = start; i < arr.length; i++) {
+        temp.push(arr[i]);
+        loop(level + 1, i + 1);
+        temp.pop();
+      }
+    };
+
+    loop(0, 0);
+    return res;
+  };
+
+  const validArray = (arr: number[]) => {
+    for (const [i, queryArr] of q.entries()) {
+      const set = new Set(arr.concat(queryArr));
+      if (10 - set.size !== ans[i]) return false;
+    }
+    return true;
+  };
+
+  const maxAns = Math.max(...ans);
+  const maxIdx = ans.indexOf(maxAns);
+  const candidate = q[maxIdx];
+  const candidateSet = new Set(candidate);
+  const nArray: number[] = Array.from(
+    { length: n },
+    (_, i: number) => i + 1,
+  ).filter((n) => !candidateSet.has(n));
+
+  const maxArray = dfs(maxAns, candidate);
+  return dfs(5 - maxAns, nArray, maxArray).length;
 };
 
-test();
+// console.log(
+//   secretCode(
+//     10,
+//     [
+//       [1, 2, 3, 4, 5],
+//       [6, 7, 8, 9, 10],
+//       [3, 7, 8, 9, 10],
+//       [2, 5, 7, 9, 10],
+//       [3, 4, 5, 6, 7],
+//     ],
+//     [2, 3, 4, 3, 3],
+//   ),
+// );
+// console.log(
+//   secretCode(
+//     15,
+//     [
+//       [2, 3, 9, 12, 13],
+//       [1, 4, 6, 7, 9],
+//       [1, 2, 8, 10, 12],
+//       [6, 7, 11, 13, 15],
+//       [1, 4, 10, 11, 14],
+//     ],
+//     [2, 1, 3, 0, 1],
+//   ),
+// );
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/389481
+const sealedSpell = (n: number, bans: string[]) => {
+  const size = 26;
+  const alphabet = Array.from({ length: size }, (_, i) =>
+    String.fromCharCode('a'.charCodeAt(0) + i),
+  );
+  let removeCount = 0;
+  for (const ban of bans) {
+    let len = ban.length - 1;
+    let code = 0;
+    for (const s of ban) {
+      const idx = alphabet.indexOf(s) + 1;
+      code += +len * size;
+      len--;
+    }
+  }
+};
+
+// console.log(sealedSpell(30, ['d', 'e', 'bb', 'aa', 'ae']));
+// console.log(sealedSpell(30, ['d', 'e', 'bb', 'aa', 'ae']));
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/258709
+
+const selectDice = (dice: number[][]) => {
+  const canPickIndexes = (
+    level: number = 0,
+    result: number[][] = [],
+    temp: number[] = [],
+  ) => {
+    if (half === level) {
+      result.push([...temp]);
+      return;
+    }
+
+    for (let i = 0; i < 6; i++) {
+      temp.push(i);
+      canPickIndexes(level + 1, result, temp);
+      temp.pop();
+    }
+    return result;
+  };
+
+  const dfs = (
+    level: number = 0,
+    start: number = 0,
+    result: number[][] = [],
+    temp: number[] = [],
+  ) => {
+    if (half === level) {
+      result.push([...temp]);
+      return;
+    }
+
+    for (let i = start; i < size; i++) {
+      temp.push(i);
+      dfs(level + 1, i + 1, result, temp);
+      temp.pop();
+    }
+
+    return result;
+  };
+
+  const getScores = (indexes: number[]) => {
+    const scores: number[] = [];
+
+    for (const indexSet of pickIndexes) {
+      let score = 0;
+      for (const [i, x] of indexSet.entries()) {
+        score += dice[indexes[i]][x];
+      }
+      scores.push(score);
+    }
+    scores.sort((a, b) => a - b);
+
+    return scores;
+  };
+
+  const getWinCount = (arr1: number[], arr2: number[]) => {
+    const maxValue = Math.max(...arr1, ...arr2);
+    const count = new Array(maxValue + 1).fill(0);
+    for (const v of arr2) count[v]++;
+
+    const prefix = [...count];
+    for (let i = 2; i <= maxValue; i++) prefix[i] += prefix[i - 1];
+
+    let result = 0;
+    for (const n of arr1) result += prefix[n - 1] ?? 0;
+
+    return result;
+  };
+
+  const size = dice.length;
+  const half = size / 2;
+  const indexes = Array.from({ length: size }, (_, i) => i);
+  const pickIndexes = canPickIndexes()!;
+  const combinableIndexes = dfs()!;
+  const maps = new Map<string, number[]>();
+  let maxWinCount = 0;
+  let result: number[] = [];
+
+  for (const my of combinableIndexes) {
+    const you = indexes.filter((v) => !my.includes(v));
+    const myKey = my.join('');
+    const youKey = you.join('');
+
+    if (!maps.has(myKey)) maps.set(myKey, getScores(my));
+    if (!maps.has(youKey)) maps.set(youKey, getScores(you));
+    let winCount = getWinCount(maps.get(myKey)!, maps.get(youKey)!);
+
+    if (winCount > maxWinCount) {
+      maxWinCount = winCount;
+      result = [...my];
+    }
+  }
+  return result.map((v) => v + 1);
+};
+
+console.log(
+  selectDice([
+    [1, 2, 3, 4, 5, 6],
+    [3, 3, 3, 3, 4, 4],
+    [1, 3, 3, 4, 4, 4],
+    [1, 1, 4, 4, 5, 5],
+    [1, 1, 4, 4, 5, 5],
+    [1, 1, 4, 4, 5, 5],
+  ]),
+);
+console.log(
+  selectDice([
+    [40, 41, 42, 43, 44, 45],
+    [43, 43, 42, 42, 41, 41],
+    [1, 1, 80, 80, 80, 80],
+    [70, 70, 1, 1, 70, 70],
+  ]),
+);

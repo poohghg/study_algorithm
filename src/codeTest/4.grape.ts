@@ -511,8 +511,89 @@ function shortestReach(n: number, edges: number[][], s: number): number[] {
   };
 
   const dists = bfs(s);
-  console.log(dists);
   dists.splice(s, 1);
   dists.splice(0, 1);
   return dists;
 }
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/388353
+const forklift = (storage: string[], requests: string[]) => {
+  const n = storage.length;
+  const m = storage[0].length;
+  const moves = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+  const maps = storage.map((s) => s.split(''));
+
+  const isValidPos = (x: number, y: number) =>
+    0 <= x && x < n && 0 <= y && y < m;
+
+  const canMoveOutside = (x: number, y: number) => {
+    const visited = Array.from({ length: n }, () => new Array(m).fill(false));
+    const q = [[x, y]];
+    visited[x][y] = true;
+
+    while (q.length) {
+      const [cx, cy] = q.shift()!;
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [cx + dx, cy + dy];
+        if (!isValidPos(nx, ny)) return true;
+        if (visited[nx][ny]) continue;
+        if (maps[nx][ny] === '') {
+          q.push([nx, ny]);
+          visited[nx][ny] = true;
+        }
+      }
+    }
+    return false;
+  };
+
+  const isOutsideNearby = (x: number, y: number): boolean => {
+    for (const [dx, dy] of moves) {
+      const [nx, ny] = [x + dx, y + dy];
+      // 주변이 밖이 거나
+      if (!isValidPos(nx, ny)) return true;
+      // bfs로 해당 위치에서 밖으로 갈 수 있는지 확인?
+      if (maps[nx][ny] === '' && canMoveOutside(nx, ny)) return true;
+    }
+
+    return false;
+  };
+
+  for (const request of requests) {
+    const updatePos = [];
+    const size = request.length;
+
+    if (size === 2) {
+      for (const [i, row] of maps.entries()) {
+        for (const [j, s] of row.entries()) {
+          if (s === request[0]) {
+            updatePos.push([i, j]);
+          }
+        }
+      }
+    } else {
+      for (const [i, row] of maps.entries()) {
+        for (const [j, s] of row.entries()) {
+          if (s === request && isOutsideNearby(i, j)) {
+            updatePos.push([i, j]);
+          }
+        }
+      }
+    }
+
+    updatePos.forEach(([i, j]) => {
+      maps[i][j] = '';
+    });
+  }
+
+  return maps.flat().filter((v) => v !== '').length;
+};
+
+console.log(forklift(['AZWQY', 'CAABX', 'BBDDA', 'ACACA'], ['A', 'BB', 'A']));
+console.log(
+  forklift(['HAH', 'HBH', 'HHH', 'HAH', 'HBH'], ['C', 'B', 'B', 'B', 'B', 'H']),
+);

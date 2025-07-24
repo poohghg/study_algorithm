@@ -284,24 +284,54 @@ const minimumPasses = (m: number, w: number, p: number, n: number): number => {
   let answer = high;
 
   const canReachInDays = (days: number) => {
+    let cm = m;
+    let cw = w;
     let currentCandies = 0;
     let currentDay = 0;
 
     while (currentDay < days) {
-      const dailyProduction = m * w;
+      const dailyProduction = cm * cw;
 
-      const maxPossible = currentCandies + dailyProduction * days - currentDay;
+      const maxPossible =
+        currentCandies + dailyProduction * (days - currentDay);
       if (maxPossible >= n) return true;
+
+      // 사탕이 p보다 적으면 건너뛰기
+      if (currentCandies < p) {
+        const need = Math.ceil((p - currentDay) / dailyProduction);
+        if (currentDay + need > days) return false;
+        currentDay += need;
+        currentCandies += need * dailyProduction;
+      }
+
+      // 구매 가능한 만큼 구매
+      const canBuyCount = Math.floor(currentCandies / p);
+      const totalUnits = cw + cm + canBuyCount;
+      const half = Math.floor(totalUnits / 2);
+
+      if (cm > cw) {
+        cm = Math.max(cm, half);
+        cw = totalUnits - cm;
+      } else {
+        cw = Math.max(cw, half);
+        cm = totalUnits - cw;
+      }
+
+      currentCandies -= canBuyCount * p;
+      currentCandies += cm * cw;
+      currentDay++;
     }
   };
 
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
-    if (true) {
+    if (canReachInDays(mid)) {
       answer = mid;
       high = mid - 1;
     } else low = mid + 1;
   }
+
+  return answer;
 };
 
 // console.log(minimumPasses(3, 1, 2, 12));
