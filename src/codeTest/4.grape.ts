@@ -593,7 +593,98 @@ const forklift = (storage: string[], requests: string[]) => {
   return maps.flat().filter((v) => v !== '').length;
 };
 
-console.log(forklift(['AZWQY', 'CAABX', 'BBDDA', 'ACACA'], ['A', 'BB', 'A']));
+// console.log(forklift(['AZWQY', 'CAABX', 'BBDDA', 'ACACA'], ['A', 'BB', 'A']));
+// console.log(
+//   forklift(['HAH', 'HBH', 'HHH', 'HAH', 'HBH'], ['C', 'B', 'B', 'B', 'B', 'H']),
+// );
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/258711
+const donutAndLeafGraph = (edges: [number, number][]) => {
+  const bfs = (start: number) => {
+    const q = [start];
+    const visited = new Set<number>();
+    let edges = 0;
+    visited.add(start);
+
+    while (q.length) {
+      const currentNode = q.shift()!;
+      for (const nextNode of graph.get(currentNode) ?? []) {
+        edges++;
+        if (!visited.has(nextNode)) {
+          q.push(nextNode);
+          visited.add(nextNode);
+        }
+      }
+    }
+
+    return [visited.size, edges];
+  };
+
+  const calcedGraphCount = (arr: number[][]) => {
+    // 도넛 모양 그래프의 수, 막대 모양 그래프의 수, 8자 모양 그래프의 수
+    // donut, line , leaf
+    const result = [0, 0, 0];
+    for (const [nodes, edges] of arr) {
+      // donut: n,n
+      // line: n,n-1
+      // leaf n+1,n+2
+      if (nodes === edges) {
+        result[0]++;
+      } else if (nodes - 1 === edges) {
+        result[1]++;
+      } else {
+        result[2]++;
+      }
+    }
+    return result;
+  };
+
+  const graph = new Map<number, number[]>([[0, []]]);
+  const startNodes = new Set<number>();
+  const nextNodes = new Set<number>();
+
+  for (const [node1, node2] of edges) {
+    if (!graph.has(node1)) graph.set(node1, []);
+    graph.get(node1)?.push(node2);
+    startNodes.add(node1);
+    nextNodes.add(node2);
+  }
+
+  // root를 찾는다.
+  // start는 할수 있지만 도달할 수 없는 노드
+  const roots = [];
+  for (const key of graph.keys()) {
+    if (startNodes.has(key) && !nextNodes.has(key)) {
+      roots.push(key);
+    }
+  }
+
+  const root = roots.reduce((a, b) => {
+    if (graph.get(a)!.length < graph.get(b)!.length) return b;
+    return a;
+  }, 0);
+
+  const graphInfo = graph.get(root)!.map((nextNodes) => bfs(nextNodes));
+
+  return [root, ...calcedGraphCount(graphInfo)];
+};
+
 console.log(
-  forklift(['HAH', 'HBH', 'HHH', 'HAH', 'HBH'], ['C', 'B', 'B', 'B', 'B', 'H']),
+  donutAndLeafGraph([
+    [4, 11],
+    [1, 12],
+    [8, 3],
+    [12, 7],
+    [4, 2],
+    [7, 11],
+    [4, 8],
+    [9, 6],
+    [10, 11],
+    [6, 10],
+    [3, 5],
+    [11, 1],
+    [5, 3],
+    [11, 9],
+    [3, 8],
+  ]),
 );

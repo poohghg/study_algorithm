@@ -422,11 +422,73 @@ function truckTour(petrolpumps: number[][]): number {
   return 1;
 }
 
-// [휘발류,거리]
+// console.log(
+//   truckTour([
+//     [1, 5],
+//     [10, 3],
+//     [3, 4],
+//   ]),
+// );
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/176962
+const assignmentProgress = (plans: [string, string, string][]) => {
+  const toTimeM = (s: string) => {
+    const [h, m] = s.split(':').map((v) => +v);
+    return h * 60 + m;
+  };
+
+  const processedPlanes = plans
+    .map<
+      [string, number, number]
+    >(([name, start, playtime]) => [name, toTimeM(start), +playtime])
+    .sort((a, b) => a[1] - b[1]);
+
+  const result = [];
+  const stack = [processedPlanes[0]];
+
+  for (let i = 1; i < processedPlanes.length; i++) {
+    const current = processedPlanes[i];
+    // 이전 타임에서 현재 타임까지의 시간 여유분
+    let restTime = current[1] - stack[stack.length - 1][1];
+
+    while (0 < restTime && stack.length) {
+      const top = stack[stack.length - 1];
+      const [tName, tStart, tPlaytime] = top;
+      if (tPlaytime <= restTime) {
+        stack.pop();
+        result.push(tName);
+      } else {
+        stack[stack.length - 1][2] -= restTime;
+      }
+      restTime -= tPlaytime;
+    }
+
+    stack.push(current);
+  }
+
+  while (stack.length) {
+    const top = stack.pop()!;
+    result.push(top[0]);
+  }
+
+  return result;
+};
+
 console.log(
-  truckTour([
-    [1, 5],
-    [10, 3],
-    [3, 4],
+  assignmentProgress([
+    ['music', '12:20', '40'],
+    ['science', '12:40', '50'],
+    ['computer', '12:30', '100'],
+    ['history', '14:00', '30'],
   ]),
 );
+
+console.log(
+  assignmentProgress([
+    ['aaa', '12:00', '20'],
+    ['bbb', '12:10', '30'],
+    ['ccc', '12:40', '10'],
+  ]),
+);
+
+//

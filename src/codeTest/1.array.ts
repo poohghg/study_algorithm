@@ -372,21 +372,71 @@ const selectDice = (dice: number[][]) => {
   return result.map((v) => v + 1);
 };
 
+// console.log(
+//   selectDice([
+//     [1, 2, 3, 4, 5, 6],
+//     [3, 3, 3, 3, 4, 4],
+//     [1, 3, 3, 4, 4, 4],
+//     [1, 1, 4, 4, 5, 5],
+//     [1, 1, 4, 4, 5, 5],
+//     [1, 1, 4, 4, 5, 5],
+//   ]),
+// );
+// console.log(
+//   selectDice([
+//     [40, 41, 42, 43, 44, 45],
+//     [43, 43, 42, 42, 41, 41],
+//     [1, 1, 80, 80, 80, 80],
+//     [70, 70, 1, 1, 70, 70],
+//   ]),
+// );
+
+const bandaging = (bandage: number[], health: number, attacks: number[][]) => {
+  const max = health;
+  const bonus = bandage[2];
+  let prev = 0;
+  for (const [time, damage] of attacks) {
+    // const sequenceTime = time - prev;
+    // const bonus = Math.floor(sequenceTime/)
+  }
+};
+
+// 시전 시간, 초당 회복량, 추가 회복량
+// console.log(
+//   bandaging([5, 1, 5], 30, [
+//     [2, 10],
+//     [9, 15],
+//     [10, 5],
+//     [11, 5],
+//   ]),
+// );
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/178871
+const calling = (players: string[], callings: string[]) => {
+  const rankMap = new Map<string, number>();
+  players.forEach((v, i) => rankMap.set(v, i));
+
+  for (const caller of callings) {
+    const callerRank = rankMap.get(caller)!;
+    const callerPrevRankName = players[callerRank - 1];
+
+    // array swap
+    [players[callerRank], players[callerRank - 1]] = [
+      players[callerRank - 1],
+      players[callerRank],
+    ];
+
+    // rankMap swap
+    rankMap.set(caller, callerRank - 1);
+    rankMap.set(callerPrevRankName, callerRank);
+  }
+
+  return players;
+};
+
 console.log(
-  selectDice([
-    [1, 2, 3, 4, 5, 6],
-    [3, 3, 3, 3, 4, 4],
-    [1, 3, 3, 4, 4, 4],
-    [1, 1, 4, 4, 5, 5],
-    [1, 1, 4, 4, 5, 5],
-    [1, 1, 4, 4, 5, 5],
-  ]),
-);
-console.log(
-  selectDice([
-    [40, 41, 42, 43, 44, 45],
-    [43, 43, 42, 42, 41, 41],
-    [1, 1, 80, 80, 80, 80],
-    [70, 70, 1, 1, 70, 70],
-  ]),
+  calling(
+    ['mumu', 'soe', 'poe', 'kai', 'mine'],
+    ['kai', 'kai', 'mine', 'mine'],
+  ),
 );
