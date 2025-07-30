@@ -362,4 +362,150 @@ const matchWord = (strs: string[], t: string) => {
   return dp[n] === Infinity ? -1 : dp[n];
 };
 
-console.log(matchWord(['ba', 'na', 'n', 'a'], 'banana'));
+// console.log(matchWord(['ba', 'na', 'n', 'a'], 'banana'));
+
+class PriorityQueue<T> {
+  private heap: { value: T; priority: number }[] = [];
+
+  constructor(private compare: (a: number, b: number) => boolean) {}
+
+  push(value: T, priority: number) {
+    this.heap.push({ value, priority });
+    this.bubbleUp();
+  }
+
+  pop(): T | null {
+    if (this.isEmpty()) return null;
+    const top = this.heap[0];
+    const end = this.heap.pop()!;
+    if (this.heap.length > 0) {
+      this.heap[0] = end;
+      this.bubbleDown();
+    }
+    return top.value;
+  }
+
+  isEmpty() {
+    return this.heap.length === 0;
+  }
+
+  private bubbleUp() {
+    let index = this.heap.length - 1;
+    const element = this.heap[index];
+
+    while (index > 0) {
+      const parentIdx = Math.floor((index - 1) / 2);
+      const parent = this.heap[parentIdx];
+      if (this.compare(element.priority, parent.priority)) {
+        this.heap[index] = parent;
+        index = parentIdx;
+      } else break;
+    }
+
+    this.heap[index] = element;
+  }
+
+  private bubbleDown() {
+    let index = 0;
+    const length = this.heap.length;
+    const element = this.heap[0];
+
+    while (true) {
+      let leftIdx = 2 * index + 1;
+      let rightIdx = 2 * index + 2;
+      let swap = -1;
+
+      if (
+        leftIdx < length &&
+        this.compare(this.heap[leftIdx].priority, element.priority)
+      ) {
+        swap = leftIdx;
+      }
+
+      if (
+        rightIdx < length &&
+        this.compare(
+          this.heap[rightIdx].priority,
+          (swap === -1 ? element : this.heap[leftIdx]).priority,
+        )
+      ) {
+        swap = rightIdx;
+      }
+
+      if (swap === -1) break;
+      this.heap[index] = this.heap[swap];
+      index = swap;
+    }
+
+    this.heap[index] = element;
+  }
+}
+
+const n1카드게임 = (coin: number, cards: number[]) => {
+  const n = cards.length;
+  const t = n + 1;
+  const roundCards: any[] = [];
+  const restCards = cards.slice(n / 3);
+  for (let i = 0; i < restCards.length; i++) {
+    roundCards.push([restCards[i], restCards[++i]]);
+  }
+
+  const canNextRound = (set: Set<number>): [boolean, Set<number>] => {
+    for (const n of set) {
+      if (set.has(t - n)) {
+        set.delete(n);
+        set.delete(t - n);
+        return [true, set];
+      }
+    }
+    return [false, set];
+  };
+
+  const bfs = () => {
+    // 0,1,2 장을 뽑을 수 있다.
+    const options: [boolean, boolean][] = [
+      [false, false],
+      [true, false],
+      [false, true],
+      [true, true],
+    ];
+
+    const pq = new PriorityQueue<[Set<number>, number, number]>(
+      (a, b) => a > b, // 큰 round 먼저 탐색
+    );
+    pq.push([new Set(cards.slice(0, n / 3)), 1, 0], 0);
+
+    let result = 1;
+
+    while (!pq.isEmpty()) {
+      const [hand, r, cost] = pq.pop()!;
+      if (roundCards.length < r) {
+        result = Math.max(result, r);
+        break;
+      }
+
+      const [a, b] = roundCards[r - 1];
+      for (const [takeA, takeB] of options) {
+        const c = (takeA ? 1 : 0) + (takeB ? 1 : 0);
+        if (cost + c > coin) continue;
+
+        const newHand = new Set(hand);
+        if (takeA) newHand.add(a);
+        if (takeB) newHand.add(b);
+
+        const [can, nextHand] = canNextRound(newHand);
+        if (can) {
+          pq.push([nextHand, r + 1, cost + c], r + 1);
+          result = Math.max(result, r + 1);
+        }
+      }
+    }
+
+    return result;
+  };
+
+  return bfs();
+};
+
+console.log(n1카드게임(3, [1, 2, 3, 4, 5, 8, 6, 7, 9, 10, 11, 12]));
+console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
