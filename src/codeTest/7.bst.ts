@@ -301,17 +301,17 @@ function perfectCrime(info: [number, number][], n: number, m: number) {
   return result;
 }
 
-console.log(
-  perfectCrime(
-    [
-      [1, 2],
-      [2, 3],
-      [2, 1],
-    ],
-    4,
-    4,
-  ),
-);
+// console.log(
+//   perfectCrime(
+//     [
+//       [1, 2],
+//       [2, 3],
+//       [2, 1],
+//     ],
+//     4,
+//     4,
+//   ),
+// );
 
 // console.log(
 //   perfectCrime(
@@ -351,3 +351,57 @@ console.log(
 //     7,
 //   ),
 // ); // 4
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/118668
+const solution = (alp: number, cop: number, problems: number[][]) => {
+  // 알고력이 최대값이 되기위한 조건?
+  let [maxAlp, maxCop] = [alp, cop];
+  problems.forEach((v) => {
+    maxAlp = Math.max(maxAlp, v[0]);
+    maxCop = Math.max(maxCop, v[1]);
+  });
+  const dp = Array.from({ length: maxAlp + 1 }, () =>
+    new Array(maxCop + 1).fill(Infinity),
+  );
+
+  dp[alp][cop] = 0;
+
+  for (let i = alp; i < maxAlp; i++) {
+    dp[i][cop] = (dp[i - 1]?.[cop] ?? -1) + 1;
+    for (let j = cop; j < maxCop; j++) {
+      dp[i][j + 1] = dp[i][j] + 1;
+    }
+  }
+
+  // 초기 alp, cop가 maxAlp, maxCop보다 클 경우에는 루프를 아예 시작하지 않음.
+  for (let a = alp; a <= maxAlp; a++) {
+    for (let c = cop; c <= maxCop; c++) {
+      if (dp[a][c] === Infinity) continue;
+      const currentCost = dp[a][c];
+      if (a === maxAlp && c === maxCop) break;
+      for (const [alp_req, cop_req, alp_rwd, cop_rwd, cost] of problems) {
+        if (alp_req <= a && cop_req <= c) {
+          // const nextA = Math.min(maxAlp, a + alp_rwd);
+          const nextA = maxAlp < a + alp_rwd ? maxAlp : a + alp_rwd;
+          // const nextC = Math.min(maxCop, c + cop_rwd);
+          const nextC = maxCop < c + cop_rwd ? maxCop : c + cop_rwd;
+          // dp[nextA][nextC] = Math.min(dp[nextA][nextC], currentCost + cost);
+          dp[nextA][nextC] =
+            dp[nextA][nextC] < currentCost + cost
+              ? dp[nextA][nextC]
+              : currentCost + cost;
+        }
+      }
+    }
+  }
+
+  return dp[maxAlp][maxCop];
+};
+
+// alp_req, cop_req, alp_rwd, cop_rwd, cost
+console.log(
+  solution(10, 10, [
+    [10, 15, 2, 1, 2],
+    [20, 20, 3, 3, 4],
+  ]),
+);
