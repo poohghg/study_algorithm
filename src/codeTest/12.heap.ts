@@ -1,6 +1,6 @@
 export default {};
 
-class PQ {
+export class PQ {
   constructor(private compare: (a: number, b: number) => boolean) {}
 
   private _data: number[] = [];
@@ -13,7 +13,7 @@ class PQ {
     return this._data.length;
   }
 
-  get top() {
+  get peak() {
     if (this.size === 0) return undefined;
     return this._data[0];
   }
@@ -85,7 +85,7 @@ const solution = (scoville: number[], K: number) => {
 
   let result = 0;
 
-  while (miniHeap.size && miniHeap.top! < K) {
+  while (miniHeap.size && miniHeap.peak! < K) {
     const top1 = miniHeap.pop();
     const top2 = miniHeap.pop();
     if (!top1 || !top2) {

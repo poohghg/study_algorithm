@@ -343,7 +343,6 @@ const puddlesMn = (m: number, n: number, puddles: [number, number][]) => {
 // console.log(puddlesMn(4, 3, [[2, 2]]));
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/12983
-
 const matchWord = (strs: string[], t: string) => {
   const n = t.length;
   const dp = Array(n + 1).fill(Infinity);

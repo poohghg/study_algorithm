@@ -1,10 +1,18 @@
-class MinHeap<T> {
+export default class PriorityQueue<T> {
   private heap: T[];
   private compare: (a: T, b: T) => number;
 
   constructor(compare: (a: T, b: T) => number) {
     this.heap = [];
     this.compare = compare;
+  }
+
+  get size() {
+    return this.heap.length;
+  }
+
+  get peak() {
+    return this.heap[0];
   }
 
   push(value: T) {
@@ -18,10 +26,6 @@ class MinHeap<T> {
     this.heap[0] = this.heap.pop()!;
     this.bubbleDown();
     return min;
-  }
-
-  size() {
-    return this.heap.length;
   }
 
   private bubbleUp() {
