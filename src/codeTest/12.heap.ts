@@ -101,7 +101,4 @@ const solution = (scoville: number[], K: number) => {
 };
 
 // console.log(solution([1, 2, 3, 9, 10, 12], 7));
-console.log(solution([1, 1], 7));
-//  0 1 2 3 4 5
-// 3 -> 1
-// [1, 2, 3, 9, 10, 12]
+// console.log(solution([1, 1], 7));
