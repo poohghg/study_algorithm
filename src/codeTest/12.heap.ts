@@ -102,3 +102,71 @@ const solution = (scoville: number[], K: number) => {
 
 // console.log(solution([1, 2, 3, 9, 10, 12], 7));
 // console.log(solution([1, 1], 7));
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/42628
+const solution2 = (operations: string[]) => {
+  const minHeap = new PQ((a, b) => a < b);
+  const maxHeap = new PQ((a, b) => a > b);
+
+  const popHeapData = (heap: PQ) => {
+    let top = heap.pop();
+    // dataMap에 없다는건 이미 처리된 데이터이다.
+    while (top && !dataMap.has(top)) {
+      top = minHeap.pop();
+    }
+
+    if (top && dataMap.has(top)) {
+      if (dataMap.get(top) === 1) {
+        dataMap.delete(top);
+      } else {
+        dataMap.set(top, dataMap.get(top)! - 1);
+      }
+    }
+  };
+
+  // 오퍼레이터 수행후에는 최소값과 최대값을 구해야한다.
+  const dataMap = new Map<number, number>();
+  for (const operation of operations) {
+    let [op, n] = operation.split(' ');
+    const num = Number(n);
+    if (op === 'I') {
+      minHeap.push(num);
+      maxHeap.push(num);
+      dataMap.set(num, (dataMap.get(num) ?? 0) + 1);
+    } else if (num === -1) {
+      popHeapData(minHeap);
+    } else if (num === 1) {
+      popHeapData(maxHeap);
+    }
+  }
+
+  let max = maxHeap.pop();
+  while (max && !dataMap.has(max)) {
+    max = maxHeap.pop();
+  }
+
+  let min = minHeap.pop();
+  while (min && !dataMap.has(min)) {
+    min = minHeap.pop();
+  }
+
+  return [max ?? 0, min ?? 0];
+};
+
+console.log(
+  solution2(['I 16', 'I -5643', 'D -1', 'D 1', 'D 1', 'I 123', 'D -1']),
+);
+
+console.log(
+  solution2([
+    'I -45',
+    'I 653',
+    'D 1',
+    'I -642',
+    'I 45',
+    'I 97',
+    'D 1',
+    'D -1',
+    'I 333',
+  ]),
+);
