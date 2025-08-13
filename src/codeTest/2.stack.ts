@@ -252,7 +252,6 @@ function twoStacks(maxSum: number, a: number[], b: number[]): number {
   };
 
   const prefixSumOfA = prefixSums(a);
-
   let result = prefixSumOfA.length;
   let bSum = 0;
 
@@ -474,21 +473,60 @@ const assignmentProgress = (plans: [string, string, string][]) => {
   return result;
 };
 
-console.log(
-  assignmentProgress([
-    ['music', '12:20', '40'],
-    ['science', '12:40', '50'],
-    ['computer', '12:30', '100'],
-    ['history', '14:00', '30'],
-  ]),
-);
+// console.log(
+//   assignmentProgress([
+//     ['music', '12:20', '40'],
+//     ['science', '12:40', '50'],
+//     ['computer', '12:30', '100'],
+//     ['history', '14:00', '30'],
+//   ]),
+// );
 
-console.log(
-  assignmentProgress([
-    ['aaa', '12:00', '20'],
-    ['bbb', '12:10', '30'],
-    ['ccc', '12:40', '10'],
-  ]),
-);
+// console.log(
+//   assignmentProgress([
+//     ['aaa', '12:00', '20'],
+//     ['bbb', '12:10', '30'],
+//     ['ccc', '12:40', '10'],
+//   ]),
+// );
 
-//
+// https://school.programmers.co.kr/learn/courses/30/lessons/42583
+const solution5 = (
+  bridge_length: number,
+  weight: number,
+  truck_weights: number[],
+) => {
+  let result = 0;
+  let currentSum = 0;
+  const queue = [];
+
+  while (true) {
+    result++;
+
+    queue.forEach((value) => {
+      value.t = value.t - 1;
+    });
+
+    while (queue.length && queue[queue.length - 1].t === 0) {
+      const { w, t } = queue.shift()!;
+      currentSum -= w;
+    }
+
+    if (!truck_weights.length) {
+      console.log(queue);
+      return result;
+    }
+
+    if (weight < currentSum) continue;
+
+    if (truck_weights.length && currentSum + truck_weights[0] < weight) {
+      const currentWeight = truck_weights.shift()!;
+      currentSum += currentWeight;
+      currentSum += queue.push({ w: currentWeight, t: bridge_length });
+    }
+  }
+};
+
+console.log(solution5(100, 100, [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]));
+console.log(solution5(100, 100, [10]));
+console.log(solution5(2, 10, [7, 4, 5, 6]));
