@@ -434,9 +434,113 @@ const calling = (players: string[], callings: string[]) => {
   return players;
 };
 
+// console.log(
+//   calling(
+//     ['mumu', 'soe', 'poe', 'kai', 'mine'],
+//     ['kai', 'kai', 'mine', 'mine'],
+//   ),
+// );
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/68646
+const solution5 = (a: number[]) => {
+  // 더 큰 풍선만 터트릴수 있다. -> 가장 작은 풍선이 남는다.
+  // 1회 더 작은 풍선을 터트릴 수 있다.
+  const n = a.length;
+
+  const leftMin = Array.from({ length: n }, () => Infinity);
+  leftMin[0] = a[0];
+  for (let i = 1; i < n; i++) {
+    leftMin[i] = Math.min(leftMin[i - 1], a[i]);
+  }
+
+  const rightMin = Array.from({ length: n }, () => Infinity);
+  rightMin[n - 1] = a[n - 1];
+  for (let i = n - 2; 0 <= i; i--) {
+    rightMin[i] = Math.min(rightMin[i + 1], a[i]);
+  }
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    if (a[i] <= leftMin[i] || a[i] <= rightMin[i]) {
+      result++;
+    }
+  }
+
+  return result;
+};
+
+// console.log(solution5([-16, 27, 65, -2, 58, -92, -71, -68, -61, -33]));
+
+const solution6 = (user_id: string[], banned_id: string[]) => {
+  const getCombinations = (candidates: string[][]) => {
+    const result = new Set<string>();
+    const usedNames = new Set<string>();
+
+    const dfs = (level: number) => {
+      if (level === banned_id.length) {
+        const key = [...usedNames.values()].sort().join(',');
+        result.add(key);
+        return;
+      }
+
+      for (const userId of candidates[level] ?? []) {
+        if (!usedNames.has(userId)) {
+          usedNames.add(userId);
+          dfs(level + 1);
+          usedNames.delete(userId);
+        }
+      }
+    };
+
+    dfs(0);
+    return result;
+  };
+
+  const isAllStar = (x: string) => {
+    return [...x].every((a) => a === '*');
+  };
+
+  const isMatch = (target: string, str: string) => {
+    for (let i = 0; i < target.length; i++) {
+      if (target[i] === '*') continue;
+      if (target[i] !== str[i]) return false;
+    }
+    return true;
+  };
+
+  const sizes = new Map<number, string[]>();
+
+  for (const string of user_id) {
+    const len = string.length;
+    if (!sizes.has(len)) sizes.set(len, []);
+    sizes.get(len)?.push(string);
+  }
+
+  let result = [];
+  for (const banId of banned_id) {
+    const len = banId.length;
+    const candidates = sizes.get(len) ?? [];
+
+    if (isAllStar(banId)) {
+      result.push(candidates);
+    } else {
+      let currArr = [];
+
+      for (const str of candidates) {
+        if (isMatch(banId, str)) currArr.push(str);
+      }
+
+      if (currArr.length) result.push(currArr);
+    }
+  }
+
+  console.log(result);
+  return getCombinations(result).size;
+};
+
 console.log(
-  calling(
-    ['mumu', 'soe', 'poe', 'kai', 'mine'],
-    ['kai', 'kai', 'mine', 'mine'],
+  solution6(
+    ['frodo', 'fradi', 'crodo', 'abc123', 'frodoc'],
+    ['fr*d*', '*rodo', '******', '******'],
   ),
 );
