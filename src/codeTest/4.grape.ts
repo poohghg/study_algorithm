@@ -669,22 +669,127 @@ const donutAndLeafGraph = (edges: [number, number][]) => {
   return [root, ...calcedGraphCount(graphInfo)];
 };
 
+// console.log(
+//   donutAndLeafGraph([
+//     [4, 11],
+//     [1, 12],
+//     [8, 3],
+//     [12, 7],
+//     [4, 2],
+//     [7, 11],
+//     [4, 8],
+//     [9, 6],
+//     [10, 11],
+//     [6, 10],
+//     [3, 5],
+//     [11, 1],
+//     [5, 3],
+//     [11, 9],
+//     [3, 8],
+//   ]),
+// );
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/340211
+const solution9 = (points: number[][], routes: number[][]) => {
+  // r 좌표가 변하는 이동을 c 좌표가 변하는 이동보다 먼저
+  const generatePath = (start: number, end: number) => {
+    const [sx, sy] = points[start - 1];
+    const [ex, ey] = points[end - 1];
+
+    const path = [[sx, sy]];
+
+    let r = sx;
+    while (r !== ex) {
+      r += ex < sx ? -1 : 1;
+      path.push([r, sy]);
+    }
+
+    let c = sy;
+    while (c !== ey) {
+      c += ey < sy ? -1 : 1;
+      path.push([r, c]);
+    }
+
+    if (path.length) path.pop();
+    return path;
+  };
+
+  const updateMap = (pos: number[], order: number) => {
+    const key = pos.join(',');
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)?.push(order);
+  };
+
+  const map = new Map<string, number[]>();
+  for (const route of routes) {
+    let time = 0;
+    for (let i = 0; i < route.length - 1; i++) {
+      const [start, end] = [route[i], route[i + 1]];
+      for (const pos of generatePath(start, end)) {
+        updateMap(pos, time++);
+      }
+    }
+    const lastIdx = route[route.length - 1];
+    updateMap(points[lastIdx - 1], time);
+  }
+
+  let result = 0;
+  for (const values of map.values()) {
+    const set = new Set(values);
+    if (set.size === values.length) continue;
+
+    const count = new Map();
+    for (const v of values) count.set(v, (count.get(v) ?? 0) + 1);
+    for (const c of count.values()) if (1 < c) result++;
+  }
+  return result;
+};
+
+// console.log(
+//   solution9(
+//     [
+//       [3, 2],
+//       [6, 4],
+//       [4, 7],
+//       [1, 4],
+//     ],
+//     [
+//       [4, 2],
+//       [1, 3],
+//       [2, 4],
+//     ],
+//   ),
+// );
+
 console.log(
-  donutAndLeafGraph([
-    [4, 11],
-    [1, 12],
-    [8, 3],
-    [12, 7],
-    [4, 2],
-    [7, 11],
-    [4, 8],
-    [9, 6],
-    [10, 11],
-    [6, 10],
-    [3, 5],
-    [11, 1],
-    [5, 3],
-    [11, 9],
-    [3, 8],
-  ]),
+  solution9(
+    [
+      [3, 2],
+      [6, 4],
+      [4, 7],
+      [1, 4],
+    ],
+    [
+      [4, 2],
+      [1, 3],
+      [4, 2],
+      [4, 3],
+    ],
+  ),
 );
+
+// console.log(
+//   solution9(
+//     [
+//       [2, 2],
+//       [2, 3],
+//       [2, 7],
+//       [6, 6],
+//       [5, 2],
+//     ],
+//     [
+//       [2, 3, 4, 5],
+//       [1, 3, 4, 5],
+//     ],
+//   ),
+// );
