@@ -509,27 +509,24 @@ const solution6 = (user_id: string[], banned_id: string[]) => {
   };
 
   const sizes = new Map<number, string[]>();
-
   for (const string of user_id) {
-    const len = string.length;
-    if (!sizes.has(len)) sizes.set(len, []);
-    sizes.get(len)?.push(string);
+    const size = string.length;
+    if (!sizes.has(size)) sizes.set(size, []);
+    sizes.get(size)?.push(string);
   }
 
   let result = [];
   for (const banId of banned_id) {
-    const len = banId.length;
-    const candidates = sizes.get(len) ?? [];
+    const size = banId.length;
+    const candidates = sizes.get(size) ?? [];
 
     if (isAllStar(banId)) {
       result.push(candidates);
     } else {
-      let currArr = [];
-
+      const currArr = [];
       for (const str of candidates) {
         if (isMatch(banId, str)) currArr.push(str);
       }
-
       if (currArr.length) result.push(currArr);
     }
   }
