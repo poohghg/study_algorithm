@@ -353,7 +353,7 @@ function perfectCrime(info: [number, number][], n: number, m: number) {
 // ); // 4
 
 //https://school.programmers.co.kr/learn/courses/30/lessons/118668
-const solution = (alp: number, cop: number, problems: number[][]) => {
+const solution4 = (alp: number, cop: number, problems: number[][]) => {
   // 알고력이 최대값이 되기위한 조건?
   let [maxAlp, maxCop] = [alp, cop];
   problems.forEach((v) => {
@@ -399,9 +399,43 @@ const solution = (alp: number, cop: number, problems: number[][]) => {
 };
 
 // alp_req, cop_req, alp_rwd, cop_rwd, cost
-console.log(
-  solution(10, 10, [
-    [10, 15, 2, 1, 2],
-    [20, 20, 3, 3, 4],
-  ]),
-);
+// console.log(
+//   solution4(10, 10, [
+//     [10, 15, 2, 1, 2],
+//     [20, 20, 3, 3, 4],
+//   ]),
+// );
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/340212
+const solution5 = (diffs: number[], times: number[], limit: number) => {
+  const canSolution = (ability: number) => {
+    let totalTime = 0;
+    for (let i = 0; i < diffs.length; i++) {
+      if (limit < totalTime) return false;
+      const diff = diffs[i];
+      const time = times[i];
+      if (diff <= ability) {
+        totalTime += time;
+      } else {
+        totalTime += (diff - ability) * (time + (times[i - 1] ?? 0)) + time;
+      }
+    }
+    return totalTime <= limit;
+  };
+
+  let minAbility = 1;
+  let maxAbility = diffs.reduce((a, b) => (a < b ? b : a), 1);
+  let result = 0;
+  while (minAbility <= maxAbility) {
+    const mid = Math.floor((minAbility + maxAbility) / 2);
+    if (canSolution(mid)) {
+      result = mid;
+      maxAbility = mid - 1;
+    } else {
+      minAbility = mid + 1;
+    }
+  }
+  return result;
+};
+
+console.log(solution5([1, 4, 4, 2], [6, 3, 8, 2], 59));

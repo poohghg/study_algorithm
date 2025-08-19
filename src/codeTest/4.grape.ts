@@ -754,27 +754,11 @@ const solution9 = (points: number[][], routes: number[][]) => {
 //     [
 //       [4, 2],
 //       [1, 3],
-//       [2, 4],
+//       [4, 2],
+//       [4, 3],
 //     ],
 //   ),
 // );
-
-console.log(
-  solution9(
-    [
-      [3, 2],
-      [6, 4],
-      [4, 7],
-      [1, 4],
-    ],
-    [
-      [4, 2],
-      [1, 3],
-      [4, 2],
-      [4, 3],
-    ],
-  ),
-);
 
 // console.log(
 //   solution9(
@@ -791,3 +775,58 @@ console.log(
 //     ],
 //   ),
 // );
+
+const solution10 = (land: number[][]) => {
+  const n = land.length;
+  const m = land[0].length;
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const canMove = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
+
+  const bfs = (i: number, j: number) => {
+    land[i][j] = 0;
+    const queue: number[][] = [[i, j]];
+    let [miny, maxy, size] = [m, 0, 0];
+    while (queue.length) {
+      const [x, y] = queue.shift()!;
+      miny = Math.min(y, miny);
+      maxy = Math.max(y, maxy);
+      size++;
+
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [x + dx, y + dy];
+        if (!canMove(nx, ny) || land[nx][ny] === 0) continue;
+        queue.push([nx, ny]);
+        land[nx][ny] = 0;
+      }
+    }
+    return [miny, maxy, size];
+  };
+
+  const sizes = Array.from({ length: m + 1 }, () => 0);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (land[i][j] === 1) {
+        const [min, max, size] = bfs(i, j);
+        for (let i = min; i <= max; i++) sizes[i + 1] += size;
+      }
+    }
+  }
+
+  return Math.max(...sizes);
+};
+
+console.log(
+  solution10([
+    [0, 0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0, 0],
+    [1, 1, 0, 0, 0, 1, 1, 0],
+    [1, 1, 1, 0, 0, 0, 0, 0],
+    [1, 1, 1, 0, 0, 0, 1, 1],
+  ]),
+);
