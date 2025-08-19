@@ -735,9 +735,7 @@ const solution9 = (points: number[][], routes: number[][]) => {
 
   let result = 0;
   for (const values of map.values()) {
-    const set = new Set(values);
-    if (set.size === values.length) continue;
-
+    if (new Set(values).size === values.length) continue;
     const count = new Map();
     for (const v of values) count.set(v, (count.get(v) ?? 0) + 1);
     for (const c of count.values()) if (1 < c) result++;
