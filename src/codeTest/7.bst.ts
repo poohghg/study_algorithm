@@ -128,7 +128,6 @@ function solution3(info: number[], edges: [number, number][]) {
   for (const [from, to] of edges) tree[from].push(to);
 
   // 큐에 (현재 위치, count, 현재까지 이동한 배열을 넣는다?)
-
   const queue = new Queue<[number, number, number, Set<number>]>([
     [0, 1, 0, new Set()],
   ]);

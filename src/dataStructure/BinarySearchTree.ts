@@ -18,15 +18,12 @@ class BinarySearchTree<T = number> {
   }
 
   insert(value: T): Node<T> {
-    let node: Node<T>;
-
     if (!this._root) {
       this._root = new Node(value);
       return this._root;
     }
 
     let currentNode: Node<T> = this._root;
-
     while (true) {
       if (value < currentNode.value) {
         if (!currentNode.left) {
@@ -35,7 +32,7 @@ class BinarySearchTree<T = number> {
           return newNode;
         }
         currentNode = currentNode.left;
-      } else if (currentNode.value < value) {
+      } else {
         if (!currentNode.right) {
           const newNode = new Node(value);
           currentNode.right = newNode;
@@ -225,5 +222,3 @@ bst.insert(0);
  * 1
  *0  2
  */
-console.log(bst.lca(6, 3));
-// console.log(bst.inOrder());

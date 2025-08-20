@@ -1,5 +1,3 @@
-import PriorityQueue from '../dataStructure/PriorityQueue';
-
 export default {};
 
 const solution1 = (k: number, operations: (string | number)[][]) => {
@@ -16,22 +14,19 @@ const solution1 = (k: number, operations: (string | number)[][]) => {
   };
 
   const parents = Array.from({ length: k }, (_, i) => i);
-  let n = k; // 집합의 개수를 저장할 변수, 처음에는 모든 노드가 서로 다른 집합에 있으므로 k
 
   for (const op of operations) {
-    // operations 리스트에 있는 연산들을 하나씩 처리
     if (op[0] === 'u') {
-      union(parents, op[1] as number, op[2] as number); // op[1]과 op[2]가 속한 집합을 합칩니다.
+      union(parents, op[1] as number, op[2] as number);
     } else if (op[0] === 'f') {
       find(parents, op[1] as number);
     }
   }
 
-  // 모든 노드의 루트 노드를 찾아서 집합의 개수를 계산
+  let n = k;
   n = new Set(
     Array.from({ length: k }, (_, i) => {
       const x = find(parents, i);
-      console.log('x', x);
       return x;
     }),
   ).size;
@@ -71,39 +66,65 @@ const solution2 = (n: number, words: string[]) => {
 //   solution2(2, ['hello', 'one', 'even', 'never', 'now', 'world', 'draw']),
 // );
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/42861
 const solution3 = (n: number, costs: number[][]) => {
-  const graph: number[][][] = [];
+  costs.sort((a, b) => a[2] - b[2]);
 
-  for (const [node1, node2, cost] of costs) {
-    if (!graph[node1]) graph[node1] = [];
-    if (!graph[node2]) graph[node2] = [];
-    graph[node1].push([node2, cost]);
-    graph[node2].push([node1, cost]);
-  }
+  const find = (parents: number[], node: number) => {
+    if (parents[node] === node) return node;
+    parents[node] = find(parents, parents[node]);
+    return parents[node];
+  };
 
-  console.log(graph);
-
-  const bfs = () => {
-    const pq = new PriorityQueue<[number, number]>((a, b) => a[1] - b[1]);
-    const distance = Array.from({ length: n + 1 }, () => Infinity);
-    pq.push([0, 0]);
-    distance[0] = 0;
-
-    while (pq.size) {
-      const [node, cost] = pq.pop()!;
+  const union = (
+    parents: number[],
+    ranks: number[],
+    root1: number,
+    root2: number,
+  ) => {
+    // 작은 랭크 트리의 루트를 큰 랭크 트리 아래에 연결
+    if (ranks[root1] < ranks[root2]) {
+      parents[root1] = root2;
+    } else if (ranks[root2] < ranks[root1]) {
+      parents[root2] = root1;
+    } else {
+      // 랭크가 같다면 한쪽을 다른쪽에 붙이고 랭크를 올린다.
+      parents[root2] = root1;
+      ranks[root1] += 1;
     }
   };
+
+  const parents = Array.from({ length: n }, (_, i) => i);
+
+  const ranks = Array(n).fill(0);
+
+  let minCost = 0;
+  let edges = 0;
+  for (const [node1, node2, cost] of costs) {
+    if (edges === n - 1) break;
+
+    const root1 = find(parents, node1);
+    const root2 = find(parents, node2);
+
+    if (root1 !== root2) {
+      union(parents, ranks, root1, root2);
+      minCost += cost;
+      edges++;
+    }
+  }
+
+  return minCost;
 };
 
-// console.log(
-//   solution3(4, [
-//     [0, 1, 1],
-//     [0, 2, 2],
-//     [1, 2, 5],
-//     [1, 3, 1],
-//     [2, 3, 8],
-//   ]),
-// );
+console.log(
+  solution3(4, [
+    [0, 1, 1],
+    [0, 2, 2],
+    [1, 2, 5],
+    [1, 3, 1],
+    [2, 3, 8],
+  ]),
+);
 
 const solution4 = (M: string[]) => {
   const sort = M.sort();
@@ -118,4 +139,4 @@ const solution4 = (M: string[]) => {
   return true;
 };
 
-console.log(solution4(['119', '97674223', '1101', '1195524421', '96']));
+// console.log(solution4(['119', '97674223', '1101', '1195524421', '96']));

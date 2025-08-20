@@ -28,6 +28,7 @@ function solution1(n, lost, reserve) {
   }
   return n;
 }
+
 // console.log(solution_1(8, [5, 6, 7], [4, 5]));
 
 // 명예의 전당
@@ -53,6 +54,7 @@ function solution2(k, score) {
   }
   return answer;
 }
+
 // console.log(solution_2(4, [0, 300, 40, 300, 20, 70, 150, 50, 500, 1000]));
 
 // 귤 고르기
@@ -69,8 +71,10 @@ function solution3(k, tangerine) {
     if (0 >= k) return i + 1;
   }
 }
+
 // console.log(solution_3(4, [1, 3, 2, 5, 4, 5, 2, 3]));
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/42861
 // 섬 연결하기
 function solution4(n, costs) {
   const list = {};
@@ -122,6 +126,7 @@ function solution4(n, costs) {
   };
   return BFS(costs[0][0].toString());
 }
+
 // console.log(
 //   solution_4(4, [
 //     [0, 1, 5],
@@ -164,6 +169,7 @@ function solution4_1(n, costs) {
   }
   return answer;
 }
+
 // console.log(
 //   solution4_1(4, [
 //     [0, 1, 5],
@@ -213,6 +219,7 @@ function solution6(s) {
   }
   return cnt[0] === cnt[1];
 }
+
 // console.log(solution6('pPoooyY'));
 
 // 문자열 나기
@@ -230,6 +237,7 @@ function solution7(s) {
   };
   return divive(s, 0);
 }
+
 // console.log(solution7('bananaa'));
 
 function solution8(k, d) {
@@ -267,6 +275,7 @@ function solution8_1(k, d) {
   }
   return answer;
 }
+
 // console.log(solution8_1(3, 5));
 
 function solution9(e, starts) {
@@ -305,11 +314,13 @@ function solution9(e, starts) {
   // }
   // return starts.map((start) => ch[start]);
 }
+
 // console.log(solution9(8, [1, 3, 7]));
 function solution10(n) {
   const s = '수박';
   return n % 2 === 0 ? s.repeat(n / 2) : s.repeat(Math.floor(n / 2)) + '수';
 }
+
 // console.log(solution10(3));
 function solution11(n, cores) {
   if (n < cores.length) return n;
@@ -328,6 +339,7 @@ function solution11(n, cores) {
   };
   bs();
 }
+
 // console.log('solution11', solution11(6, [1, 2, 3]));
 // 최빈값
 function solution12(array) {
@@ -342,6 +354,7 @@ function solution12(array) {
   }
   return max.length > 1 ? -1 : Number(max[0]);
 }
+
 // console.log(solution12([3, 3, 1, 2, 4, 4, 4, 3, 3]));
 
 // 2 x n 타일링
@@ -388,6 +401,7 @@ function solution15(s) {
   }
   return answer;
 }
+
 // console.log(solution15('bananab'));
 
 // 디팬스 게임
@@ -456,6 +470,7 @@ function solution18(begin, end) {
   }
   return answer;
 }
+
 // console.log(solution18(1, 10));
 
 // 특이한 정렬
@@ -467,6 +482,7 @@ function solution19(numlist, n) {
     return Math.abs(calA) - Math.abs(calB);
   });
 }
+
 // console.log(solution19([1, 2, 3, 4, 5, 6], 4));
 
 // 평행
@@ -583,6 +599,7 @@ function solution23(phone_number) {
   }
   return answer.join('');
 }
+
 // console.log(solution23('01033334444'));
 
 function solution24(answers) {
@@ -605,6 +622,7 @@ function solution24(answers) {
   if (answer[0][0] === answer[2][0]) return answer.map((v) => v[1]);
   return [answer[0][1], answer[1][1]];
 }
+
 // console.log(solution24([1, 3, 2, 4, 2, 1, 3, 2, 4, 5, 6]));
 
 function solution25(participant, completion) {
@@ -618,6 +636,7 @@ function solution25(participant, completion) {
     completed[name]--;
   }
 }
+
 // console.log(solution(['leo', 'kiki', 'eden'], ['eden', 'kiki']));
 
 function solution26(numbers) {
@@ -648,6 +667,7 @@ function solution26(numbers) {
   }
   return answer;
 }
+
 // console.log(solution26('123'));
 
 // 숫자 카드 나누기
@@ -674,6 +694,7 @@ function solution28(t, p) {
   }
   return answer;
 }
+
 // console.log(solution28('3141592', '271'));
 
 // 테이블 해시 함수
@@ -726,6 +747,7 @@ function solution30(storey) {
   if (nextPlus) answer++;
   return answer;
 }
+
 // console.log(solution30(45));
 
 // console.log('1101111011000001101111011'.length);
