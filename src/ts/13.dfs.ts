@@ -128,21 +128,23 @@ const solution3 = (n: number, m: number, arr: [number, number][]) => {
     return graph;
   };
 
-  const graph = makeGraph();
-  const visited: boolean[] = new Array(n + 1).fill(false);
-  let result = 0;
-
   const isCycle = (node: number, prevNode: number) => {
     visited[node] = true;
 
     for (const nextNode of graph[node]) {
       if (visited[nextNode]) {
         if (nextNode !== prevNode) return true;
-      } else return isCycle(nextNode, node);
+      } else {
+        return isCycle(nextNode, node);
+      }
     }
 
     return false;
   };
+
+  const graph = makeGraph();
+  const visited: boolean[] = new Array(n + 1).fill(false);
+  let result = 0;
 
   for (let i = 1; i <= n; i++)
     if (!visited[i] && !isCycle(i, 0)) {
