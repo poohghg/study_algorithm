@@ -506,5 +506,170 @@ const n1카드게임 = (coin: number, cards: number[]) => {
   return bfs();
 };
 
-console.log(n1카드게임(3, [1, 2, 3, 4, 5, 8, 6, 7, 9, 10, 11, 12]));
-console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
+// console.log(n1카드게임(3, [1, 2, 3, 4, 5, 8, 6, 7, 9, 10, 11, 12]));
+// console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/136797
+const solution1 = (numbers: string) => {
+  const n = 4;
+  const m = 3;
+
+  const padNumbers = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    ['*', 0, '#'],
+  ];
+
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const diagonalMoves = [
+    [1, -1],
+    [1, 1],
+    [-1, -1],
+    [-1, 1],
+  ];
+
+  const canMove = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
+
+  const bfs = (i: number, j: number) => {
+    const enqueueMoves = (
+      x: number,
+      y: number,
+      moves: number[][],
+      weight: number,
+    ) => {
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [x + dx, y + dy];
+        if (!canMove(nx, ny) || visited[nx][ny] === true) continue;
+        queue.push([nx, ny, weight]);
+        visited[nx][ny] = true;
+        // 다음 거리 까지 확정?
+        const target = padNumbers[nx][ny];
+        if (typeof target === 'number') {
+          dist[start][target] = weight;
+        }
+      }
+    };
+
+    const visited = Array.from({ length: 4 }, () => new Array(3).fill(false));
+    const start = padNumbers[i][j] as number;
+    dist[start][start] = 1;
+    visited[i][j] = true;
+    // x,y,cost
+    const queue = [[i, j, 0]];
+
+    while (queue.length) {
+      const [x, y, cost] = queue.shift()!;
+      enqueueMoves(x, y, moves, cost + 2);
+      enqueueMoves(x, y, diagonalMoves, cost + 3);
+    }
+  };
+
+  const dist = Array.from({ length: 10 }, () => new Array(10).fill(Infinity));
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (typeof padNumbers[i][j] === 'number') {
+        bfs(i, j);
+      }
+    }
+  }
+
+  const dp = Array.from({ length: numbers.length + 1 }, () =>
+    Array.from({ length: 10 }, () => new Array(10).fill(Infinity)),
+  );
+
+  dp[0][4][6] = 0;
+
+  for (let i = 0; i < numbers.length; i++) {
+    const num = +numbers[i];
+    for (let l = 0; l < 10; l++) {
+      for (let r = 0; r < 10; r++) {
+        if (dp[i][l][r] === Infinity) continue;
+        const cost = dp[i][l][r];
+        if (l === num || r === num) {
+          dp[i + 1][l][r] = Math.min(dp[i + 1][l][r], cost + 1);
+        } else {
+          // l을 옮긴다.
+          dp[i + 1][num][r] = Math.min(dp[i + 1][num][r], cost + dist[l][num]);
+          // r을 옮긴다.
+          dp[i + 1][l][num] = Math.min(dp[i + 1][l][num], cost + dist[r][num]);
+        }
+      }
+    }
+  }
+
+  let result = Infinity;
+  for (let l = 0; l < 10; l++) {
+    for (let r = 0; r < 10; r++) {
+      result = Math.min(result, dp[numbers.length][l][r]);
+    }
+  }
+
+  return result;
+};
+
+// console.log(solution1('5123513512351351235137894123654877'));
+
+const solution2 = (n: number, lighthouse: number[][]) => {
+  const graph = lighthouse.reduce(
+    (acc, curr) => {
+      const [node1, node2] = curr;
+      acc[node1].push(node2);
+      acc[node2].push(node1);
+      return acc;
+    },
+    Array.from({ length: n + 1 }, (): number[] => []),
+  );
+  const order: number[] = [];
+
+  const stack: number[] = [1];
+  const visited = Array(n + 1).fill(false);
+  while (stack.length) {
+    const node = stack.pop()!;
+    order.push(node);
+    visited[node] = true;
+
+    for (const nextNode of graph[node]) {
+      if (!visited[nextNode]) stack.push(nextNode);
+    }
+  }
+
+  // 0은 자기 자신을 끄는 경우 1은 자기 자신을 키는 경우
+  const dp = Array.from({ length: n + 1 }, () => [0, 0]);
+  for (let i = n - 1; 0 <= i; i--) {
+    const node = order[i];
+    dp[node][1] = 1;
+    for (const next of graph[node]) {
+      dp[node][0] += dp[next][1];
+      dp[node][1] += Math.min(...dp[next]);
+    }
+  }
+
+  const a = Number(5),
+    b = Number(3);
+  for (let i = 0; i < b; i++) {
+    console.log(Array(a).fill('*').join(''));
+  }
+
+  return Math.min(...dp[1]);
+};
+
+console.log(
+  solution2(10, [
+    [4, 1],
+    [5, 1],
+    [5, 6],
+    [7, 6],
+    [1, 2],
+    [1, 3],
+    [6, 8],
+    [2, 9],
+    [9, 10],
+  ]),
+);
