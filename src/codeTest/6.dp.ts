@@ -651,25 +651,53 @@ const solution2 = (n: number, lighthouse: number[][]) => {
     }
   }
 
-  const a = Number(5),
-    b = Number(3);
-  for (let i = 0; i < b; i++) {
-    console.log(Array(a).fill('*').join(''));
-  }
-
   return Math.min(...dp[1]);
 };
 
-console.log(
-  solution2(10, [
-    [4, 1],
-    [5, 1],
-    [5, 6],
-    [7, 6],
-    [1, 2],
-    [1, 3],
-    [6, 8],
-    [2, 9],
-    [9, 10],
-  ]),
-);
+// console.log(
+//   solution2(10, [
+//     [4, 1],
+//     [5, 1],
+//     [5, 6],
+//     [7, 6],
+//     [1, 2],
+//     [1, 3],
+//     [6, 8],
+//     [2, 9],
+//     [9, 10],
+//   ]),
+// );
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/131129
+
+const solution3 = (target: number) => {
+  const isSingleOrBull = (n: number) => n === 50 || n <= 20;
+
+  const nums = new Set(
+    Array.from({ length: 20 }, (_, i) => [i + 1, (i + 1) * 2, (i + 1) * 3])
+      .flat()
+      .concat(50)
+      .sort((a, b) => a - b),
+  );
+
+  const dp = Array.from({ length: target + 1 }, () => [Infinity, 0]);
+
+  for (let i = 1; i <= target; i++) {
+    if (nums.has(i)) {
+      dp[i] = [1, isSingleOrBull(i) ? 1 : 0];
+    } else {
+      for (const v of nums) {
+        if (i < v) break;
+        const [prevCount, prevSingle] = dp[i - v];
+        if (prevCount + 1 < dp[i][0]) {
+          dp[i] = [prevCount + 1, prevSingle + dp[v][1]];
+        } else if (prevCount + 1 === dp[i][0]) {
+          dp[i][1] = Math.max(dp[i][1], prevSingle + dp[v][1]);
+        }
+      }
+    }
+  }
+  return dp[target];
+};
+
+console.log(solution3(121));
