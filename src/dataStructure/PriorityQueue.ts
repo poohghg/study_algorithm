@@ -1,73 +1,152 @@
-export default class PriorityQueue<T> {
-  private heap: T[];
-  private compare: (a: T, b: T) => number;
+/**
+ * a < b 가 참이면 minHeap
+ * a > b 가 참이면 maxHeap
+ */
 
-  constructor(compare: (a: T, b: T) => number) {
-    this.heap = [];
-    this.compare = compare;
+export default class PriorityQueue<T = number> {
+  constructor(private compare: (a: T, b: T) => boolean) {}
+
+  private _data: T[] = [];
+
+  get data() {
+    return this._data.slice();
   }
 
   get size() {
-    return this.heap.length;
+    return this._data.length;
   }
 
   get peak() {
-    return this.heap[0];
+    if (this.size === 0) return undefined;
+    return this._data[0];
   }
 
-  push(value: T) {
-    this.heap.push(value);
+  push(v: T) {
+    this._data.push(v);
     this.bubbleUp();
   }
 
   pop(): T | undefined {
-    if (this.heap.length === 1) return this.heap.pop();
-    const min = this.heap[0];
-    this.heap[0] = this.heap.pop()!;
+    if (this._data.length === 1) return this._data.pop();
+    this.swap(0, this.size - 1);
+    const top = this._data.pop();
     this.bubbleDown();
-    return min;
+    return top;
   }
 
   private bubbleUp() {
-    let index = this.heap.length - 1;
-    while (index > 0) {
-      const parentIdx = Math.floor((index - 1) / 2);
-      if (this.compare(this.heap[index], this.heap[parentIdx]) >= 0) break;
-      [this.heap[index], this.heap[parentIdx]] = [
-        this.heap[parentIdx],
-        this.heap[index],
-      ];
-      index = parentIdx;
+    let idx = this.size - 1;
+
+    while (0 < idx) {
+      let parentIdx = Math.floor((idx - 1) / 2);
+      if (this.compare(this._data[idx], this._data[parentIdx])) {
+        this.swap(idx, parentIdx);
+        idx = parentIdx;
+      } else {
+        break;
+      }
     }
   }
 
   private bubbleDown() {
-    let index = 0;
-    const length = this.heap.length;
-    while (true) {
-      let leftIdx = 2 * index + 1;
-      let rightIdx = 2 * index + 2;
-      let smallest = index;
+    let idx = 0;
+    const size = this.size;
+
+    while (idx < size) {
+      let leftIdx = idx * 2 + 1;
+      let rightIdx = idx * 2 + 2;
+      let currentIdx = idx;
 
       if (
-        leftIdx < length &&
-        this.compare(this.heap[leftIdx], this.heap[smallest]) < 0
+        leftIdx < size &&
+        this.compare(this._data[leftIdx], this._data[currentIdx])
       ) {
-        smallest = leftIdx;
+        currentIdx = leftIdx;
       }
-      if (
-        rightIdx < length &&
-        this.compare(this.heap[rightIdx], this.heap[smallest]) < 0
-      ) {
-        smallest = rightIdx;
-      }
-      if (smallest === index) break;
 
-      [this.heap[index], this.heap[smallest]] = [
-        this.heap[smallest],
-        this.heap[index],
-      ];
-      index = smallest;
+      if (
+        rightIdx < size &&
+        this.compare(this._data[rightIdx], this._data[currentIdx])
+      ) {
+        currentIdx = rightIdx;
+      }
+
+      if (currentIdx === idx) break;
+      this.swap(idx, currentIdx);
+      idx = currentIdx;
     }
   }
+
+  private swap(aIdx: number, bIdx: number) {
+    [this._data[aIdx], this._data[bIdx]] = [this._data[bIdx], this._data[aIdx]];
+  }
 }
+
+// js 코드
+// class PriorityQueue {
+//   constructor(compare) {
+//     this.compare = compare;
+//     this._data = [];
+//   }
+//
+//   get data() {
+//     return this._data.slice();
+//   }
+//   get size() {
+//     return this._data.length;
+//   }
+//   get peak() {
+//     if (this.size === 0) return undefined;
+//     return this._data[0];
+//   }
+//   push(v) {
+//     this._data.push(v);
+//     this.bubbleUp();
+//   }
+//   pop() {
+//     if (this._data.length === 1) return this._data.pop();
+//     this.swap(0, this.size - 1);
+//     const top = this._data.pop();
+//     this.bubbleDown();
+//     return top;
+//   }
+//   bubbleUp() {
+//     let idx = this.size - 1;
+//     while (0 < idx) {
+//       let parentIdx = Math.floor((idx - 1) / 2);
+//       if (this.compare(this._data[idx], this._data[parentIdx])) {
+//         this.swap(idx, parentIdx);
+//         idx = parentIdx;
+//       } else {
+//         break;
+//       }
+//     }
+//   }
+//   bubbleDown() {
+//     let idx = 0;
+//     const size = this.size;
+//     while (idx < size) {
+//       let leftIdx = idx * 2 + 1;
+//       let rightIdx = idx * 2 + 2;
+//       let currentIdx = idx;
+//       if (
+//         leftIdx < size &&
+//         this.compare(this._data[leftIdx], this._data[currentIdx])
+//       ) {
+//         currentIdx = leftIdx;
+//       }
+//       if (
+//         rightIdx < size &&
+//         this.compare(this._data[rightIdx], this._data[currentIdx])
+//       ) {
+//         currentIdx = rightIdx;
+//       }
+//       if (currentIdx === idx) break;
+//       this.swap(idx, currentIdx);
+//       idx = currentIdx;
+//     }
+//   }
+//   swap(aIdx, bIdx) {
+//     [this._data[aIdx], this._data[bIdx]] = [this._data[bIdx], this._data[aIdx]];
+//   }
+// }

@@ -1,3 +1,5 @@
+import PriorityQueue from '../dataStructure/PriorityQueue';
+
 export default {};
 
 interface QueueImpl<T> {
@@ -830,3 +832,98 @@ const solution10 = (land: number[][]) => {
 //     [1, 1, 1, 0, 0, 0, 1, 1],
 //   ]),
 // );
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/118669
+// 다익스트라 응용
+const solution11 = (
+  n: number,
+  paths: number[][],
+  gates: number[],
+  summits: number[],
+) => {
+  const graph = paths.reduce(
+    (acc, curr) => {
+      const [node1, node2, cost] = curr;
+      acc[node1].push([node2, cost]);
+      acc[node2].push([node1, cost]);
+      return acc;
+    },
+    Array.from({ length: n + 1 }, (): number[][] => []),
+  );
+  const summitsSet = new Set(summits);
+  const queue = new PriorityQueue<[number, number]>((a, b) => a[1] < b[1]);
+  const intensities = Array.from({ length: n + 1 }, () => Infinity);
+  gates.forEach((gate) => queue.push([gate, 0]));
+  gates.forEach((gate) => (intensities[gate] = 0));
+
+  while (queue.size) {
+    const [node, cost] = queue.pop()!;
+    if (intensities[node] < cost) continue;
+    for (const [next, nextCost] of graph[node]) {
+      const maxIntensity = Math.max(cost, nextCost);
+      // 현재까지 온 높이가 현재 저장된 높이보다 작으면 갱신하다.
+      if (maxIntensity < intensities[next]) {
+        intensities[next] = maxIntensity;
+        if (!summitsSet.has(next)) queue.push([next, maxIntensity]);
+      }
+    }
+  }
+
+  const result = [0, Infinity];
+  for (const summit of summits) {
+    if (intensities[summit] < result[1]) {
+      result[0] = summit;
+      result[1] = intensities[summit];
+    } else if (intensities[summit] === result[1] && summit < result[0]) {
+      result[0] = summit;
+    }
+  }
+  return result;
+};
+
+// console.log(
+//   solution11(
+//     7,
+//     [
+//       [1, 2, 5],
+//       [1, 4, 1],
+//       [2, 3, 1],
+//       [2, 6, 7],
+//       [4, 5, 1],
+//       [5, 6, 1],
+//       [6, 7, 1],
+//     ],
+//     [3, 7],
+//     [1, 5],
+//   ),
+// );
+// console.log(
+//   solution11(
+//     6,
+//     [
+//       [1, 2, 3],
+//       [2, 3, 5],
+//       [2, 4, 2],
+//       [2, 5, 4],
+//       [3, 4, 4],
+//       [4, 5, 3],
+//       [4, 6, 1],
+//       [5, 6, 1],
+//     ],
+//     [1, 3],
+//     [5],
+//   ),
+// );
+
+console.log(
+  solution11(
+    4,
+    [
+      [1, 3, 1],
+      [1, 4, 1],
+      [4, 2, 1],
+    ],
+    [1],
+    [2, 3, 4],
+  ),
+);
