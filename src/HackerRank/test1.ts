@@ -25,7 +25,6 @@ function solution1(A: number[]): number {
   let maxCount = 0;
   for (const value of sums.values()) {
     let count = 0;
-    // 첫 인덱스는 -2로 설정하여 첫 번째 인덱스와의 차이를 계산할 때 1 이상이 되도록 합니다.
     let prevIndex = -2;
 
     for (const index of value) {
@@ -186,8 +185,6 @@ function solution(U: number, weight: number[]): number {
   }
 
   let maxLen = 0;
-
-  console.log(dp);
 
   for (let k = 0; k < n; k++) {
     maxLen = Math.max(maxLen, dp[k]);

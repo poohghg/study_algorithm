@@ -915,15 +915,41 @@ const solution11 = (
 //   ),
 // );
 
-console.log(
-  solution11(
-    4,
-    [
-      [1, 3, 1],
-      [1, 4, 1],
-      [4, 2, 1],
-    ],
-    [1],
-    [2, 3, 4],
-  ),
-);
+// console.log(
+//   solution11(
+//     4,
+//     [
+//       [1, 3, 1],
+//       [1, 4, 1],
+//       [4, 2, 1],
+//     ],
+//     [1],
+//     [2, 3, 4],
+//   ),
+// );
+
+function solution(e: number, starts: number[]) {
+  const getDivisors = (num: number) => {
+    let cnt = 0;
+    for (let i = 1; i <= Math.sqrt(num); i++) {
+      if (num % i === 0) {
+        cnt++;
+        if (num / i !== i) cnt++;
+      }
+    }
+    console.log(Math.sqrt(num), cnt);
+    return cnt;
+  };
+
+  let max = [e, 0];
+  const ch = Array(e + 1).fill(0);
+  for (e; Math.min(...starts) <= e; e--) {
+    const cnt = getDivisors(e);
+    if (cnt >= max[1]) max = [e, cnt];
+    ch[e] = max[0];
+  }
+  console.log(ch);
+  return starts.map((start) => ch[start]);
+}
+
+console.log(solution(8, [1, 3, 7]));

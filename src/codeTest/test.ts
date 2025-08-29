@@ -36,12 +36,8 @@ const solution1 = () => {
 function solve(arr: number[] = [1, 1, 2, 4, 2]): number {
   arr.sort((a, b) => a - b);
   const max = Math.max(...arr);
-  const filteredArr = arr.filter((a) => a <= max);
   const n = arr.length;
   let result = 0;
-
-  console.log(max);
-  console.log(filteredArr);
 
   for (let i = 0; i < n - 1; i++) {
     const current = arr[i];

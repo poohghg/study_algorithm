@@ -513,7 +513,6 @@ const solution5 = (
     }
 
     if (!truck_weights.length) {
-      console.log(queue);
       return result;
     }
 
@@ -527,6 +526,38 @@ const solution5 = (
   }
 };
 
-console.log(solution5(100, 100, [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]));
-console.log(solution5(100, 100, [10]));
-console.log(solution5(2, 10, [7, 4, 5, 6]));
+// console.log(solution5(100, 100, [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]));
+// console.log(solution5(100, 100, [10]));
+// console.log(solution5(2, 10, [7, 4, 5, 6]));
+
+const solution6 = (queue1: number[], queue2: number[]) => {
+  let q1Sum = queue1.reduce((sum, curr) => sum + curr, 0);
+  let q2Sum = queue2.reduce((sum, curr) => sum + curr, 0);
+  const halfSum = (q1Sum + q2Sum) / 2;
+  const size = queue1.length * 2;
+
+  if ((q1Sum + q2Sum) % 2 !== 0) return -1;
+
+  let result = 0;
+  let q1Idx = 0;
+  let q2Idx = 0;
+
+  while (result <= size * 2) {
+    if (q1Sum === halfSum) return result;
+
+    if (q1Sum < halfSum) {
+      q1Sum += queue2[q2Idx];
+      queue1.push(queue2[q2Idx]);
+      q2Idx++;
+    } else {
+      q1Sum -= queue1[q1Idx];
+      queue2.push(queue1[q1Idx]);
+      q1Idx++;
+    }
+    result++;
+  }
+
+  return -1;
+};
+
+console.log(solution6([3, 2, 7, 2], [4, 6, 5, 1]));
