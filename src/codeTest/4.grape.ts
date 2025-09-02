@@ -928,28 +928,54 @@ const solution11 = (
 //   ),
 // );
 
-function solution(e: number, starts: number[]) {
-  const getDivisors = (num: number) => {
-    let cnt = 0;
-    for (let i = 1; i <= Math.sqrt(num); i++) {
-      if (num % i === 0) {
-        cnt++;
-        if (num / i !== i) cnt++;
+//https://www.hackerrank.com/challenges/connected-cell-in-a-grid/problem?isFullScreen=true
+const connectedCell = (matrix: number[][]): number => {
+  const n = matrix.length;
+  const m = matrix[0].length;
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+    [1, -1],
+    [1, 1],
+    [-1, 1],
+    [-1, -1],
+  ];
+
+  const canMove = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
+
+  const bfs = (start: [number, number]) => {
+    let count = 0;
+    const queue = [start];
+    matrix[start[0]][start[1]] = 0;
+
+    while (queue.length) {
+      const [x, y] = queue.shift()!;
+      count++;
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [x + dx, y + dy];
+        if (!canMove(nx, ny) || matrix[nx][ny] === 0) continue;
+        matrix[nx][ny] = 0;
+        queue.push([nx, ny]);
       }
     }
-    console.log(Math.sqrt(num), cnt);
-    return cnt;
+
+    return count;
   };
 
-  let max = [e, 0];
-  const ch = Array(e + 1).fill(0);
-  for (e; Math.min(...starts) <= e; e--) {
-    const cnt = getDivisors(e);
-    if (cnt >= max[1]) max = [e, cnt];
-    ch[e] = max[0];
-  }
-  console.log(ch);
-  return starts.map((start) => ch[start]);
-}
+  return matrix
+    .flatMap((row, i) => row.map((_, j) => [i, j] as [number, number]))
+    .filter(([i, j]) => matrix[i][j] === 1)
+    .map((pos) => bfs(pos))
+    .reduce((max, cur) => Math.max(max, cur), 0);
+};
 
-console.log(solution(8, [1, 3, 7]));
+console.log(
+  connectedCell([
+    [1, 1, 1, 0],
+    [0, 1, 1, 0],
+    [0, 0, 1, 0],
+    [1, 0, 0, 0],
+  ]),
+);

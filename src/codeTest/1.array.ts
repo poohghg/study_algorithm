@@ -531,13 +531,62 @@ const solution6 = (user_id: string[], banned_id: string[]) => {
     }
   }
 
-  console.log(result);
   return getCombinations(result).size;
 };
 
-console.log(
-  solution6(
-    ['frodo', 'fradi', 'crodo', 'abc123', 'frodoc'],
-    ['fr*d*', '*rodo', '******', '******'],
-  ),
-);
+// console.log(
+//   solution6(
+//     ['frodo', 'fradi', 'crodo', 'abc123', 'frodoc'],
+//     ['fr*d*', '*rodo', '******', '******'],
+//   ),
+// );
+
+//https://www.hackerrank.com/challenges/the-birthday-bar/problem?isFullScreen=true
+const birthday = (s: number[], d: number, m: number) => {
+  return s
+    .reduce(
+      (acc, v, index) => {
+        acc[index + 1] = acc[index] + v;
+        return acc;
+      },
+      Array(s.length + 1).fill(0) as number[],
+    )
+    .map((_, i, array) => (m <= i ? array[i] - array[i - m] : null))
+    .filter((v) => v === d).length;
+};
+
+// console.log(birthday([2, 2, 1, 3, 2], 4, 2));
+
+const divisibleSumPairs = (n: number, k: number, ar: number[]) => {
+  let result = 0;
+  const dfs = (start: number = 0, level: number = 0, sum: number = 0) => {
+    if (level === 2) {
+      if (sum % k === 0) result++;
+      return;
+    }
+
+    for (let i = start; i < ar.length; i++) {
+      dfs(i + 1, level + 1, sum + ar[i]);
+    }
+  };
+
+  dfs();
+  return result;
+};
+
+// console.log(divisibleSumPairs(6, 3, [1, 3, 2, 6, 1, 2]));
+
+const migratoryBirds = (arr: number[]) => {
+  return [
+    ...arr
+      .reduce(
+        (acc, v) => acc.set(v, acc.get(v)! + 1),
+        new Map<number, number>(
+          Array.from({ length: 5 }, (_, i) => [i + 1, 0]),
+        ),
+      )
+      .entries(),
+  ].reduce((max, current) => (max[1] < current[1] ? current : max))[0];
+};
+
+// console.log(migratoryBirds([1, 4, 4, 4, 5, 3]));
