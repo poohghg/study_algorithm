@@ -967,7 +967,7 @@ const connectedCell = (matrix: number[][]): number => {
   return matrix
     .flatMap((row, i) => row.map((_, j) => [i, j] as [number, number]))
     .filter(([i, j]) => matrix[i][j] === 1)
-    .map((pos) => bfs(pos))
+    .map(([i, j]) => (matrix[i][j] === 1 ? bfs([i, j]) : 0))
     .reduce((max, cur) => Math.max(max, cur), 0);
 };
 

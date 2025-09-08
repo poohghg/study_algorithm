@@ -440,74 +440,79 @@ class PriorityQueue<T> {
   }
 }
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/258707
 const n1카드게임 = (coin: number, cards: number[]) => {
+  const checkInitCards = () => {
+    for (const initCard of initCardSet) {
+      if (initCardSet.has(target - initCard)) {
+        initCardSet.delete(initCard);
+        initCardSet.delete(target - initCard);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const checkInitCardsAndAddCards = () => {
+    for (const initCard of initCardSet) {
+      if (addCardSet.has(target - initCard)) {
+        initCardSet.delete(initCard);
+        addCardSet.delete(target - initCard);
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  const checkAddCards = () => {
+    for (const addCard of addCardSet) {
+      if (addCardSet.has(target - addCard)) {
+        addCardSet.delete(addCard);
+        addCardSet.delete(target - addCard);
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const n = cards.length;
-  const t = n + 1;
-  const roundCards: any[] = [];
-  const restCards = cards.slice(n / 3);
-  for (let i = 0; i < restCards.length; i++) {
-    roundCards.push([restCards[i], restCards[++i]]);
+  const target = n + 1;
+  const initCardSet = new Set(cards.slice(0, n / 3));
+  const addCardSet = new Set<number>();
+
+  let round = 1;
+  for (let i = n / 3; i < cards.length; i++) {
+    // 초기 카드 부터 소비 있으면 통과 하고 삭제,
+    // 두번째 배열에 현재뽑을수 있는카드를 모두선택,
+    addCardSet.add(cards[i++]);
+    i < cards.length && addCardSet.add(cards[i] ?? 0);
+
+    if (initCardSet.size && checkInitCards()) {
+      // coin을 소비 하지 않고 통과 가능
+      round++;
+    } else if (initCardSet.size && 0 < coin && checkInitCardsAndAddCards()) {
+      round++;
+      coin--;
+    } else if (addCardSet.size && 1 < coin && checkAddCards()) {
+      round++;
+      coin -= 2;
+    } else {
+      return round;
+    }
   }
-
-  const canNextRound = (set: Set<number>): [boolean, Set<number>] => {
-    for (const n of set) {
-      if (set.has(t - n)) {
-        set.delete(n);
-        set.delete(t - n);
-        return [true, set];
-      }
-    }
-    return [false, set];
-  };
-
-  const bfs = () => {
-    // 0,1,2 장을 뽑을 수 있다.
-    const options: [boolean, boolean][] = [
-      [false, false],
-      [true, false],
-      [false, true],
-      [true, true],
-    ];
-
-    const pq = new PriorityQueue<[Set<number>, number, number]>(
-      (a, b) => a > b, // 큰 round 먼저 탐색
-    );
-    pq.push([new Set(cards.slice(0, n / 3)), 1, 0], 0);
-
-    let result = 1;
-
-    while (!pq.isEmpty()) {
-      const [hand, r, cost] = pq.pop()!;
-      if (roundCards.length < r) {
-        result = Math.max(result, r);
-        break;
-      }
-
-      const [a, b] = roundCards[r - 1];
-      for (const [takeA, takeB] of options) {
-        const c = (takeA ? 1 : 0) + (takeB ? 1 : 0);
-        if (cost + c > coin) continue;
-
-        const newHand = new Set(hand);
-        if (takeA) newHand.add(a);
-        if (takeB) newHand.add(b);
-
-        const [can, nextHand] = canNextRound(newHand);
-        if (can) {
-          pq.push([nextHand, r + 1, cost + c], r + 1);
-          result = Math.max(result, r + 1);
-        }
-      }
-    }
-
-    return result;
-  };
-
-  return bfs();
+  return round;
 };
 
 // console.log(n1카드게임(3, [1, 2, 3, 4, 5, 8, 6, 7, 9, 10, 11, 12]));
-// console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
+console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
+console.log(
+  n1카드게임(
+    10,
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+  ),
+);
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/136797
 const solution1 = (numbers: string) => {
@@ -700,4 +705,4 @@ const solution3 = (target: number) => {
   return dp[target];
 };
 
-console.log(solution3(121));
+// console.log(solution3(121));
