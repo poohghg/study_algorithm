@@ -590,3 +590,37 @@ const migratoryBirds = (arr: number[]) => {
 };
 
 // console.log(migratoryBirds([1, 4, 4, 4, 5, 3]));
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/250137
+const solution7 = (bandage: number[], health: number, attacks: number[][]) => {
+  const [시전시간, 초당회복량, 추가회복량] = bandage;
+  const [첫공격시간, 첫피해량] = attacks.shift()!;
+  const maxHealth = health;
+
+  let prevAttackTime = 첫공격시간;
+  health -= 첫피해량;
+  for (const [공격시간, 피해량] of attacks) {
+    const tempTime = 공격시간 - prevAttackTime - 1;
+
+    if (0 < tempTime) {
+      health += tempTime * 초당회복량;
+      health += Math.floor(tempTime / 시전시간) * 추가회복량;
+      health = Math.min(health, maxHealth);
+    }
+
+    prevAttackTime = 공격시간;
+    health -= 피해량;
+    if (health <= 0) return -1;
+  }
+
+  return health;
+};
+
+console.log(
+  solution7([5, 1, 5], 30, [
+    [2, 10],
+    [9, 15],
+    [10, 5],
+    [11, 5],
+  ]),
+);

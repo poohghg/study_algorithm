@@ -560,4 +560,42 @@ const solution6 = (queue1: number[], queue2: number[]) => {
   return -1;
 };
 
-console.log(solution6([3, 2, 7, 2], [4, 6, 5, 1]));
+// console.log(solution6([3, 2, 7, 2], [4, 6, 5, 1]));
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/181188
+const solution7 = (targets: number[][]) => {
+  return targets
+    .sort((a, b) => a[1] - b[1])
+    .reduce(
+      (acc, [s, e]) => {
+        const [result, prevEnd] = acc;
+        if (prevEnd <= s) {
+          acc[0]++;
+          acc[1] = e;
+        }
+        return acc;
+      },
+      [0, -1],
+    )[0];
+};
+
+console.log(
+  solution7([
+    [4, 5],
+    [4, 8],
+    [10, 14],
+    [11, 13],
+    [5, 12],
+    [3, 7],
+    [1, 4],
+  ]),
+);
+
+// console.log(
+//   solution7([
+//     [0, 4],
+//     [0, 1],
+//     [2, 3],
+//   ]),
+// );
+// =>2
