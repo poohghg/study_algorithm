@@ -616,11 +616,166 @@ const solution7 = (bandage: number[], health: number, attacks: number[][]) => {
   return health;
 };
 
+// console.log(
+//   solution7([5, 1, 5], 30, [
+//     [2, 10],
+//     [9, 15],
+//     [10, 5],
+//     [11, 5],
+//   ]),
+// );
+
+const solution8 = (picks: number[], minerals: string[]) => {
+  const costTable: Map<number, Map<string, number>> = new Map([
+    [
+      0,
+      new Map([
+        ['diamond', 1],
+        ['iron', 1],
+        ['stone', 1],
+      ]),
+    ],
+    [
+      1,
+      new Map([
+        ['diamond', 5],
+        ['iron', 1],
+        ['stone', 1],
+      ]),
+    ],
+    [
+      2,
+      new Map([
+        ['diamond', 25],
+        ['iron', 5],
+        ['stone', 1],
+      ]),
+    ],
+  ]);
+
+  const getCost = (start: number, end: number, pick: number) => {
+    let cost = 0;
+
+    for (let i = start; i < end && i < minerals.length; i++) {
+      const mineral = minerals[i];
+      cost += costTable.get(pick)?.get(mineral)!;
+    }
+
+    return cost;
+  };
+
+  let result = Number.MAX_SAFE_INTEGER;
+  const dfs = (start: number, curPicks: number[], cost: number) => {
+    if (result < cost) return;
+
+    if (minerals.length < start || curPicks.every((p) => p === 0)) {
+      result = Math.min(result, cost);
+      return;
+    }
+
+    for (const [index, pick] of curPicks.entries()) {
+      if (pick === 0) continue;
+      const newPicks = [...curPicks];
+      newPicks[index]--;
+      dfs(start + 5, newPicks, getCost(start, start + 5, index) + cost);
+    }
+  };
+
+  dfs(0, [...picks], 0);
+
+  return result;
+};
+
+const solution9 = (picks: number[], minerals: string[]) => {
+  const getCost = (startIdx: number, pick: number) => {
+    const start = startIdx * 5;
+    let cost = 0;
+
+    for (let i = start; i < start + 5 && i < minerals.length; i++) {
+      const mineral = minerals[i];
+      cost += costTable.get(pick)?.get(mineral)!;
+    }
+
+    return cost;
+  };
+
+  const costTable: Map<number, Map<string, number>> = new Map([
+    [
+      0,
+      new Map([
+        ['diamond', 1],
+        ['iron', 1],
+        ['stone', 1],
+      ]),
+    ],
+    [
+      1,
+      new Map([
+        ['diamond', 5],
+        ['iron', 1],
+        ['stone', 1],
+      ]),
+    ],
+    [
+      2,
+      new Map([
+        ['diamond', 25],
+        ['iron', 5],
+        ['stone', 1],
+      ]),
+    ],
+  ]);
+
+  const n = minerals.length;
+  const m = Math.ceil(n / 5);
+  const dp: Map<string, number>[] = Array.from(
+    { length: m + 1 },
+    () => new Map(),
+  );
+  dp[0].set(picks.join(''), 0);
+
+  for (let i = 0; i < m; i++) {
+    for (const [key, cost] of dp[i]) {
+      if (key === '000') return Math.min(...dp[i].values());
+
+      const curPicks = key.split('').map(Number);
+
+      curPicks.forEach((count, pick) => {
+        if (count === 0) return;
+
+        const newPicks = [...curPicks];
+        newPicks[pick]--;
+        const newPicksKey = newPicks.join('');
+        const newCost = cost + getCost(i, pick);
+
+        if (
+          !dp[i + 1].has(newPicksKey) ||
+          newCost < dp[i + 1].get(newPicksKey)!
+        ) {
+          dp[i + 1].set(newPicksKey, newCost);
+        }
+      });
+    }
+  }
+
+  return Math.min(...dp[m].values());
+};
+
 console.log(
-  solution7([5, 1, 5], 30, [
-    [2, 10],
-    [9, 15],
-    [10, 5],
-    [11, 5],
-  ]),
+  solution9(
+    [0, 1, 1],
+    [
+      'diamond',
+      'diamond',
+      'diamond',
+      'diamond',
+      'diamond',
+      'iron',
+      'iron',
+      'iron',
+      'iron',
+      'iron',
+      'diamond',
+    ],
+  ),
 );
