@@ -674,7 +674,6 @@ const solution2 = (n: number, lighthouse: number[][]) => {
 // );
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/131129
-
 const solution3 = (target: number) => {
   const isSingleOrBull = (n: number) => n === 50 || n <= 20;
 
@@ -706,3 +705,125 @@ const solution3 = (target: number) => {
 };
 
 // console.log(solution3(121));
+
+const solution4 = (picks: number[], minerals: string[]) => {
+  const getCost = (startIdx: number, pick: number) => {
+    const start = startIdx * 5;
+    return minerals.slice(start, start + 5).reduce((cost, mineral) => {
+      const mineralCost = costTable.get(pick)?.get(mineral) ?? 0;
+      return cost + mineralCost;
+    }, 0);
+  };
+
+  const costTable: Map<number, Map<string, number>> = new Map([
+    [
+      0,
+      new Map([
+        ['diamond', 1],
+        ['iron', 1],
+        ['stone', 1],
+      ]),
+    ],
+    [
+      1,
+      new Map([
+        ['diamond', 5],
+        ['iron', 1],
+        ['stone', 1],
+      ]),
+    ],
+    [
+      2,
+      new Map([
+        ['diamond', 25],
+        ['iron', 5],
+        ['stone', 1],
+      ]),
+    ],
+  ]);
+  const n = Math.ceil(minerals.length / 5);
+  const dp: Map<string, number>[] = Array.from(
+    { length: n + 1 },
+    () => new Map(),
+  );
+  dp[0].set(picks.join(''), 0);
+
+  for (let i = 0; i < n; i++) {
+    for (const [key, cost] of dp[i]) {
+      if (key === '000') return Math.min(...dp[i].values());
+
+      const curPicks = key.split('').map(Number);
+      curPicks.forEach((count, pick) => {
+        if (count === 0) return;
+        const newPicks = [...curPicks];
+        newPicks[pick]--;
+        const newPicksKey = newPicks.join('');
+        const newCost = cost + getCost(i, pick);
+
+        if (
+          !dp[i + 1].has(newPicksKey) ||
+          newCost < dp[i + 1].get(newPicksKey)!
+        ) {
+          dp[i + 1].set(newPicksKey, newCost);
+        }
+      });
+    }
+  }
+
+  return Math.min(...dp[n].values());
+};
+
+// console.log(
+//   solution4(
+//     [0, 1, 1],
+//     [
+//       'diamond',
+//       'diamond',
+//       'diamond',
+//       'diamond',
+//       'diamond',
+//       'iron',
+//       'iron',
+//       'iron',
+//       'iron',
+//       'iron',
+//       'diamond',
+//     ],
+//   ),
+// );
+
+// https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence/problem?isFullScreen=true
+const largestCommonSubsequence = (a: number[], b: number[]) => {
+  const lengthOfLIS = (arr: number[]) => {
+    const lis: number[] = [];
+
+    for (let x of arr) {
+      let left = 0;
+      let right = lis.length;
+      let mid = Math.floor((left + right) / 2);
+
+      // 이분 탐색: x가 들어갈 위치 찾기
+      while (left <= right) {
+        mid = Math.floor((left + right) / 2);
+        // x보다 작으면 오른쪽 탐색
+        if (lis[mid] < x) left = mid + 1;
+        else right = mid - 1;
+      }
+
+      // 위치에 삽입 or 교체
+      if (mid < lis.length) lis[mid] = x;
+      else lis.push(x);
+    }
+    return lis;
+  };
+
+  console.log(a);
+  console.log(lengthOfLIS(b));
+};
+
+console.log(
+  largestCommonSubsequence([2, 3, 4, 1, 2, 3, 4, 5, 6], [5, 6, 7, 8, 2, 3, 4]),
+);
+
+// console.log(largestCommonSubsequence([1, 2, 3, 4, 1], [3, 4, 1, 2, 1, 3]));
+// console.log(largestCommonSubsequence([1, 2, 3, 4, 1], [2, 3, 1, 2, 3, 19]));

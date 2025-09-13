@@ -686,96 +686,33 @@ const solution8 = (picks: number[], minerals: string[]) => {
   return result;
 };
 
-const solution9 = (picks: number[], minerals: string[]) => {
-  const getCost = (startIdx: number, pick: number) => {
-    const start = startIdx * 5;
-    let cost = 0;
+// https://www.hackerrank.com/challenges/non-divisible-subset/problem?isFullScreen=true
 
-    for (let i = start; i < start + 5 && i < minerals.length; i++) {
-      const mineral = minerals[i];
-      cost += costTable.get(pick)?.get(mineral)!;
-    }
+const nonDivisibleSubset = (k: number, s: number[]): number => {
+  const remains = Array.from({ length: k }, () => new Set());
 
-    return cost;
-  };
-
-  const costTable: Map<number, Map<string, number>> = new Map([
-    [
-      0,
-      new Map([
-        ['diamond', 1],
-        ['iron', 1],
-        ['stone', 1],
-      ]),
-    ],
-    [
-      1,
-      new Map([
-        ['diamond', 5],
-        ['iron', 1],
-        ['stone', 1],
-      ]),
-    ],
-    [
-      2,
-      new Map([
-        ['diamond', 25],
-        ['iron', 5],
-        ['stone', 1],
-      ]),
-    ],
-  ]);
-
-  const n = minerals.length;
-  const m = Math.ceil(n / 5);
-  const dp: Map<string, number>[] = Array.from(
-    { length: m + 1 },
-    () => new Map(),
-  );
-  dp[0].set(picks.join(''), 0);
-
-  for (let i = 0; i < m; i++) {
-    for (const [key, cost] of dp[i]) {
-      if (key === '000') return Math.min(...dp[i].values());
-
-      const curPicks = key.split('').map(Number);
-
-      curPicks.forEach((count, pick) => {
-        if (count === 0) return;
-
-        const newPicks = [...curPicks];
-        newPicks[pick]--;
-        const newPicksKey = newPicks.join('');
-        const newCost = cost + getCost(i, pick);
-
-        if (
-          !dp[i + 1].has(newPicksKey) ||
-          newCost < dp[i + 1].get(newPicksKey)!
-        ) {
-          dp[i + 1].set(newPicksKey, newCost);
-        }
-      });
-    }
-  }
-
-  return Math.min(...dp[m].values());
+  s.forEach((s) => {
+    remains[s % 4].add(s);
+  });
+  // 4 -> 0+0 x 0+1
+  // 0, 1 + 2, console.log(remains);
+  // Write your code here
+  return 0;
 };
 
-console.log(
-  solution9(
-    [0, 1, 1],
-    [
-      'diamond',
-      'diamond',
-      'diamond',
-      'diamond',
-      'diamond',
-      'iron',
-      'iron',
-      'iron',
-      'iron',
-      'iron',
-      'diamond',
-    ],
-  ),
-);
+// console.log(nonDivisibleSubset(4, [19, 10, 12, 10, 24, 25, 22]));
+
+// https://www.hackerrank.com/challenges/angry-children/problem?isFullScreen=true
+
+const maxMin = (k: number, arr: number[]): number => {
+  return arr
+    .sort((a, b) => b - a)
+    .reduce((result, curr, index, array) => {
+      const maxIndex = index + k - 1;
+      if (arr.length <= maxIndex) return result;
+      return curr - array[maxIndex] < result ? curr - array[maxIndex] : result;
+    }, Number.MAX_SAFE_INTEGER);
+};
+
+console.log(maxMin(3, [10, 100, 300, 200, 1000, 20, 30]));
+console.log(maxMin(4, [1, 2, 3, 4, 10, 20, 30, 40, 100, 200]));
