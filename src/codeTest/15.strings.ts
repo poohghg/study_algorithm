@@ -20,4 +20,20 @@ const alternate = (s: string): number => {
     .reduce((result, curr) => Math.max(result, curr), 0);
 };
 
-console.log(alternate('beabeefeab'));
+// console.log(alternate('beabeefeab'));
+
+//https://www.hackerrank.com/challenges/repeated-string/problem?isFullScreen=true
+
+const repeatedString = (s: string, n: number): number => {
+  const size = s.length;
+  const m = Math.floor(n / size);
+  const r = n % size;
+
+  return [...s.slice(0, r)].reduce(
+    (acc, curr) => (curr === 'a' ? acc + 1 : acc),
+    [...s].filter((c) => c === 'a').length * m,
+  );
+};
+
+console.log(repeatedString('aba', 11));
+// console.log(repeatedString('abcd', 100));

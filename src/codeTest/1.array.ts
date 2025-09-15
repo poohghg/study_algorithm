@@ -689,28 +689,34 @@ const solution8 = (picks: number[], minerals: string[]) => {
 // https://www.hackerrank.com/challenges/non-divisible-subset/problem?isFullScreen=true
 
 const nonDivisibleSubset = (k: number, s: number[]): number => {
-  const remains = Array.from({ length: k }, () => new Set());
+  const remains = Array.from({ length: k }, () => 0);
 
-  s.forEach((s) => {
-    remains[s % 4].add(s);
+  s.forEach((num) => {
+    remains[num % k] += 1;
   });
-  // 4 -> 0+0 x 0+1
-  // 0, 1 + 2, console.log(remains);
-  // Write your code here
-  return 0;
+
+  let max = 0 < remains[0] ? 1 : 0;
+  for (let r = 1; r <= Math.floor(remains.length / 2); r++) {
+    if (r === k / 2) {
+      max += 1;
+    } else {
+      max += Math.max(remains[r], remains[k - r]);
+    }
+  }
+
+  return max;
 };
 
-// console.log(nonDivisibleSubset(4, [19, 10, 12, 10, 24, 25, 22]));
+console.log(nonDivisibleSubset(4, [19, 10, 12, 10, 24, 25, 22]));
 
 // https://www.hackerrank.com/challenges/angry-children/problem?isFullScreen=true
-
 const maxMin = (k: number, arr: number[]): number => {
   return arr
     .sort((a, b) => b - a)
     .reduce((result, curr, index, array) => {
       const maxIndex = index + k - 1;
       if (arr.length <= maxIndex) return result;
-      return curr - array[maxIndex] < result ? curr - array[maxIndex] : result;
+      return Math.min(curr - array[maxIndex], result);
     }, Number.MAX_SAFE_INTEGER);
 };
 
