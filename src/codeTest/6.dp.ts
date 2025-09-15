@@ -53,6 +53,29 @@ const LIS = (arr: number[]): number => {
 
 // console.log(LIS([1, 4, 2, 3, 1, 5, 7, 3]));
 
+const lengthOfLIS = (arr: number[]) => {
+  const lis: number[] = [];
+
+  for (let x of arr) {
+    let left = 0;
+    let right = lis.length;
+    let mid = Math.floor((left + right) / 2);
+
+    // 이분 탐색: x가 들어갈 위치 찾기
+    while (left <= right) {
+      mid = Math.floor((left + right) / 2);
+      // x보다 작으면 오른쪽 탐색
+      if (lis[mid] < x) left = mid + 1;
+      else right = mid - 1;
+    }
+
+    // 위치에 삽입 or 교체
+    if (mid < lis.length) lis[mid] = x;
+    else lis.push(x);
+  }
+  return lis.length;
+};
+
 const LIS_MAP = (arr: number[][]) => {
   const n = arr[0].length;
   const dp = Array.from(Array(4), () => Array(n).fill(0));
@@ -793,33 +816,7 @@ const solution4 = (picks: number[], minerals: string[]) => {
 // );
 
 // https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence/problem?isFullScreen=true
-const largestCommonSubsequence = (a: number[], b: number[]) => {
-  const lengthOfLIS = (arr: number[]) => {
-    const lis: number[] = [];
-
-    for (let x of arr) {
-      let left = 0;
-      let right = lis.length;
-      let mid = Math.floor((left + right) / 2);
-
-      // 이분 탐색: x가 들어갈 위치 찾기
-      while (left <= right) {
-        mid = Math.floor((left + right) / 2);
-        // x보다 작으면 오른쪽 탐색
-        if (lis[mid] < x) left = mid + 1;
-        else right = mid - 1;
-      }
-
-      // 위치에 삽입 or 교체
-      if (mid < lis.length) lis[mid] = x;
-      else lis.push(x);
-    }
-    return lis;
-  };
-
-  console.log(a);
-  console.log(lengthOfLIS(b));
-};
+const largestCommonSubsequence = (a: number[], b: number[]) => {};
 
 console.log(
   largestCommonSubsequence([2, 3, 4, 1, 2, 3, 4, 5, 6], [5, 6, 7, 8, 1, 2]),
