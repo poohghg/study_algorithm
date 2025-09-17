@@ -23,7 +23,6 @@ const alternate = (s: string): number => {
 // console.log(alternate('beabeefeab'));
 
 //https://www.hackerrank.com/challenges/repeated-string/problem?isFullScreen=true
-
 const repeatedString = (s: string, n: number): number => {
   const size = s.length;
   const m = Math.floor(n / size);

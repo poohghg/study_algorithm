@@ -749,6 +749,7 @@ const solution4 = (picks: number[], minerals: string[]) => {
     ],
     [
       1,
+
       new Map([
         ['diamond', 5],
         ['iron', 1],
