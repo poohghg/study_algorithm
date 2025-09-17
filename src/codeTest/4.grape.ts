@@ -971,11 +971,60 @@ const connectedCell = (matrix: number[][]): number => {
     .reduce((max, cur) => Math.max(max, cur), 0);
 };
 
-console.log(
-  connectedCell([
-    [1, 1, 1, 0],
-    [0, 1, 1, 0],
-    [0, 0, 1, 0],
-    [1, 0, 0, 0],
-  ]),
-);
+// console.log(
+//   connectedCell([
+//     [1, 1, 1, 0],
+//     [0, 1, 1, 0],
+//     [0, 0, 1, 0],
+//     [1, 0, 0, 0],
+//   ]),
+// );
+
+//https://school.programmers.co.kr/learn/courses/30/lessons/150365
+const solution12 = (
+  n: number,
+  m: number,
+  x: number,
+  y: number,
+  r: number,
+  c: number,
+  k: number,
+) => {
+  const calcDist = (cx: number, cy: number) =>
+    Math.abs(cx - (r - 1)) + Math.abs(cy - (c - 1));
+
+  const canMove = (cx: number, cy: number) =>
+    0 <= cx && cx < n && 0 <= cy && cy < m;
+
+  const canArrive = (cx: number, cy: number, count: number) => {
+    const dist = calcDist(cx, cy);
+    return dist <= count && (count - dist) % 2 === 0;
+  };
+
+  if (!canArrive(x - 1, y - 1, k)) return 'impossible';
+
+  const dirs = [
+    ['d', 1, 0],
+    ['l', 0, -1],
+    ['r', 0, 1],
+    ['u', -1, 0],
+  ] as const;
+
+  let result = '';
+  let [cx, cy] = [x - 1, y - 1];
+  for (let step = k; 0 < step; step--) {
+    for (let [ch, dx, dy] of dirs) {
+      const [nx, ny] = [cx + dx, cy + dy];
+      if (canMove(nx, ny) && canArrive(nx, ny, step - 1)) {
+        [cx, cy] = [nx, ny];
+        result += ch;
+        break;
+      }
+    }
+  }
+
+  return result === '' ? 'impossible' : result;
+};
+
+console.log(solution12(3, 4, 2, 3, 3, 1, 5));
+// console.log(solution12(2, 2, 1, 1, 2, 2, 2));

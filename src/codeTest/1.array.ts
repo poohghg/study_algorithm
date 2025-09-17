@@ -707,7 +707,7 @@ const nonDivisibleSubset = (k: number, s: number[]): number => {
   return max;
 };
 
-console.log(nonDivisibleSubset(4, [19, 10, 12, 10, 24, 25, 22]));
+// console.log(nonDivisibleSubset(4, [19, 10, 12, 10, 24, 25, 22]));
 
 // https://www.hackerrank.com/challenges/angry-children/problem?isFullScreen=true
 const maxMin = (k: number, arr: number[]): number => {
@@ -722,3 +722,9 @@ const maxMin = (k: number, arr: number[]): number => {
 
 // console.log(maxMin(3, [10, 100, 300, 200, 1000, 20, 30]));
 // console.log(maxMin(4, [1, 2, 3, 4, 10, 20, 30, 40, 100, 200]));
+
+const squares = (a: number, b: number): number => {
+  return Math.floor(Math.sqrt(b)) - Math.ceil(Math.sqrt(a)) + 1;
+};
+
+console.log(squares(465868129, 988379794));
