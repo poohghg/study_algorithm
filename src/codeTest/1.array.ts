@@ -1,5 +1,3 @@
-export default {};
-
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/42889
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
@@ -727,4 +725,52 @@ const squares = (a: number, b: number): number => {
   return Math.floor(Math.sqrt(b)) - Math.ceil(Math.sqrt(a)) + 1;
 };
 
-console.log(squares(465868129, 988379794));
+// console.log(squares(465868129, 988379794));
+
+// https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/merge-and-sort-intervals/problem?isFullScreen=true
+const mergeHighDefinitionIntervals = (intervals: number[][]): number[][] => {
+  if (intervals.length === 0) return [];
+
+  intervals.sort((a, b) => a[0] - b[0]);
+  const result = [intervals[0]];
+
+  for (let i = 1; i < intervals.length; i++) {
+    const [s, e] = intervals[i];
+    if (s <= result[result.length - 1][1]) {
+      result[result.length - 1][1] = Math.max(result[result.length - 1][1], e);
+    } else {
+      result.push([s, e]);
+    }
+  }
+
+  return result;
+};
+
+// console.log(mergeHighDefinitionIntervals([[1, 3]]));
+
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/count-elements-greater-than-previous-average/problem?isFullScreen=true
+const countResponseTimeRegressions = (responseTimes: number[]): number => {
+  return responseTimes.slice(1).reduce(
+    ({ count, prefixSum }, curr, index) => {
+      const newSum = prefixSum + curr;
+      const average = newSum / (index + 2);
+      return {
+        count: average < curr ? count + 1 : count,
+        prefixSum: newSum,
+      };
+    },
+    { count: 0, prefixSum: responseTimes[0] },
+  ).count;
+};
+
+// console.log(countResponseTimeRegressions([100, 200, 150, 300]));
+
+const countSubarraysWithSumAndMaxAtMost = (
+  nums: number[],
+  k: number,
+  M: number,
+): number => {
+  return 0;
+};
+
+console.log(countSubarraysWithSumAndMaxAtMost([2, -1, 2, 1, -2, 3], 3, 2));

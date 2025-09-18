@@ -1013,7 +1013,7 @@ const solution12 = (
   let result = '';
   let [cx, cy] = [x - 1, y - 1];
   for (let step = k; 0 < step; step--) {
-    for (let [ch, dx, dy] of dirs) {
+    for (const [ch, dx, dy] of dirs) {
       const [nx, ny] = [cx + dx, cy + dy];
       if (canMove(nx, ny) && canArrive(nx, ny, step - 1)) {
         [cx, cy] = [nx, ny];

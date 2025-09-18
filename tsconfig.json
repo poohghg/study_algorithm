@@ -12,7 +12,11 @@
 
     /* Language and Environment */
     // 트랜스파일링 대상 버전
-    "target": "es2016",
+    "target": "ES2015",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
@@ -29,7 +33,7 @@
     /* Modules */
     // import 문을 어떻게 해석할지
     // https://f-lab.kr/insight/commonjs-vs-esmodule-20240523?gad_source=1&gclid=Cj0KCQiA_qG5BhDTARIsAA0UHSJYkB6yMQ0VLgumuyTKedaepAixYKiU2btNbbFpoXfdr2IG11yukjwaAnJFEALw_wcB
-    "module": "CommonJS",
+    "module": "ESNext",
     /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
