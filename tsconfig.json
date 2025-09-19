@@ -33,7 +33,7 @@
     /* Modules */
     // import 문을 어떻게 해석할지
     // https://f-lab.kr/insight/commonjs-vs-esmodule-20240523?gad_source=1&gclid=Cj0KCQiA_qG5BhDTARIsAA0UHSJYkB6yMQ0VLgumuyTKedaepAixYKiU2btNbbFpoXfdr2IG11yukjwaAnJFEALw_wcB
-    "module": "ESNext",
+    "module": "CommonJS",
     /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */

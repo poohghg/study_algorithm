@@ -1,5 +1,25 @@
 export default {};
 
+const binarySearch = (nums: number[], target: number) => {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) return mid;
+
+    if (target < nums[mid]) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  return -1;
+};
+
+console.log(binarySearch([1, 2, 3, 4, 5], 3));
+
 const gridlandMetro = (
   n: number,
   m: number,
@@ -237,52 +257,7 @@ const playingWithNumbers = (arr: number[], queries: number[]): number[] => {
 // console.log(playingWithNumbers([-5, -3, -2, 0, 1, 2, 3], [-2]));
 
 // https://www.hackerrank.com/challenges/making-candies/problem?isFullScreen=true
-
 const minimumPasses = (m: number, w: number, p: number, n: number): number => {
-  const restDays = (current: number, m: number, w: number) =>
-    Math.ceil((n - current) / (m * w));
-
-  const binarySpend = (current: number) => {
-    let currentM = m;
-    let currentW = w;
-    let minM = m;
-    let minW = w;
-    let minCurrent = current;
-    let min = restDays(current, m, w);
-    let rest = Math.floor(current / p);
-
-    while (0 < rest) {
-      if (currentM < currentW) {
-        currentM += 1;
-        rest--;
-      } else {
-        currentW += 1;
-        rest--;
-      }
-      current -= p;
-
-      const restDay = restDays(current, currentM, currentW);
-
-      if (restDay <= min) {
-        min = restDay;
-        minM = currentM;
-        minW = currentW;
-        minCurrent = current;
-      }
-    }
-
-    return {
-      minM,
-      minW,
-      minCurrent,
-    };
-  };
-
-  let low = 1;
-  // let high = 1e18;
-  let high = n;
-  let answer = high;
-
   const canReachInDays = (days: number) => {
     let cm = m;
     let cw = w;
@@ -323,12 +298,17 @@ const minimumPasses = (m: number, w: number, p: number, n: number): number => {
     }
   };
 
+  let low = 1;
+  let high = n;
+  let answer = high;
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
     if (canReachInDays(mid)) {
       answer = mid;
       high = mid - 1;
-    } else low = mid + 1;
+    } else {
+      low = mid + 1;
+    }
   }
 
   return answer;

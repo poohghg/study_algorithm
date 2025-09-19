@@ -4,6 +4,8 @@
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+export default {};
+
 const solution1 = (N: number, stages: number[]) => {
   const count: number[] = Array(N + 2).fill(0);
 
@@ -773,4 +775,21 @@ const countSubarraysWithSumAndMaxAtMost = (
   return 0;
 };
 
-console.log(countSubarraysWithSumAndMaxAtMost([2, -1, 2, 1, -2, 3], 3, 2));
+// console.log(countSubarraysWithSumAndMaxAtMost([2, -1, 2, 1, -2, 3], 3, 2));
+
+function countAffordablePairs(prices: number[], budget: number): number {
+  let result = 0;
+  for (let i = prices.length - 1; 0 <= i; i--) {
+    if (budget < prices[i]) continue;
+
+    for (let j = i - 1; 0 <= j; j--) {
+      if (prices[i] + prices[j] <= budget) {
+        result += j + 1;
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+console.log(countAffordablePairs([1, 2, 3, 4, 5], 7));

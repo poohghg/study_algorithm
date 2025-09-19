@@ -1,5 +1,28 @@
 export default {};
 
+const getBinarySearchTreeHeight = (
+  values: number[],
+  leftChild: number[],
+  rightChild: number[],
+): number => {
+  const treeHeight = (node: number): number => {
+    if (node === -1) return -1;
+    return (
+      1 + Math.max(treeHeight(leftChild[node]), treeHeight(rightChild[node]))
+    );
+  };
+
+  return treeHeight(0) + 1;
+};
+
+console.log(
+  getBinarySearchTreeHeight(
+    [4, 2, 6, 1, 3, 5, 7],
+    [1, 3, 5, -1, -1, -1, -1],
+    [2, 4, 6, -1, -1, -1, -1],
+  ),
+);
+
 function solution1(n: number, a: number, b: number) {
   const m = Math.log2(n);
 
@@ -437,4 +460,4 @@ const solution5 = (diffs: number[], times: number[], limit: number) => {
   return result;
 };
 
-console.log(solution5([1, 4, 4, 2], [6, 3, 8, 2], 59));
+// console.log(solution5([1, 4, 4, 2], [6, 3, 8, 2], 59));

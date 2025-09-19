@@ -34,5 +34,12 @@ const repeatedString = (s: string, n: number): number => {
   );
 };
 
-console.log(repeatedString('aba', 11));
+// console.log(repeatedString('aba', 11));
 // console.log(repeatedString('abcd', 100));
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/check-non-identical-string-rotation/problem?isFullScreen=true
+const isNonTrivialRotation = (s1: string, s2: string): boolean => {
+  if (s1 === s2) return false;
+  return (s1 + s1).includes(s2);
+};
+
+console.log(isNonTrivialRotation('abcde', 'cdeab'));
