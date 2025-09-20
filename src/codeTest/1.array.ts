@@ -6,6 +6,32 @@
 
 export default {};
 
+const maximizeNonOverlappingMeetings = (meetings: number[][]): number => {
+  return meetings
+    .sort((a, b) => a[1] - b[1])
+    .reduce(
+      ([count, prevEndTime], [startTime, endTime], index) => {
+        if (prevEndTime <= startTime) {
+          count++;
+          prevEndTime = endTime;
+        }
+        return [count, prevEndTime];
+      },
+      [0, -1],
+    )[0];
+};
+
+console.log(
+  maximizeNonOverlappingMeetings([
+    [0, 5],
+    [0, 1],
+    [1, 2],
+    [2, 3],
+    [3, 5],
+    [4, 6],
+  ]),
+);
+
 const solution1 = (N: number, stages: number[]) => {
   const count: number[] = Array(N + 2).fill(0);
 
@@ -792,4 +818,4 @@ function countAffordablePairs(prices: number[], budget: number): number {
   return result;
 }
 
-console.log(countAffordablePairs([1, 2, 3, 4, 5], 7));
+// console.log(countAffordablePairs([1, 2, 3, 4, 5], 7));

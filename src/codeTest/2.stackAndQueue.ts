@@ -1,9 +1,65 @@
 export default {};
 
+type StackItem = { value: number; minSoFar: number };
+
+class MinStackProcessor {
+  private stack: StackItem[] = [];
+  private min: number = Number.MAX_SAFE_INTEGER;
+  private result: number[] = [];
+
+  private operations: Record<string, (num?: number) => void> = {
+    push: (num?: number) => {
+      if (num === undefined) return;
+      this.min = Math.min(this.min, num);
+      this.stack.push({ value: num, minSoFar: this.min });
+    },
+    pop: () => {
+      this.stack.pop();
+      this.min = this.stack.length ? this.stack.at(-1)!.minSoFar : Infinity;
+    },
+    top: () => {
+      this.result.push(this.stack.at(-1)!.value);
+    },
+    getMin: () => {
+      this.result.push(this.min);
+    },
+  };
+
+  run(operations: string[]): number[] {
+    operations.forEach((operation) => {
+      const [op, numStr] = operation.split(' ');
+      this.operations[op]?.(+numStr);
+    });
+    return this.result;
+  }
+}
+
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/min-tracking-stack/problem?isFullScreen=true
+const processCouponStackOperations = (operations: string[]): number[] => {
+  const processor = new MinStackProcessor();
+  return processor.run(operations);
+};
+
+console.log(
+  processCouponStackOperations([
+    'push 2',
+    'push 0',
+    'push 3',
+    'push 0',
+    'getMin',
+    'pop',
+    'getMin',
+    'pop',
+    'top',
+    'getMin',
+  ]),
+);
+
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/76502
  * 괄호 회전하기
  */
+
 const solution1 = (str: string) => {
   const isValid = (start: number) => {
     const stack: string[] = [];
