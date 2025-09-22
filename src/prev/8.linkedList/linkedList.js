@@ -145,11 +145,9 @@ class LinkedList {
     let next;
 
     for (let i = 0; i < this.length; i++) {
-      // 2
       next = node.next;
       node.next = prev;
       prev = node;
-      // 노드는 2
       node = next;
     }
     console.log(this);

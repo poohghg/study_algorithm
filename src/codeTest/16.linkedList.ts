@@ -10,7 +10,7 @@ class SinglyLinkedListNode {
   }
 }
 
-function deleteDuplicates(head: SinglyLinkedListNode): SinglyLinkedListNode {
+const deleteDuplicates = (head: SinglyLinkedListNode): SinglyLinkedListNode => {
   let currentNode: SinglyLinkedListNode | null = head?.next;
 
   while (currentNode && currentNode.next) {
@@ -22,4 +22,7 @@ function deleteDuplicates(head: SinglyLinkedListNode): SinglyLinkedListNode {
   }
 
   return head;
-}
+};
+
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/one-pass-removal-kth-from-end/problem?isFullScreen=true
+const removeKthNodeFromEnd = (head: SinglyLinkedListNode, k: number) => {};
