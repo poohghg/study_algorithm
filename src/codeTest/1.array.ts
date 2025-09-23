@@ -6,6 +6,23 @@
 
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/longest-arithmetic-subsequence-given-diff/problem?isFullScreen=true
+const findLongestArithmeticProgression = (arr: number[], k: number): number => {
+  const dp = new Map<number, number>();
+  return arr
+    .sort((a, b) => a - b)
+    .reduce((max, v) => {
+      const prevLen = dp.get(v - k) ?? 0;
+      const currLen = prevLen + 1;
+      dp.set(v, currLen);
+      return Math.max(max, currLen);
+    }, 0);
+};
+
+console.log(
+  findLongestArithmeticProgression([8, 1, -1, 0, 3, 6, 2, 4, 5, 7, 9], 2),
+);
+
 const maximizeNonOverlappingMeetings = (meetings: number[][]): number => {
   return meetings
     .sort((a, b) => a[1] - b[1])
@@ -21,16 +38,16 @@ const maximizeNonOverlappingMeetings = (meetings: number[][]): number => {
     )[0];
 };
 
-console.log(
-  maximizeNonOverlappingMeetings([
-    [0, 5],
-    [0, 1],
-    [1, 2],
-    [2, 3],
-    [3, 5],
-    [4, 6],
-  ]),
-);
+// console.log(
+//   maximizeNonOverlappingMeetings([
+//     [0, 5],
+//     [0, 1],
+//     [1, 2],
+//     [2, 3],
+//     [3, 5],
+//     [4, 6],
+//   ]),
+// );
 
 const solution1 = (N: number, stages: number[]) => {
   const count: number[] = Array(N + 2).fill(0);

@@ -1,5 +1,49 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/place-n-cameras-no-conflict-blocked-grid/problem?isFullScreen=true
+const canPlaceSecurityCameras = (N: number, grid: number[][]): boolean => {
+  const n = grid.length;
+  const records: [number, number][] = [];
+  let result = false;
+
+  const isValidPos = (x: number, y: number) => {
+    for (const [rx, ry] of records) {
+      if (x === rx || y === ry) return false;
+      if (Math.abs(x - rx) === Math.abs(y - ry)) return false;
+    }
+    return true;
+  };
+
+  const dfs = (x: number) => {
+    if (result) return;
+
+    if (x === N) {
+      result = true;
+      return;
+    }
+
+    for (let y = 0; y < n; y++) {
+      if (grid[x][y] === 0 && isValidPos(x, y)) {
+        records.push([x, y]);
+        dfs(x + 1);
+        records.pop();
+      }
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+console.log(
+  canPlaceSecurityCameras(4, [
+    [0, 1, 0, 0],
+    [0, 0, 0, 1],
+    [1, 0, 0, 0],
+    [0, 0, 1, 0],
+  ]),
+);
+
 const solution1 = (n: number) => {
   const result: number[][] = [];
   const visited: number[] = Array(n).fill(0);
@@ -159,4 +203,4 @@ const solution4 = (n: number, info: number[]) => {
   const a = combinationsWithRepetition([...Array(11).keys()], n);
 };
 
-console.log(solution4(5, [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]));
+// console.log(solution4(5, [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]));

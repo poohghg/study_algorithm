@@ -1,5 +1,34 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/validate-properly-nested-brackets/problem?isFullScreen=true
+const areBracketsProperlyMatched = (code_snippet: string): boolean => {
+  const stack: string[] = [];
+  const open = new Set(['{', '[', '(']);
+  const close = new Set(['}', ']', ')']);
+  const pairs: Record<string, string> = {
+    '{': '}',
+    '[': ']',
+    '(': ')',
+  };
+
+  for (const s of code_snippet) {
+    if (open.has(s)) stack.push(s);
+
+    if (close.has(s)) {
+      const top = stack.at(-1);
+      if (top && pairs[top] === s) {
+        stack.pop();
+      } else {
+        return false;
+      }
+    }
+  }
+
+  return !stack.length;
+};
+
+// console.log(areBracketsProperlyMatched('() {} []'));
+
 type StackItem = { value: number; minSoFar: number };
 
 class MinStackProcessor {
@@ -40,20 +69,20 @@ const processCouponStackOperations = (operations: string[]): number[] => {
   return processor.run(operations);
 };
 
-console.log(
-  processCouponStackOperations([
-    'push 2',
-    'push 0',
-    'push 3',
-    'push 0',
-    'getMin',
-    'pop',
-    'getMin',
-    'pop',
-    'top',
-    'getMin',
-  ]),
-);
+// console.log(
+//   processCouponStackOperations([
+//     'push 2',
+//     'push 0',
+//     'push 3',
+//     'push 0',
+//     'getMin',
+//     'pop',
+//     'getMin',
+//     'pop',
+//     'top',
+//     'getMin',
+//   ]),
+// );
 
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/76502

@@ -1,5 +1,24 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/find-peak-element-in-bitonic-array/problem?isFullScreen=true
+const findPeakIndex = (counts: number[]): number => {
+  let left = 0;
+  let right = counts.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (counts[mid + 1] < counts[mid]) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  return left;
+};
+
+console.log(findPeakIndex([1, 3, 5, 6, 4, 2]));
+
 const binarySearch = (nums: number[], target: number) => {
   let left = 0;
   let right = nums.length - 1;
@@ -317,7 +336,7 @@ const minimumPasses = (m: number, w: number, p: number, n: number): number => {
 // console.log(minimumPasses(3, 1, 2, 12));
 // console.log(minimumPasses(1, 1, 6, 45));
 // console.log(minimumPasses(1, 1, 1000000000000, 1000000000000));
-console.log(minimumPasses(1, 100, 10000000000, 1000000000000));
+// console.log(minimumPasses(1, 100, 10000000000, 1000000000000));
 // console.log(minimumPasses(1, 1, 1000000000000, 1000000000000));
 // console.log(minimumPasses(2, 1, 9, 9));
 // console.log(minimumPasses(1, 2, 1, 60));
