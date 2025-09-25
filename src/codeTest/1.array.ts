@@ -6,6 +6,26 @@
 
 export default {};
 
+// https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/time-slot-task-pairing/problem?isFullScreen=true
+const findTaskPairForSlot = (taskDurations: number[], slotLength: number) => {
+  const indexMap = new Map<number, number>();
+
+  for (let i = 0; i < taskDurations.length; i++) {
+    const n = taskDurations[i];
+    const complement = slotLength - n;
+
+    if (indexMap.has(complement)) {
+      return [indexMap.get(complement)!, i];
+    }
+
+    indexMap.set(n, i);
+  }
+
+  return [-1, -1];
+};
+
+console.log(findTaskPairForSlot([2, 7, 11, 15], 9));
+
 const findZeroSumTripletsInWindow = (
   readings: number[],
   windowSize: number,

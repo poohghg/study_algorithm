@@ -1,5 +1,39 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/lexicographical-letter-combinations-phone-digits/problem?isFullScreen=true
+
+const minTasksToCancelForNoConflict = (digits: string): string[] => {
+  const padMap = new Map<string, string[]>([
+    ['2', ['a', 'b', 'c']],
+    ['3', ['d', 'e', 'f']],
+    ['4', ['g', 'h', 'i']],
+    ['5', ['j', 'k', 'l']],
+    ['6', ['m', 'n', 'o']],
+    ['7', ['p', 'q', 'r', 's']],
+    ['8', ['t', 'u', 'v']],
+    ['9', ['w', 'x', 'y', 'z']],
+    ['0', ['0']],
+    ['1', ['1']],
+  ]);
+
+  let result: string[] = [];
+  const dfs = (level: number = 0, prefix = '') => {
+    if (level === digits.length) {
+      result.push(prefix);
+      return;
+    }
+
+    for (const ch of padMap.get(digits[level]) ?? []) {
+      dfs(level + 1, prefix + ch);
+    }
+  };
+
+  dfs(0);
+  return result;
+};
+
+console.log(minTasksToCancelForNoConflict('203'));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/place-n-cameras-no-conflict-blocked-grid/problem?isFullScreen=true
 const canPlaceSecurityCameras = (N: number, grid: number[][]): boolean => {
   const n = grid.length;
