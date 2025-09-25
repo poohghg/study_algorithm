@@ -1,5 +1,28 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/next-greater-element-with-offset/problem?isFullScreen=true
+const findNextGreaterElementsWithDistance = (
+  readings: number[],
+): number[][] => {
+  const result: number[][] = Array.from({ length: readings.length }, () => [
+    -1, -1,
+  ]);
+
+  const stack: number[] = [];
+  for (let i = 0; i < readings.length; i++) {
+    while (stack.length && readings[stack.at(-1)!] < readings[i]) {
+      const topIndex = stack.at(-1)!;
+      result[topIndex] = [readings[i], i - topIndex];
+      stack.pop();
+    }
+    stack.push(i);
+  }
+
+  return result;
+};
+
+console.log(findNextGreaterElementsWithDistance([1, 1, 2, 4, 3]));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/validate-properly-nested-brackets/problem?isFullScreen=true
 const areBracketsProperlyMatched = (code_snippet: string): boolean => {
   const stack: string[] = [];

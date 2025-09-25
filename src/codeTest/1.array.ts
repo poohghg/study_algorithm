@@ -6,6 +6,17 @@
 
 export default {};
 
+const findZeroSumTripletsInWindow = (
+  readings: number[],
+  windowSize: number,
+): number[][] => {
+  // Write your code here
+
+  return [];
+};
+
+// console.log(findZeroSumTripletsInWindow([1, -2, 1, 0, 5], 3));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/longest-arithmetic-subsequence-given-diff/problem?isFullScreen=true
 const findLongestArithmeticProgression = (arr: number[], k: number): number => {
   const dp = new Map<number, number>();
@@ -19,9 +30,9 @@ const findLongestArithmeticProgression = (arr: number[], k: number): number => {
     }, 0);
 };
 
-console.log(
-  findLongestArithmeticProgression([8, 1, -1, 0, 3, 6, 2, 4, 5, 7, 9], 2),
-);
+// console.log(
+//   findLongestArithmeticProgression([8, 1, -1, 0, 3, 6, 2, 4, 5, 7, 9], 2),
+// );
 
 const maximizeNonOverlappingMeetings = (meetings: number[][]): number => {
   return meetings
