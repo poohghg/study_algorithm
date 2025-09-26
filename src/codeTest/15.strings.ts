@@ -1,9 +1,43 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/max-unique-substring-length-in-session/problem?isFullScreen=true
+const maxDistinctSubstringLengthInSessions = (
+  sessionString: string,
+): number => {
+  let currentSting: string = '';
+  let result = 0;
+
+  for (let i = 0; i < sessionString.length; i++) {
+    const char = sessionString[i];
+
+    if (char === '*') {
+      currentSting = '';
+      continue;
+    }
+
+    // 현재 문자열에 들어오는 문자가 있으면?
+    // 앞에서부터 제거한다.
+    while (currentSting.includes(char)) {
+      currentSting = currentSting.substring(1);
+    }
+
+    currentSting += char;
+    result = Math.max(result, currentSting.length);
+  }
+
+  return result;
+};
+
+console.log(
+  maxDistinctSubstringLengthInSessions('aaabbb'), // 3
+);
+
 //https://www.hackerrank.com/challenges/two-characters/problem?isFullScreen=true
 const alternate = (s: string): number => {
   const validStringSize = (remainStrings: string[]) => {
-    const filteredStrings = [...s].filter((str) => remainStrings.includes(str));
+    const filteredStrings = [...s].filter((char) =>
+      remainStrings.includes(char),
+    );
 
     for (let i = 1; i < filteredStrings.length; i++) {
       if (filteredStrings[i - 1] === filteredStrings[i]) return 0;
@@ -42,4 +76,4 @@ const isNonTrivialRotation = (s1: string, s2: string): boolean => {
   return (s1 + s1).includes(s2);
 };
 
-console.log(isNonTrivialRotation('abcde', 'cdeab'));
+// console.log(isNonTrivialRotation('abcde', 'cdeab'));
