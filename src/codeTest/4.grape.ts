@@ -40,6 +40,52 @@ class Queue<T> implements QueueImpl<T> {
   }
 }
 
+const countIsolatedCommunicationGroups = (
+  links: number[][],
+  n: number,
+): number => {
+  const bfs = (start: number, graph: number[][]) => {
+    const queue = [start];
+
+    while (queue.length) {
+      const currentNode = queue.pop()!;
+      visited[currentNode] = true;
+
+      for (const nextNode of graph[currentNode]) {
+        if (!visited[nextNode]) {
+          queue.push(nextNode);
+        }
+      }
+    }
+  };
+
+  const visited = Array.from({ length: n }, () => false);
+  return links
+    .reduce(
+      (graph, [node1, node2]) => {
+        graph[node1].push(node2);
+        graph[node2].push(node1);
+        return graph;
+      },
+      Array.from({ length: n }, (): number[] => []),
+    )
+    .reduce((count, _, index, graph) => {
+      if (visited[index]) return count;
+      bfs(index, graph);
+      return count + 1;
+    }, 0);
+};
+
+console.log(
+  countIsolatedCommunicationGroups(
+    [
+      [0, 1],
+      [2, 3],
+    ],
+    4,
+  ), // 2
+);
+
 const solution1 = (maps: number[][]) => {
   const n = maps.length;
   const m = maps[0].length;
