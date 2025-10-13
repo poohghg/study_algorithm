@@ -71,6 +71,7 @@ const countIsolatedCommunicationGroups = (
     )
     .reduce((count, _, index, graph) => {
       if (visited[index]) return count;
+
       bfs(index, graph);
       return count + 1;
     }, 0);

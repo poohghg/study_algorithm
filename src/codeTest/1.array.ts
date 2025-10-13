@@ -6,6 +6,20 @@
 
 export default {};
 
+// https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/remove-elements-within-k-distance/problem?isFullScreen=true
+const debounceTimestamps = (timestamps: number[], K: number): number => {
+  let prev = timestamps[0];
+
+  return timestamps.slice(1).reduce((acc, current) => {
+    if (current - prev < K) acc--;
+    else prev = current;
+
+    return acc;
+  }, timestamps.length);
+};
+
+console.log(debounceTimestamps([1, 2, 3, 8, 10], 3));
+
 // https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/time-slot-task-pairing/problem?isFullScreen=true
 const findTaskPairForSlot = (taskDurations: number[], slotLength: number) => {
   const indexMap = new Map<number, number>();
@@ -24,7 +38,7 @@ const findTaskPairForSlot = (taskDurations: number[], slotLength: number) => {
   return [-1, -1];
 };
 
-console.log(findTaskPairForSlot([2, 7, 11, 15], 9));
+// console.log(findTaskPairForSlot([2, 7, 11, 15], 9));
 
 const findZeroSumTripletsInWindow = (
   readings: number[],
