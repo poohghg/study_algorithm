@@ -1,5 +1,45 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/search-timestamp-in-rotated-log-timestamps/problem?isFullScreen=true
+function searchRotatedTimestamps(nums: number[], target: number): number {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) return mid;
+
+    // 왼족이 정렬된 상태?
+    if (nums[left] <= nums[mid]) {
+      // 왼쪽 범위에 있을경우?
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1;
+        // 해당 범위가 아닐경우?
+      } else {
+        left = mid + 1;
+      }
+    }
+
+    // 오른쪽이 정렬된 상태
+    if (nums[mid] <= nums[right]) {
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+  }
+
+  return -1;
+}
+
+console.log(
+  searchRotatedTimestamps(
+    [1609466400, 1609470000, 1609473600, 1609459200, 1609462800],
+    1609459200,
+  ),
+);
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/find-peak-element-in-bitonic-array/problem?isFullScreen=true
 const findPeakIndex = (counts: number[]): number => {
   let left = 0;
@@ -17,7 +57,7 @@ const findPeakIndex = (counts: number[]): number => {
   return left;
 };
 
-console.log(findPeakIndex([1, 3, 5, 6, 4, 2]));
+// console.log(findPeakIndex([1, 3, 5, 6, 4, 2]));
 
 const binarySearch = (nums: number[], target: number) => {
   let left = 0;
@@ -37,7 +77,7 @@ const binarySearch = (nums: number[], target: number) => {
   return -1;
 };
 
-console.log(binarySearch([1, 2, 3, 4, 5], 3));
+// console.log(binarySearch([1, 2, 3, 4, 5], 3));
 
 const gridlandMetro = (
   n: number,

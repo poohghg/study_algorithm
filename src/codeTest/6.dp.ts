@@ -1,5 +1,37 @@
 export default {};
 
+// https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/longest-increasing-subsequence-length/problem?isFullScreen=true
+function computeLongestIncreasingSubsequenceLength(
+  n: number,
+  quality: number[],
+): number {
+  const lis: number[] = [];
+
+  for (const n of quality) {
+    let left = 0;
+    let right = lis.length - 1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      if (lis[mid] < n) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+
+    if (left < lis.length) {
+      lis[left] = n;
+    } else {
+      lis.push(n);
+    }
+  }
+
+  return lis.length;
+}
+
+console.log(computeLongestIncreasingSubsequenceLength(8, [4, 5, 2, 6, 7, 1]));
+
 function power(m: number, n: number): number {
   if (n === 0) return 1;
   return power(m, n - 1) * 2;
@@ -529,13 +561,13 @@ const n1카드게임 = (coin: number, cards: number[]) => {
 };
 
 // console.log(n1카드게임(3, [1, 2, 3, 4, 5, 8, 6, 7, 9, 10, 11, 12]));
-console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
-console.log(
-  n1카드게임(
-    10,
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-  ),
-);
+// console.log(n1카드게임(4, [3, 6, 7, 2, 1, 10, 5, 9, 8, 12, 11, 4]));
+// console.log(
+//   n1카드게임(
+//     10,
+//     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+//   ),
+// );
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/136797
 const solution1 = (numbers: string) => {
@@ -819,9 +851,9 @@ const solution4 = (picks: number[], minerals: string[]) => {
 // https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence/problem?isFullScreen=true
 const largestCommonSubsequence = (a: number[], b: number[]) => {};
 
-console.log(
-  largestCommonSubsequence([2, 3, 4, 1, 2, 3, 4, 5, 6], [5, 6, 7, 8, 1, 2]),
-);
+// console.log(
+//   largestCommonSubsequence([2, 3, 4, 1, 2, 3, 4, 5, 6], [5, 6, 7, 8, 1, 2]),
+// );
 
 // console.log(largestCommonSubsequence([1, 2, 3, 4, 1], [3, 4, 1, 2, 1, 3]));
 // console.log(largestCommonSubsequence([1, 2, 3, 4, 1], [2, 3, 1, 2, 3, 19]));
