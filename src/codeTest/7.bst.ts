@@ -3,7 +3,72 @@ export default {};
 function verifySameMultisetDifferentStructure(
   root1: number[],
   root2: number[],
-): boolean {}
+): boolean {
+  const preOrder = (
+    nodeIndex: number,
+    array: number[],
+    values: number[] = [],
+    structure: number[] = [],
+  ): { values: number[]; structure: number[] } => {
+    if (array.length <= nodeIndex) {
+      structure.push(-1);
+      return { values, structure };
+    }
+
+    const nodeValue = array[nodeIndex];
+
+    if (nodeValue === nullValue) {
+      structure.push(-1);
+      return { values, structure };
+    }
+
+    values.push(nodeValue);
+    structure.push(1);
+
+    const left = nodeIndex * 2 + 1;
+    const right = nodeIndex * 2 + 2;
+
+    preOrder(left, array, values, structure);
+    preOrder(right, array, values, structure);
+
+    return { values, structure };
+  };
+
+  const sameMultiset = (data1: number[], data2: number[]) => {
+    const makeMap = (data: number[]) =>
+      data.reduce((map, currentValue) => {
+        map.set(currentValue, (map.get(currentValue) ?? 0) + 1);
+        return map;
+      }, new Map<number, number>());
+
+    const map = makeMap(data1);
+
+    for (const v of data2) {
+      if (!map.has(v)) return false;
+      map.set(v, map.get(v)! - 1);
+      if (map.get(v) === 0) map.delete(v);
+    }
+
+    return map.size === 0;
+  };
+
+  const sameStructures = (data1: number[], data2: number[]) => {
+    for (let i = 0; i < data1.length; i++) {
+      const v1 = data1[i];
+      const v2 = data2[i];
+
+      if (v1 !== v2) return false;
+    }
+
+    return true;
+  };
+
+  const nullValue = 100001;
+  const { values: v1, structure: s1 } = preOrder(0, root1);
+  const { values: v2, structure: s2 } = preOrder(0, root2);
+
+  return sameMultiset(v1, v2) && !sameStructures(s1, s2);
+}
 
 console.log(
   verifySameMultisetDifferentStructure(
