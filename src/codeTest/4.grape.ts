@@ -2,6 +2,50 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
+function hasCircularDependency(n: number, dependencies: number[][]): boolean {
+  const graph = dependencies.reduce(
+    (acc, [node1, node2]) => {
+      acc[node1].push(node2);
+      return acc;
+    },
+    Array.from({ length: n }, (): number[] => []),
+  );
+
+  const visited = Array.from({ length: n }, () => false);
+  const inStack = Array.from({ length: n }, () => false);
+
+  const dfs = (node: number) => {
+    if (inStack[node]) return true;
+    if (visited[node]) return false;
+
+    visited[node] = true;
+    inStack[node] = true;
+
+    for (const nextNode of graph[node]) {
+      if (dfs(nextNode)) return true;
+    }
+
+    inStack[node] = false;
+    return false;
+  };
+
+  for (let i = 0; i < n; i++) {
+    if (!visited[i] && dfs(i)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+console.log(
+  hasCircularDependency(4, [
+    [1, 0],
+    [2, 1],
+    [0, 2],
+  ]),
+);
+
 interface QueueImpl<T> {
   size: number;
 
@@ -77,15 +121,15 @@ const countIsolatedCommunicationGroups = (
     }, 0);
 };
 
-console.log(
-  countIsolatedCommunicationGroups(
-    [
-      [0, 1],
-      [2, 3],
-    ],
-    4,
-  ), // 2
-);
+// console.log(
+//   countIsolatedCommunicationGroups(
+//     [
+//       [0, 1],
+//       [2, 3],
+//     ],
+//     4,
+//   ), // 2
+// );
 
 const solution1 = (maps: number[][]) => {
   const n = maps.length;

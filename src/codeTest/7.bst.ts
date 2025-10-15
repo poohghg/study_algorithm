@@ -1,5 +1,17 @@
 export default {};
 
+function verifySameMultisetDifferentStructure(
+  root1: number[],
+  root2: number[],
+): boolean {}
+
+console.log(
+  verifySameMultisetDifferentStructure(
+    [4, 2, 5, 1, 3, 100001, 100001],
+    [3, 1, 5, 100001, 2, 4, 100001],
+  ),
+);
+
 const getBinarySearchTreeHeight = (
   values: number[],
   leftChild: number[],
@@ -15,13 +27,13 @@ const getBinarySearchTreeHeight = (
   return treeHeight(0) + 1;
 };
 
-console.log(
-  getBinarySearchTreeHeight(
-    [4, 2, 6, 1, 3, 5, 7],
-    [1, 3, 5, -1, -1, -1, -1],
-    [2, 4, 6, -1, -1, -1, -1],
-  ),
-);
+// console.log(
+//   getBinarySearchTreeHeight(
+//     [4, 2, 6, 1, 3, 5, 7],
+//     [1, 3, 5, -1, -1, -1, -1],
+//     [2, 4, 6, -1, -1, -1, -1],
+//   ),
+// );
 
 function solution1(n: number, a: number, b: number) {
   const m = Math.log2(n);

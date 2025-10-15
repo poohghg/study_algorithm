@@ -9,7 +9,7 @@ function searchRotatedTimestamps(nums: number[], target: number): number {
     const mid = Math.floor((left + right) / 2);
     if (nums[mid] === target) return mid;
 
-    // 왼족이 정렬된 상태?
+    // 왼쪽이 정렬된 상태?
     if (nums[left] <= nums[mid]) {
       // 왼쪽 범위에 있을경우?
       if (nums[left] <= target && target < nums[mid]) {
