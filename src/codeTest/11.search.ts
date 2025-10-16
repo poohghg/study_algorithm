@@ -1,5 +1,29 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/zero-sum-triplets-within-sliding-window/problem?isFullScreen=true
+function findZeroSumTripletsInWindow(readings: number[], windowSize: number) {
+  const resultMap = new Map<string, number[]>();
+  for (let i = 0; i < readings.length; i++) {
+    const current = readings[i];
+    const set = new Set<number>();
+    const end = Math.min(i + windowSize, readings.length);
+
+    for (let j = i + 1; j < end; j++) {
+      const v = readings[j];
+      const complement = -(current + v);
+
+      if (set.has(complement)) {
+        const triplet = [current, complement, v];
+        console.log(triplet);
+      }
+      set.add(v);
+    }
+  }
+  return Array.from(resultMap.values());
+}
+
+console.log(findZeroSumTripletsInWindow([0, -1, 1, 0], 4));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/search-timestamp-in-rotated-log-timestamps/problem?isFullScreen=true
 function searchRotatedTimestamps(nums: number[], target: number): number {
   let left = 0;
@@ -33,12 +57,12 @@ function searchRotatedTimestamps(nums: number[], target: number): number {
   return -1;
 }
 
-console.log(
-  searchRotatedTimestamps(
-    [1609466400, 1609470000, 1609473600, 1609459200, 1609462800],
-    1609459200,
-  ),
-);
+// console.log(
+//   searchRotatedTimestamps(
+//     [1609466400, 1609470000, 1609473600, 1609459200, 1609462800],
+//     1609459200,
+//   ),
+// );
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/find-peak-element-in-bitonic-array/problem?isFullScreen=true
 const findPeakIndex = (counts: number[]): number => {
