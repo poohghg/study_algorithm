@@ -1,5 +1,3 @@
-import PriorityQueue from '../dataStructure/PriorityQueue';
-
 export default {};
 
 class PQ {
@@ -80,33 +78,6 @@ class PQ {
     [this._data[aIdx], this._data[bIdx]] = [this._data[bIdx], this._data[aIdx]];
   }
 }
-
-function findMinimumPlansForBandwidth(
-  planSizes: number[],
-  targetBandwidth: number,
-): number {
-  const miniHeap = new PriorityQueue<[number, number]>((a, b) => a[1] < b[1]);
-
-  for (const planSize of planSizes) {
-    if (planSize === targetBandwidth) return 1;
-    miniHeap.push([planSize, 1]);
-  }
-
-  while (miniHeap.size) {
-    const [currentPlanSize, currentCount] = miniHeap.pop()!;
-
-    for (const planSize of planSizes) {
-      const nextPlanSize = planSize + currentPlanSize;
-      if (nextPlanSize === targetBandwidth) return currentCount + 1;
-      if (targetBandwidth < nextPlanSize) continue;
-      miniHeap.push([nextPlanSize, currentCount + 1]);
-    }
-  }
-
-  return -1;
-}
-
-console.log(findMinimumPlansForBandwidth([5], 5));
 
 const solution = (scoville: number[], K: number) => {
   const miniHeap = new PQ((a, b) => a < b);

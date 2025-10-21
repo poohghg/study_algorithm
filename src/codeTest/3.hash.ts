@@ -1,10 +1,71 @@
 export default {};
 
+// https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/top-k-frequent-events-with-order-preservation/problem?isFullScreen=true
+
+/***
+ * 전체를 정렬하면 O(n log n)인데,
+ * 상위 k개만 필요하니까 k개의 원소만 유지하는 min-heap을 유지
+ * 힙의 크기가 k를 초과하면, 가장 우선순위가 낮은 원소를 제거
+ * 마지막에 힙을 꺼내면 상위 k개가 남음
+ */
+
+/***
+ | 방식          | 시간 복잡도       | 공간 복잡도 | 설명               |
+ | ----------- | ------------ | ------ | ---------------- |
+ | 전체 sort     | `O(n log n)` | `O(n)` | 단순하고 직관적         |
+ | min-heap 유지 | `O(n log k)` | `O(k)` | 대규모 데이터에서 훨씬 효율적 |
+ */
+
+function getTopKFrequentEvents(events: number[], k: number): number[] {
+  const count = events.reduce((map, currentValue) => {
+    map.set(currentValue, (map.get(currentValue) ?? 0) + 1);
+    return map;
+  }, new Map<number, number>());
+
+  const indexMap = events.reduce((map, currentValue, index) => {
+    if (!map.has(currentValue)) {
+      map.set(currentValue, index);
+    }
+    return map;
+  }, new Map<number, number>());
+
+  const pushedHeap = (
+    heap: [number, number, number][],
+    [value, freq]: [number, number],
+  ) => {
+    heap.push([freq, indexMap.get(value)!, value]);
+
+    heap.sort((a, b) => {
+      if (a[0] === b[0]) {
+        return b[1] - a[1];
+      }
+      return a[0] - b[0];
+    });
+
+    if (k < heap.length) {
+      heap.shift();
+    }
+
+    return heap;
+  };
+
+  return Array.from(count)
+    .reduce(pushedHeap, [] as [number, number, number][])
+    .sort((a, b) => {
+      if (a[0] === b[0]) {
+        return a[1] - b[1];
+      }
+      return b[0] - a[0];
+    })
+    .map((v) => v[2]);
+}
+
+console.log(getTopKFrequentEvents([4, 4, 1, 2, 2, 3, 1, 3, 2], 3));
+
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/131127
  *
  */
-
 class HashData<T extends PropertyKey> {
   private hash: Map<T, number> = new Map<T, number>();
 
@@ -161,10 +222,10 @@ const solution3 = (id_list: string[], report: string[], k: number) => {
   });
 };
 
-console.log(
-  solution3(
-    ['muzi', 'frodo', 'apeach', 'neo'],
-    ['muzi frodo', 'apeach frodo', 'frodo neo', 'muzi neo', 'apeach muzi'],
-    2,
-  ),
-);
+// console.log(
+//   solution3(
+//     ['muzi', 'frodo', 'apeach', 'neo'],
+//     ['muzi frodo', 'apeach frodo', 'frodo neo', 'muzi neo', 'apeach muzi'],
+//     2,
+//   ),
+// );

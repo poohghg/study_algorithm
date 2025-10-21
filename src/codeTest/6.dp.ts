@@ -1,5 +1,26 @@
 export default {};
 
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/minimum-plans-to-reach-target-bandwidth/problem?isFullScreen=true
+function findMinimumPlansForBandwidth(
+  planSizes: number[],
+  targetBandwidth: number,
+): number {
+  const dp = new Array(targetBandwidth + 1).fill(Infinity);
+  dp[0] = 0;
+
+  for (let i = 1; i < targetBandwidth + 1; i++) {
+    for (const planSize of planSizes) {
+      if (0 <= dp[i - planSize]) {
+        dp[i] = Math.min(dp[i], dp[i - planSize] + 1);
+      }
+    }
+  }
+
+  return dp[targetBandwidth] === Infinity ? -1 : dp[targetBandwidth];
+}
+
+console.log(findMinimumPlansForBandwidth([5], 5));
+
 // https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/longest-increasing-subsequence-length/problem?isFullScreen=true
 function computeLongestIncreasingSubsequenceLength(
   n: number,
