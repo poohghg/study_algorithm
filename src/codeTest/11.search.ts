@@ -1,8 +1,65 @@
 export default {};
 
+//https://www.hackerrank.com/challenges/the-grid-search/problem?isFullScreen=true
+function gridSearch(G: string[], P: string[]): string {
+  const set = new Set(P);
+  let result = 0;
+
+  for (const string of G) {
+    for (const char of set) {
+      console.log(string.split(char));
+      if (string.split(char).length > 1) {
+        result++;
+      }
+    }
+  }
+
+  return result === P.length ? 'YES' : 'NO';
+}
+
+// 400453592126560
+// 114213133098692
+// 474386082879648
+// 522356951189169
+// 887109450487496
+// 252802633388782
+// 502771484966748
+// 075975207693780
+// 511799789562806
+// 404007454272504
+// 549043809916080
+// 962410809534811
+// 445893523733475
+// 768705303214174
+// 650629270887160
+
+console.log(
+  gridSearch(
+    [
+      '400453592126560',
+      '114213133098692',
+      '474386082879648',
+      '522356951189169',
+      '887109450487496',
+      '252802633388782',
+      '502771484966748',
+      '075975207693780',
+      '511799789562806',
+      '404007454272504',
+      '549043809916080',
+      '962410809534811',
+      '445893523733475',
+      '768705303214174',
+      '650629270887160',
+    ],
+    ['99', '99'],
+  ),
+);
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/zero-sum-triplets-within-sliding-window/problem?isFullScreen=true
 function findZeroSumTripletsInWindow(readings: number[], windowSize: number) {
   const resultMap = new Map<string, number[]>();
+
   for (let i = 0; i < readings.length; i++) {
     const current = readings[i];
     const set = new Set<number>();
@@ -14,15 +71,15 @@ function findZeroSumTripletsInWindow(readings: number[], windowSize: number) {
 
       if (set.has(complement)) {
         const triplet = [current, complement, v];
-        console.log(triplet);
       }
+
       set.add(v);
     }
   }
   return Array.from(resultMap.values());
 }
 
-console.log(findZeroSumTripletsInWindow([0, -1, 1, 0], 4));
+// console.log(findZeroSumTripletsInWindow([0, -1, 1, 0], 4));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/search-timestamp-in-rotated-log-timestamps/problem?isFullScreen=true
 function searchRotatedTimestamps(nums: number[], target: number): number {
