@@ -1,5 +1,48 @@
 export default {};
 
+class ListNode {
+  val: number;
+  next: ListNode | null;
+
+  constructor(val?: number, next?: ListNode | null) {
+    this.val = val === undefined ? 0 : val;
+    this.next = next === undefined ? null : next;
+  }
+}
+
+//https://leetcode.com/problems/add-two-numbers/
+function addTwoNumbers(
+  l1: ListNode | null,
+  l2: ListNode | null,
+): ListNode | null {
+  const getListNodeNum = (l: ListNode | null) => {
+    let current: ListNode | null = l;
+    const result: number[] = [];
+
+    while (current) {
+      result.push(current.val);
+      current = current.next;
+    }
+
+    return Number(result.reverse().join(''));
+  };
+
+  const sum = (getListNodeNum(l1) + getListNodeNum(l2)).toString();
+
+  const head: ListNode = new ListNode(Number(sum[sum.length - 1]));
+  let prev: ListNode | null = head;
+
+  for (let i = sum.length - 2; 0 <= i; i--) {
+    const newNode = new ListNode(Number(sum[i]));
+    prev.next = newNode;
+    prev = newNode;
+  }
+
+  return head;
+}
+
+console.log(addTwoNumbers(null, null));
+
 class SinglyLinkedListNode {
   data: number;
   next: SinglyLinkedListNode | null;
@@ -84,7 +127,7 @@ head.next.next.next = new SinglyLinkedListNode(40);
 head.next.next.next.next = new SinglyLinkedListNode(50);
 head.next.next.next.next.next = new SinglyLinkedListNode(60);
 
-console.log(extractAndAppendSponsoredNodes(head));
+// console.log(extractAndAppendSponsoredNodes(head));
 
 const deleteDuplicates = (head: SinglyLinkedListNode): SinglyLinkedListNode => {
   let currentNode: SinglyLinkedListNode | null = head?.next;

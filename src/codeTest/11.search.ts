@@ -1,20 +1,47 @@
 export default {};
 
+function twoSum(nums: number[], target: number): number[] {
+  const map = new Map<number, number>();
+
+  for (const [i, num] of nums.entries()) {
+    if (map.has(target - num)) {
+      return [map.get(target - num)!, i];
+    }
+    map.set(num, i);
+  }
+
+  return [];
+}
+
+console.log(twoSum([3, 2, 4], 6));
+
 //https://www.hackerrank.com/challenges/the-grid-search/problem?isFullScreen=true
 function gridSearch(G: string[], P: string[]): string {
-  const set = new Set(P);
-  let result = 0;
+  const pattenSize = P[0].length;
 
-  for (const string of G) {
-    for (const char of set) {
-      console.log(string.split(char));
-      if (string.split(char).length > 1) {
-        result++;
+  for (let i = 0; i < G.length; i++) {
+    const s = G[i];
+
+    let startIndex = s.indexOf(P[0]);
+    while (startIndex !== -1) {
+      let isMatch = true;
+
+      for (let j = 1; j < P.length; j++) {
+        if (G[i + j].substring(startIndex, startIndex + pattenSize) !== P[j]) {
+          isMatch = false;
+          break;
+        }
       }
+
+      if (isMatch) {
+        return 'YES';
+      }
+
+      startIndex = s.indexOf(P[0], startIndex + 1);
     }
   }
 
-  return result === P.length ? 'YES' : 'NO';
+  return 'NO';
 }
 
 // 400453592126560
