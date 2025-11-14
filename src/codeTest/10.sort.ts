@@ -1,5 +1,60 @@
 export default {};
 
+// https://leetcode.com/problems/median-of-two-sorted-arrays/
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+  const size = nums1.length + nums2.length;
+  const isEven = size % 2 === 0;
+
+  const getMidianIndexes = (size: number): number[] => {
+    const mid = Math.floor(size / 2);
+    return isEven ? [mid - 1, mid] : [mid];
+  };
+
+  const getMedian = () => {
+    const array: number[] = [];
+    let index = 0;
+    let array1Index = 0;
+    let array2Index = 0;
+
+    const lastIndex = getMidianIndexes(size).at(-1)!;
+
+    while (
+      array1Index < nums1.length &&
+      array2Index < nums2.length &&
+      index <= lastIndex
+    ) {
+      if (nums1[array1Index] < nums2[array2Index]) {
+        array.push(nums1[array1Index]);
+        array1Index++;
+      } else {
+        array.push(nums2[array2Index]);
+        array2Index++;
+      }
+      index++;
+    }
+
+    while (array1Index < nums1.length && index <= lastIndex) {
+      array.push(nums1[array1Index]);
+      array1Index++;
+      index++;
+    }
+
+    while (array2Index < nums2.length && index <= lastIndex) {
+      array.push(nums2[array2Index]);
+      array2Index++;
+      index++;
+    }
+
+    return isEven
+      ? (array[index - 2] + array[index - 1]) / 2
+      : array[index - 1];
+  };
+
+  return getMedian();
+}
+
+console.log(findMedianSortedArrays([1, 2], [3]));
+
 const radixSort = (arr: number[]) => {
   const getDigit = (num: number, place: number) => {
     return Math.floor((Math.abs(num) / 10 ** place) % 10);

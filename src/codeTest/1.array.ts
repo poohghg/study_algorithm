@@ -6,6 +6,27 @@
 
 export default {};
 
+//https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
+function lengthOfLongestSubstring(s: string): number {
+  let max = 0;
+  let left = 0;
+  const subStringSet = new Set();
+
+  for (let right = 0; right < s.length; right++) {
+    const char = s[right];
+    while (subStringSet.has(char)) {
+      subStringSet.delete(s[left++]);
+    }
+
+    subStringSet.add(char);
+    max = Math.max(max, right - left + 1);
+  }
+
+  return max;
+}
+
+console.log(lengthOfLongestSubstring('pwwkew'));
+
 // https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/remove-elements-within-k-distance/problem?isFullScreen=true
 const debounceTimestamps = (timestamps: number[], K: number): number => {
   let prev = timestamps[0];
@@ -18,7 +39,7 @@ const debounceTimestamps = (timestamps: number[], K: number): number => {
   }, timestamps.length);
 };
 
-console.log(debounceTimestamps([1, 2, 3, 8, 10], 3));
+// console.log(debounceTimestamps([1, 2, 3, 8, 10], 3));
 
 // https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/time-slot-task-pairing/problem?isFullScreen=true
 const findTaskPairForSlot = (taskDurations: number[], slotLength: number) => {
