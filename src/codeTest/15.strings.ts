@@ -1,5 +1,21 @@
 export default {};
 
+//https://leetcode.com/problems/longest-palindromic-substring/
+function longestPalindrome(s: string): string {
+  const isPalindrome = (s: string) => {
+    if (s.length === 1) return true;
+    if (s.length === 2) return s[0] === s[1];
+    return isPalindrome(s.slice(1, -1));
+  };
+
+  console.log(isPalindrome('aabbaa'));
+
+  return '';
+}
+
+console.log(longestPalindrome('babad'));
+// console.log(longestPalindrome('baabd'));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/max-unique-substring-length-in-session/problem?isFullScreen=true
 const maxDistinctSubstringLengthInSessions = (
   sessionString: string,
@@ -28,9 +44,9 @@ const maxDistinctSubstringLengthInSessions = (
   return result;
 };
 
-console.log(
-  maxDistinctSubstringLengthInSessions('aaabbb'), // 3
-);
+// console.log(
+//   maxDistinctSubstringLengthInSessions('aaabbb'), // 3
+// );
 
 //https://www.hackerrank.com/challenges/two-characters/problem?isFullScreen=true
 const alternate = (s: string): number => {
