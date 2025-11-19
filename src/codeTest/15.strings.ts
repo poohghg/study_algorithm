@@ -1,19 +1,68 @@
 export default {};
 
-//https://leetcode.com/problems/longest-palindromic-substring/
-function longestPalindrome(s: string): string {
-  const isPalindrome = (s: string) => {
-    if (s.length === 1) return true;
-    if (s.length === 2) return s[0] === s[1];
-    return isPalindrome(s.slice(1, -1));
-  };
+//https://leetcode.com/problems/zigzag-conversion/
+function convert(s: string, numRows: number): string {
+  if (numRows === 1) return s;
 
-  console.log(isPalindrome('aabbaa'));
+  const strArray = Array.from({ length: numRows }, (): string[] => []);
+  let r = 0;
+  let c = 0;
+  let currentPattern: 'down' | 'upR' = 'down';
 
-  return '';
+  for (let i = 0; i < s.length; i++) {
+    console.log(r, c);
+    // strArray[r][c] = s[i];
+
+    if (currentPattern === 'down') {
+      r++;
+    } else {
+      r--;
+      c++;
+    }
+
+    if (r === 0) {
+      currentPattern = 'down';
+    }
+
+    if (r === numRows - 1) {
+      currentPattern = 'upR';
+    }
+  }
+
+  return strArray.flatMap((s) => s).join('');
 }
 
-console.log(longestPalindrome('babad'));
+// console.log(convert('PAYPALISHIRING', 4));
+console.log(convert('AB', 1));
+
+//https://leetcode.com/problems/longest-palindromic-substring/
+function longestPalindrome(s: string): string {
+  const expand = (l: number, r: number) => {
+    while (0 <= l && r <= s.length - 1 && s[l] === s[r]) {
+      l--;
+      r++;
+    }
+    return s.substring(l + 1, r);
+  };
+
+  let maxStr = '';
+  for (let i = 0; i < s.length; i++) {
+    const oddStr = expand(i, i);
+    const evenStr = expand(i, i + 1);
+
+    if (maxStr.length < oddStr.length) {
+      maxStr = oddStr;
+    }
+
+    if (maxStr.length < evenStr.length) {
+      maxStr = evenStr;
+    }
+  }
+
+  return maxStr;
+}
+
+// console.log(longestPalindrome('baabad'));
 // console.log(longestPalindrome('baabd'));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/max-unique-substring-length-in-session/problem?isFullScreen=true
