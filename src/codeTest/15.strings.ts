@@ -1,5 +1,26 @@
 export default {};
 
+//https://leetcode.com/problems/longest-common-prefix/
+function longestCommonPrefix(strs: string[]): string {
+  strs.sort((a, b) => {
+    return a.localeCompare(b);
+  });
+
+  const first = strs[0];
+  const last = strs[strs.length - 1];
+  let result = '';
+
+  for (let i = 0; i < Math.min(first.length, last.length); i++) {
+    if (first[i] !== last[i]) break;
+    result += first[i];
+  }
+
+  return result;
+}
+
+console.log(longestCommonPrefix(['flower', 'flow', 'flight']));
+console.log(longestCommonPrefix(['dog', 'racecar', 'car']));
+
 //https://leetcode.com/problems/zigzag-conversion/
 function convert(s: string, numRows: number): string {
   if (numRows === 1) return s;
@@ -10,8 +31,7 @@ function convert(s: string, numRows: number): string {
   let currentPattern: 'down' | 'upR' = 'down';
 
   for (let i = 0; i < s.length; i++) {
-    console.log(r, c);
-    // strArray[r][c] = s[i];
+    strArray[r][c] = s[i];
 
     if (currentPattern === 'down') {
       r++;
@@ -33,7 +53,7 @@ function convert(s: string, numRows: number): string {
 }
 
 // console.log(convert('PAYPALISHIRING', 4));
-console.log(convert('AB', 1));
+// console.log(convert('AB', 1));
 
 //https://leetcode.com/problems/longest-palindromic-substring/
 function longestPalindrome(s: string): string {
