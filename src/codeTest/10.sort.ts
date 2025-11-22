@@ -1,5 +1,20 @@
 export default {};
 
+// https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+function searchRange(nums: number[], target: number): number[] {
+  const targetIndex = nums.indexOf(target);
+  if (targetIndex === -1) return [-1, -1];
+
+  let lastIndex = targetIndex;
+  while (lastIndex < nums.length - 1 && nums[lastIndex + 1] === target) {
+    lastIndex++;
+  }
+
+  return [targetIndex, lastIndex];
+}
+
+// console.log(searchRange([5, 7, 7, 8, 8], 8));
+
 // https://leetcode.com/problems/median-of-two-sorted-arrays/
 function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
   const size = nums1.length + nums2.length;
@@ -53,7 +68,7 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
   return getMedian();
 }
 
-console.log(findMedianSortedArrays([1, 2], [3]));
+// console.log(findMedianSortedArrays([1, 2], [3]));
 
 const radixSort = (arr: number[]) => {
   const getDigit = (num: number, place: number) => {
