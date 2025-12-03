@@ -19,7 +19,7 @@ function findMinimumPlansForBandwidth(
   return dp[targetBandwidth] === Infinity ? -1 : dp[targetBandwidth];
 }
 
-console.log(findMinimumPlansForBandwidth([5], 5));
+// console.log(findMinimumPlansForBandwidth([5], 5));
 
 // https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/longest-increasing-subsequence-length/problem?isFullScreen=true
 function computeLongestIncreasingSubsequenceLength(
@@ -51,7 +51,7 @@ function computeLongestIncreasingSubsequenceLength(
   return lis.length;
 }
 
-console.log(computeLongestIncreasingSubsequenceLength(8, [4, 5, 2, 6, 7, 1]));
+// console.log(computeLongestIncreasingSubsequenceLength(8, [4, 5, 2, 6, 7, 1]));
 
 function power(m: number, n: number): number {
   if (n === 0) return 1;

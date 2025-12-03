@@ -1,5 +1,26 @@
 export default {};
 
+//https://leetcode.com/problems/generate-parentheses/
+function generateParenthesis(n: number): string[] {
+  const dp = Array.from({ length: 9 }, (): Set<string> => new Set());
+
+  dp[0] = new Set([]);
+  dp[1] = new Set(['()']);
+
+  for (let i = 2; i <= n; i++) {
+    for (const item of dp[i - 1]) {
+      dp[i].add(item + '()');
+      dp[i].add('()' + item);
+      dp[i].add(`(${item})`);
+    }
+  }
+
+  console.log(dp);
+  return Array.from(dp[n]);
+}
+
+console.log(generateParenthesis(3));
+
 //https://leetcode.com/problems/longest-common-prefix/
 function longestCommonPrefix(strs: string[]): string {
   strs.sort((a, b) => {
@@ -18,8 +39,8 @@ function longestCommonPrefix(strs: string[]): string {
   return result;
 }
 
-console.log(longestCommonPrefix(['flower', 'flow', 'flight']));
-console.log(longestCommonPrefix(['dog', 'racecar', 'car']));
+// console.log(longestCommonPrefix(['flower', 'flow', 'flight']));
+// console.log(longestCommonPrefix(['dog', 'racecar', 'car']));
 
 //https://leetcode.com/problems/zigzag-conversion/
 function convert(s: string, numRows: number): string {
