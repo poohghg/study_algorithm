@@ -1,5 +1,39 @@
 export default {};
 
+function removeDuplicatesTwo(nums: number[]): number {
+  let index = 1;
+
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i - 1] !== nums[i]) {
+    }
+  }
+
+  console.log(nums);
+
+  return index;
+}
+
+// [1,1,2,2,3,_]
+// console.log(removeDuplicatesTwo([1, 1, 1, 2, 2, 3]));
+// [0,0,1,1,2,3,3,_,_]
+console.log(removeDuplicatesTwo([0, 0, 1, 1, 1, 1, 2, 3, 3]));
+
+// https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+function removeDuplicates(nums: number[]): number {
+  let index = 1;
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i - 1] !== nums[i]) {
+      nums[index] = nums[i];
+      index++;
+    }
+  }
+
+  return index;
+}
+
+// console.log(removeDuplicates([1, 1, 2]));
+// console.log(removeDuplicates([0, 0, 1, 1, 1, 2, 2, 3, 3, 4]));
+
 // https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
 function searchRange(nums: number[], target: number): number[] {
   const targetIndex = nums.indexOf(target);

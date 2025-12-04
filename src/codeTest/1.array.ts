@@ -6,6 +6,26 @@
 
 export default {};
 
+// https://leetcode.com/problems/count-collisions-on-a-road/?envType=daily-question&envId=2025-12-04
+function countCollisions(directions: string): number {
+  const arr = directions.split('');
+
+  let left = 0;
+  while (left < arr.length && arr[left] === 'L') left++;
+
+  let right = arr.length - 1;
+  while (right >= 0 && arr[right] === 'R') right--;
+
+  let collisions = 0;
+
+  for (let i = left; i <= right; i++) {
+    if (arr[i] !== 'S') collisions++;
+  }
+  return collisions;
+}
+
+console.log(countCollisions('SSRSSRLLRSLLRSRSSRLRRRRRRLRRSSRR'));
+
 //https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
 function lengthOfLongestSubstring(s: string): number {
   let max = 0;
@@ -25,7 +45,7 @@ function lengthOfLongestSubstring(s: string): number {
   return max;
 }
 
-console.log(lengthOfLongestSubstring('pwwkew'));
+// console.log(lengthOfLongestSubstring('pwwkew'));
 
 // https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/remove-elements-within-k-distance/problem?isFullScreen=true
 const debounceTimestamps = (timestamps: number[], K: number): number => {

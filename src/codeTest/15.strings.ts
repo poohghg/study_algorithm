@@ -2,21 +2,25 @@ export default {};
 
 //https://leetcode.com/problems/generate-parentheses/
 function generateParenthesis(n: number): string[] {
-  const dp = Array.from({ length: 9 }, (): Set<string> => new Set());
+  const result: string[] = [];
 
-  dp[0] = new Set([]);
-  dp[1] = new Set(['()']);
-
-  for (let i = 2; i <= n; i++) {
-    for (const item of dp[i - 1]) {
-      dp[i].add(item + '()');
-      dp[i].add('()' + item);
-      dp[i].add(`(${item})`);
+  const solve = (s: string, open: number, close: number) => {
+    if (open === n && close === n) {
+      result.push(s);
+      return;
     }
-  }
 
-  console.log(dp);
-  return Array.from(dp[n]);
+    if (open < n) {
+      solve(s + '(', open + 1, close);
+    }
+
+    if (close < open) {
+      solve(s + ')', open, close + 1);
+    }
+  };
+
+  solve('', 0, 0);
+  return result;
 }
 
 console.log(generateParenthesis(3));
