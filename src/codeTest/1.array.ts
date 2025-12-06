@@ -25,9 +25,6 @@ function maxFreeTime(
     largestRight[i] = Math.max(largestRight[i + 1], gaps[i + 1]);
   }
 
-  console.log(gaps);
-  console.log(largestRight);
-
   return 0;
 }
 
