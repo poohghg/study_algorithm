@@ -6,6 +6,54 @@
 
 export default {};
 
+// https://leetcode.com/problems/reschedule-meetings-for-maximum-free-time-ii/?envType=daily-question&envId=2025-12-06
+function maxFreeTime(
+  eventTime: number,
+  startTime: number[],
+  endTime: number[],
+): number {
+  const n = startTime.length;
+  const gaps = [
+    startTime[0],
+    ...startTime.slice(1).map((s, i) => s - endTime[i]),
+    eventTime - endTime[n - 1],
+  ];
+
+  const largestRight: number[] = new Array(n + 1).fill(0);
+
+  for (let i = n - 1; 0 <= i; i--) {
+    largestRight[i] = Math.max(largestRight[i + 1], gaps[i + 1]);
+  }
+
+  console.log(gaps);
+  console.log(largestRight);
+
+  return 0;
+}
+
+console.log(maxFreeTime(11, [0, 3, 7, 9], [1, 4, 8, 10]));
+
+//https://leetcode.com/problems/count-partitions-with-even-sum-difference/?envType=daily-question&envId=2025-12-06
+function countPartitions(nums: number[]): number {
+  let result = 0;
+  let leftSum = 0;
+  let rightSum = nums.reduce((a, b) => a + b);
+
+  for (let i = 0; i < nums.length - 1; i++) {
+    leftSum += nums[i];
+    rightSum -= nums[i];
+
+    if (Math.abs(leftSum - rightSum) % 2 === 0) {
+      result++;
+    }
+  }
+
+  return result;
+}
+
+// console.log(countPartitions([10, 10, 3, 7, 6]));
+// console.log(countPartitions([1, 2, 2]));
+
 // https://leetcode.com/problems/count-collisions-on-a-road/?envType=daily-question&envId=2025-12-04
 function countCollisions(directions: string): number {
   const arr = directions.split('');
@@ -24,7 +72,7 @@ function countCollisions(directions: string): number {
   return collisions;
 }
 
-console.log(countCollisions('SSRSSRLLRSLLRSRSSRLRRRRRRLRRSSRR'));
+// console.log(countCollisions('SSRSSRLLRSLLRSRSSRLRRRRRRLRRSSRR'));
 
 //https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
 function lengthOfLongestSubstring(s: string): number {
