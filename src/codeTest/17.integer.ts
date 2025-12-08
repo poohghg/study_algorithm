@@ -1,5 +1,35 @@
 export default {};
 
+//https://leetcode.com/problems/count-square-sum-triples/?envType=daily-question&envId=2025-12-08
+function countTriples(n: number): number {
+  let result = 0;
+  const set: number[] = [];
+
+  for (let i = 1; i <= n; i++) {
+    const target = i ** 2;
+    let left = 0;
+    let right = set.length - 1;
+
+    while (left <= right) {
+      const sum = set[left] + set[right];
+      if (sum == target) {
+        result += 2;
+        break;
+      }
+      if (sum < target) {
+        left++;
+      } else {
+        right--;
+      }
+    }
+    set.push(target);
+  }
+
+  return result;
+}
+
+console.log(countTriples(10));
+
 //https://leetcode.com/problems/3sum/description/
 function threeSum(nums: number[]): number[][] {
   const result: number[][] = [];
@@ -35,7 +65,7 @@ function threeSum(nums: number[]): number[][] {
   return result;
 }
 
-console.log(threeSum([-1, 0, 1, 2, -1, -4]));
+// console.log(threeSum([-1, 0, 1, 2, -1, -4]));
 
 //https://leetcode.com/problems/reverse-integer/
 function reverse(x: number): number {

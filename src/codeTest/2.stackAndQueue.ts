@@ -1,5 +1,10 @@
 export default {};
 
+//https://leetcode.com/problems/longest-valid-parentheses/solutions/4619860/determine-the-length-of-the-longest-vali-id2u/
+function longestValidParentheses(s: string): number {}
+
+console.log(longestValidParentheses('(()())'));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/next-greater-element-with-offset/problem?isFullScreen=true
 const findNextGreaterElementsWithDistance = (
   readings: number[],
@@ -21,7 +26,7 @@ const findNextGreaterElementsWithDistance = (
   return result;
 };
 
-console.log(findNextGreaterElementsWithDistance([1, 1, 2, 4, 3]));
+// console.log(findNextGreaterElementsWithDistance([1, 1, 2, 4, 3]));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/validate-properly-nested-brackets/problem?isFullScreen=true
 const areBracketsProperlyMatched = (code_snippet: string): boolean => {
@@ -487,18 +492,6 @@ class StackUsingTwoQueues {
   }
 }
 
-function stackUsingTwoQueues(arr: [string, number?][]) {
-  const stack = new StackUsingTwoQueues();
-  stack.push(1);
-  stack.push(2);
-  stack.push(3);
-  console.log(stack.pop());
-  console.log(stack.pop());
-  console.log(stack.pop());
-  stack.push(5);
-  console.log(stack.peek());
-}
-
 // console.log(
 //   stackUsingTwoQueues([
 //     ['ENQUEUE', 5],
@@ -687,17 +680,17 @@ const solution7 = (targets: number[][]) => {
     )[0];
 };
 
-console.log(
-  solution7([
-    [4, 5],
-    [4, 8],
-    [10, 14],
-    [11, 13],
-    [5, 12],
-    [3, 7],
-    [1, 4],
-  ]),
-);
+// console.log(
+//   solution7([
+//     [4, 5],
+//     [4, 8],
+//     [10, 14],
+//     [11, 13],
+//     [5, 12],
+//     [3, 7],
+//     [1, 4],
+//   ]),
+// );
 
 // console.log(
 //   solution7([

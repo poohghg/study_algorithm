@@ -1,5 +1,39 @@
 export default {};
 
+//https://leetcode.com/problems/search-in-rotated-sorted-array/
+function search(nums: number[], target: number): number {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (nums[mid] === target) {
+      return mid;
+    }
+
+    // 왼쪽 정렬
+    if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+
+    // 오른쪽 정렬인상태
+    if (nums[mid] <= nums[right]) {
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+  }
+
+  return -1;
+}
+
 function twoSum(nums: number[], target: number): number[] {
   const map = new Map<number, number>();
 
@@ -13,7 +47,7 @@ function twoSum(nums: number[], target: number): number[] {
   return [];
 }
 
-console.log(twoSum([3, 2, 4], 6));
+// console.log(twoSum([3, 2, 4], 6));
 
 //https://www.hackerrank.com/challenges/the-grid-search/problem?isFullScreen=true
 function gridSearch(G: string[], P: string[]): string {
@@ -60,28 +94,28 @@ function gridSearch(G: string[], P: string[]): string {
 // 768705303214174
 // 650629270887160
 
-console.log(
-  gridSearch(
-    [
-      '400453592126560',
-      '114213133098692',
-      '474386082879648',
-      '522356951189169',
-      '887109450487496',
-      '252802633388782',
-      '502771484966748',
-      '075975207693780',
-      '511799789562806',
-      '404007454272504',
-      '549043809916080',
-      '962410809534811',
-      '445893523733475',
-      '768705303214174',
-      '650629270887160',
-    ],
-    ['99', '99'],
-  ),
-);
+// console.log(
+//   gridSearch(
+//     [
+//       '400453592126560',
+//       '114213133098692',
+//       '474386082879648',
+//       '522356951189169',
+//       '887109450487496',
+//       '252802633388782',
+//       '502771484966748',
+//       '075975207693780',
+//       '511799789562806',
+//       '404007454272504',
+//       '549043809916080',
+//       '962410809534811',
+//       '445893523733475',
+//       '768705303214174',
+//       '650629270887160',
+//     ],
+//     ['99', '99'],
+//   ),
+// );
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/zero-sum-triplets-within-sliding-window/problem?isFullScreen=true
 function findZeroSumTripletsInWindow(readings: number[], windowSize: number) {
