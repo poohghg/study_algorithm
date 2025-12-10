@@ -2,6 +2,78 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
+/**
+ Do not return anything, modify board in-place instead.
+ */
+function solve1(board: string[][]): void {
+  const oPositions = board.reduce((acc, row, i) => {
+    row.forEach((v, j) => {});
+    return acc;
+  }, []);
+}
+
+console.log(
+  solve1([
+    ['X', 'X', 'X', 'X'],
+    ['X', 'O', 'O', 'X'],
+    ['X', 'X', 'O', 'X'],
+    ['X', 'O', 'X', 'X'],
+  ]),
+);
+
+//https://leetcode.com/problems/number-of-islands/?envType=problem-list-v2&envId=breadth-first-search
+function numIslands(grid: string[][]): number {
+  const n = grid.length;
+  const m = grid[0].length;
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const canMoves = (i: number, j: number) => {
+    return 0 <= i && i < n && 0 <= j && j < m;
+  };
+
+  const bfs = (i: number, j: number) => {
+    const queue: number[][] = [[i, j]];
+    grid[i][j] = '0';
+
+    while (queue.length) {
+      const [x, y] = queue.shift()!;
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [dx + x, dy + y];
+        if (canMoves(nx, ny) && grid[nx][ny] === '1') {
+          queue.push([nx, ny]);
+          grid[nx][ny] = '0';
+        }
+      }
+    }
+  };
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (grid[i][j] === '1') {
+        bfs(i, j);
+        result++;
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  numIslands([
+    ['1', '1', '0', '0', '0'],
+    ['1', '1', '0', '0', '0'],
+    ['0', '0', '1', '0', '0'],
+    ['0', '0', '0', '1', '1'],
+  ]),
+);
+
 function hasCircularDependency(n: number, dependencies: number[][]): boolean {
   const graph = dependencies.reduce(
     (acc, [node1, node2]) => {
@@ -38,13 +110,13 @@ function hasCircularDependency(n: number, dependencies: number[][]): boolean {
   return false;
 }
 
-console.log(
-  hasCircularDependency(4, [
-    [1, 0],
-    [2, 1],
-    [0, 2],
-  ]),
-);
+// console.log(
+//   hasCircularDependency(4, [
+//     [1, 0],
+//     [2, 1],
+//     [0, 2],
+//   ]),
+// );
 
 interface QueueImpl<T> {
   size: number;
@@ -1117,5 +1189,5 @@ const solution12 = (
   return result === '' ? 'impossible' : result;
 };
 
-console.log(solution12(3, 4, 2, 3, 3, 1, 5));
+// console.log(solution12(3, 4, 2, 3, 3, 1, 5));
 // console.log(solution12(2, 2, 1, 1, 2, 2, 2));

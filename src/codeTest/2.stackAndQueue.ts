@@ -1,9 +1,28 @@
 export default {};
 
 //https://leetcode.com/problems/longest-valid-parentheses/solutions/4619860/determine-the-length-of-the-longest-vali-id2u/
-function longestValidParentheses(s: string): number {}
+function longestValidParentheses(s: string): number {
+  const queue: number[] = [-1];
+  let max = 0;
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    if (char === '(') {
+      queue.push(i);
+    } else {
+      queue.pop();
+      if (queue.length === 0) {
+        queue.push(i);
+      } else {
+        max = Math.max(max, i - queue.at(-1)!);
+      }
+    }
+  }
 
-console.log(longestValidParentheses('(()())'));
+  return max;
+}
+
+console.log(longestValidParentheses(')(()())'));
+console.log(longestValidParentheses('()())'));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/next-greater-element-with-offset/problem?isFullScreen=true
 const findNextGreaterElementsWithDistance = (
