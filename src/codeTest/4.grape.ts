@@ -2,24 +2,104 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
-/**
- Do not return anything, modify board in-place instead.
- */
-function solve1(board: string[][]): void {
-  const oPositions = board.reduce((acc, row, i) => {
-    row.forEach((v, j) => {});
-    return acc;
-  }, []);
+//https://leetcode.com/problems/count-covered-buildings/?envType=daily-question&envId=2025-12-11
+function countCoveredBuildings(n: number, buildings: number[][]): number {
+  const rows = Array.from({ length: n + 1 }, () => [
+    Number.MAX_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER,
+  ]);
+
+  const cols = Array.from({ length: n + 1 }, () => [
+    Number.MAX_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER,
+  ]);
+
+  for (const [y, x] of buildings) {
+    rows[x] = [Math.min(y, rows[x][0]), Math.max(y, rows[x][1])];
+    cols[y] = [Math.min(x, cols[y][0]), Math.max(x, cols[y][1])];
+  }
+
+  let result = 0;
+  for (const [y, x] of buildings) {
+    const possibleLAndR = rows[x][0] < y && y < rows[x][1];
+    const possibleTAndB = rows[y][0] < x && x < rows[y][1];
+    if (possibleLAndR && possibleTAndB) {
+      result++;
+    }
+  }
+
+  return result;
 }
 
 console.log(
-  solve1([
-    ['X', 'X', 'X', 'X'],
-    ['X', 'O', 'O', 'X'],
-    ['X', 'X', 'O', 'X'],
-    ['X', 'O', 'X', 'X'],
+  countCoveredBuildings(5, [
+    [1, 3],
+    [3, 2],
+    [3, 3],
+    [3, 5],
+    [5, 3],
   ]),
 );
+
+//https://leetcode.com/problems/surrounded-regions/description/
+function solve1(board: string[][]): void {
+  const n = board.length;
+  const m = board[0].length;
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const canMoves = (i: number, j: number) => {
+    return 0 <= i && i < n && 0 <= j && j < m;
+  };
+
+  // 외곽이 아니고 x인지역만
+  const bfs = (i: number, j: number) => {
+    const queue: number[][] = [[i, j]];
+    const visited = Array.from({ length: n }, () => Array(m).fill(false));
+    visited[i][j] = true;
+
+    while (queue.length) {
+      const [x, y] = queue.shift()!;
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [dx + x, dy + y];
+        if (!canMoves(nx, ny)) return;
+        if (canMoves(nx, ny) && board[nx][ny] === 'O' && !visited[nx][ny]) {
+          queue.push([nx, ny]);
+          visited[nx][ny] = true;
+        }
+      }
+    }
+
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+        if (visited[i][j]) {
+          board[i][j] = 'X';
+        }
+      }
+    }
+  };
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (board[i][j] === 'O') {
+        bfs(i, j);
+      }
+    }
+  }
+}
+
+// console.log(
+//   solve1([
+//     ['X', 'X', 'X', 'X'],
+//     ['X', 'O', 'O', 'X'],
+//     ['X', 'X', 'O', 'X'],
+//     ['X', 'O', 'X', 'X'],
+//   ]),
+// );
 
 //https://leetcode.com/problems/number-of-islands/?envType=problem-list-v2&envId=breadth-first-search
 function numIslands(grid: string[][]): number {
@@ -65,14 +145,14 @@ function numIslands(grid: string[][]): number {
   return result;
 }
 
-console.log(
-  numIslands([
-    ['1', '1', '0', '0', '0'],
-    ['1', '1', '0', '0', '0'],
-    ['0', '0', '1', '0', '0'],
-    ['0', '0', '0', '1', '1'],
-  ]),
-);
+// console.log(
+//   numIslands([
+//     ['1', '1', '0', '0', '0'],
+//     ['1', '1', '0', '0', '0'],
+//     ['0', '0', '1', '0', '0'],
+//     ['0', '0', '0', '1', '1'],
+//   ]),
+// );
 
 function hasCircularDependency(n: number, dependencies: number[][]): boolean {
   const graph = dependencies.reduce(
