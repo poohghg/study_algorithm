@@ -1,10 +1,87 @@
+export default {};
+
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/42889
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
-export default {};
+// https://leetcode.com/problems/count-mentions-per-user/description/?envType=daily-question&envId=2025-12-12
+type UserStatus = 'online' | 'offline';
+
+function countMentions(numberOfUsers: number, events: string[][]): number[] {
+  let mentionCount: number[] = Array(numberOfUsers).fill(0);
+  // status,will online?
+  let userStatues = Array.from(
+    { length: numberOfUsers },
+    (): [UserStatus, number] => ['online', 0],
+  );
+
+  events.sort(
+    (a, b) => Number(a[1]) - Number(b[1]) || (a[0] === 'OFFLINE' ? -1 : 1),
+  );
+
+  for (const [e, timeStamp, users] of events) {
+    if (e === 'MESSAGE') {
+      switch (users) {
+        // 전체 유저
+        case 'ALL': {
+          mentionCount = mentionCount.map((c) => c + 1);
+          break;
+        }
+        // 온라인 유저
+        case 'HERE': {
+          for (let i = 0; i < numberOfUsers; i++) {
+            const [status, changeOnlineTime] = userStatues[i];
+            if (status === 'online') {
+              mentionCount[i] += 1;
+            } else if (
+              status === 'offline' &&
+              changeOnlineTime <= parseInt(timeStamp)
+            ) {
+              mentionCount[i] += 1;
+              userStatues[i] = ['online', 0];
+            }
+          }
+          break;
+        }
+        // 배열내 유저
+        default: {
+          const userList = users.split(' ');
+          for (let i = 0; i < userList.length; i++) {
+            const id = parseInt(userList[i].split('id')[1]);
+            mentionCount[id] += 1;
+          }
+        }
+      }
+    }
+
+    if (e === 'OFFLINE') {
+      const id = parseInt(users);
+      userStatues[id] = ['offline', parseInt(timeStamp) + 60];
+    }
+  }
+
+  return mentionCount;
+}
+
+// [1, 0, 2]
+[0, 1, 1];
+console.log(
+  countMentions(3, [
+    ['OFFLINE', '2', '1'],
+    ['MESSAGE', '2', 'HERE'],
+    ['OFFLINE', '1', '0'],
+    ['MESSAGE', '61', 'HERE'],
+  ]),
+);
+
+// console.log(
+//   countMentions(2, [
+//     ['OFFLINE', '10', '0'],
+//     ['MESSAGE', '12', 'HERE'],
+//   ]),
+// );
 
 // https://leetcode.com/problems/reschedule-meetings-for-maximum-free-time-ii/?envType=daily-question&envId=2025-12-06
 function maxFreeTime(
@@ -28,7 +105,7 @@ function maxFreeTime(
   return 0;
 }
 
-console.log(maxFreeTime(11, [0, 3, 7, 9], [1, 4, 8, 10]));
+// console.log(maxFreeTime(11, [0, 3, 7, 9], [1, 4, 8, 10]));
 
 //https://leetcode.com/problems/count-partitions-with-even-sum-difference/?envType=daily-question&envId=2025-12-06
 function countPartitions(nums: number[]): number {

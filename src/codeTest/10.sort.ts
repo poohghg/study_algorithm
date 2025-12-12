@@ -13,10 +13,56 @@ function removeDuplicatesTwo(nums: number[]): number {
   return index;
 }
 
+//https://leetcode.com/problems/relative-sort-array/?envType=problem-list-v2&envId=counting-sort
+function relativeSortArray(arr1: number[], arr2: number[]): number[] {
+  const indexMap = arr2.reduce((map, b, i) => {
+    map.set(b, i);
+    return map;
+  }, new Map<number, number>());
+
+  return arr1.sort((a, b) => {
+    const aIndex = indexMap.get(a) ?? Number.MAX_SAFE_INTEGER;
+    const bIndex = indexMap.get(b) ?? Number.MAX_SAFE_INTEGER;
+
+    if (
+      aIndex === Number.MAX_SAFE_INTEGER &&
+      bIndex === Number.MAX_SAFE_INTEGER
+    ) {
+      return a - b;
+    }
+
+    return aIndex - bIndex;
+  });
+}
+
+console.log(relativeSortArray([28, 22, 6, 8, 44, 17], [22, 28, 8, 6]));
+
 // [1,1,2,2,3,_]
 // console.log(removeDuplicatesTwo([1, 1, 1, 2, 2, 3]));
 // [0,0,1,1,2,3,3,_,_]
 // console.log(removeDuplicatesTwo([0, 0, 1, 1, 1, 1, 2, 3, 3]));
+
+//https://leetcode.com/problems/array-partition/?envType=problem-list-v2&envId=counting-sort
+/**
+ * 1.
+ * 배열을 정렬한다. 배열을 정렬하면 가장 작은 숫자들이 서로 인접하게 된다. 이렇게 하면 인접한 숫자들을 짝지어 가장 작은 값들의 합을 최대화할 수 있다.
+ * 2.
+ * 복잡성
+ * 시간 복잡도: O(n logn)
+ */
+
+function arrayPairSum(nums: number[]): number {
+  let result = 0;
+  nums.sort((a, b) => a - b);
+
+  for (let i = 0; i < nums.length; i += 2) {
+    result += nums[i];
+  }
+
+  return result;
+}
+
+console.log(arrayPairSum([6, 2, 6, 5, 1, 2]));
 
 // https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 function removeDuplicates(nums: number[]): number {
@@ -47,7 +93,7 @@ function removeElement(nums: number[], val: number): number {
   return index;
 }
 
-console.log(removeElement([0, 1, 2, 2, 3, 0, 4, 2], 2));
+// console.log(removeElement([0, 1, 2, 2, 3, 0, 4, 2], 2));
 
 // https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
 function searchRange(nums: number[], target: number): number[] {
