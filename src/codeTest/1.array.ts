@@ -6,6 +6,41 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+// https://leetcode.com/problems/coupon-code-validator/?envType=daily-question&envId=2025-12-13
+
+type Business = 'electronics' | 'grocery' | 'pharmacy' | 'restaurant';
+
+function validateCoupons(
+  code: string[],
+  businessLine: string[],
+  isActive: boolean[],
+): string[] {
+  const priority = new Map<string, number>([
+    ['electronics', 0],
+    ['grocery', 1],
+    ['pharmacy', 2],
+    ['restaurant', 3],
+  ]);
+
+  const isValidBusiness = (business: string): business is Business =>
+    priority.has(business);
+  const isValidCode = (code: string) => /^[a-zA-Z0-9_]+$/.test(code);
+
+  const n = code.length;
+  const result = Array.from({ length: 4 }, (): string[] => []);
+  for (let i = 0; i < n; i++) {
+    if (
+      isActive[i] &&
+      isValidCode(code[i]) &&
+      isValidBusiness(businessLine[i])
+    ) {
+      result[priority.get(businessLine[i])!].push(code[i]);
+    }
+  }
+
+  return result.flatMap((businessLine) => businessLine.sort());
+}
+
 // https://leetcode.com/problems/count-mentions-per-user/description/?envType=daily-question&envId=2025-12-12
 type UserStatus = 'online' | 'offline';
 
