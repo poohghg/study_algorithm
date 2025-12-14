@@ -6,8 +6,57 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
-// https://leetcode.com/problems/coupon-code-validator/?envType=daily-question&envId=2025-12-13
+//https://leetcode.com/problems/next-permutation/description/
+function nextPermutation(nums: number[]): void {
+  // 왼쪽이 끝자리 수보다 작은면 스왑한다.
+  // let isSwap = false;
+  for (let i = nums.length - 1; 1 <= i; i--) {
+    const lastNum = nums[i];
 
+    for (let i = nums.length - 2; 0 <= i; i--) {
+      const num = nums[i];
+      [nums[i], nums[i + 1]] = [nums[i + 1], nums[i]];
+      if (num < lastNum) {
+        break;
+      }
+    }
+  }
+
+  console.log(nums);
+}
+
+console.log(nextPermutation([2, 3, 1]));
+
+/**
+ * 각 구간을 2개씩 들어가도록 묶고 그 사이의 P 개수를 곱해준다.
+ * P개수를 곱하는 이유? 각 구간 사이에 P가 있으면 그 구간을 나눌 수 있는 방법이 생기기 때문
+ */
+//https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/?envType=daily-question&envId=2025-12-14
+function numberOfWays(corridor: string): number {
+  let totalSeat = corridor.split('').filter((c) => c === 'S').length;
+  if (totalSeat < 2 || totalSeat % 2 !== 0) return 0;
+  if (totalSeat === 2) return 1;
+
+  const indexes = corridor.split('').reduce((acc, c, index) => {
+    if (c === 'P') return acc;
+    acc.push(index);
+    return acc;
+  }, [] as number[]);
+
+  let result = 1;
+  for (let i = 2; i < indexes.length; i += 2) {
+    const currentPos = indexes[i];
+    const prevPos = indexes[i - 1];
+    result = (result * (currentPos - prevPos)) % 1_000_000_007;
+  }
+
+  return result;
+}
+
+// console.log(numberOfWays('SSPPSPS'));
+// console.log(numberOfWays('SSPSS'));
+
+// https://leetcode.com/problems/coupon-code-validator/?envType=daily-question&envId=2025-12-13
 type Business = 'electronics' | 'grocery' | 'pharmacy' | 'restaurant';
 
 function validateCoupons(
@@ -101,15 +150,14 @@ function countMentions(numberOfUsers: number, events: string[][]): number[] {
 }
 
 // [1, 0, 2]
-[0, 1, 1];
-console.log(
-  countMentions(3, [
-    ['OFFLINE', '2', '1'],
-    ['MESSAGE', '2', 'HERE'],
-    ['OFFLINE', '1', '0'],
-    ['MESSAGE', '61', 'HERE'],
-  ]),
-);
+// console.log(
+//   countMentions(3, [
+//     ['OFFLINE', '2', '1'],
+//     ['MESSAGE', '2', 'HERE'],
+//     ['OFFLINE', '1', '0'],
+//     ['MESSAGE', '61', 'HERE'],
+//   ]),
+// );
 
 // console.log(
 //   countMentions(2, [
