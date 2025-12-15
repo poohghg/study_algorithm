@@ -24,7 +24,7 @@ function searchInsert(nums: number[], target: number): number {
 }
 
 console.log(searchInsert([1, 3, 5, 6], 7));
-// console.log(searchInsert([1, 2, 4, 6], 2));
+console.log(searchInsert([1, 2, 4, 6], 3));
 
 //https://leetcode.com/problems/search-in-rotated-sorted-array/
 function search(nums: number[], target: number): number {
