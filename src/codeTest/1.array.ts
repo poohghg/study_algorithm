@@ -25,7 +25,47 @@ function nextPermutation(nums: number[]): void {
   console.log(nums);
 }
 
-console.log(nextPermutation([2, 3, 1]));
+// console.log(nextPermutation([2, 3, 1]));
+
+//https://leetcode.com/problems/subarray-product-less-than-k/
+function numSubarrayProductLessThanK(nums: number[], k: number): number {
+  let result = 0;
+  let left = -1;
+  let prefix = 1;
+
+  for (let i = 0; i < nums.length; i++) {
+    prefix *= nums[i];
+    while (left < i && k <= prefix) {
+      prefix = prefix / nums[left];
+      left++;
+    }
+    // console.log(prefix, i, left);
+    result += i - left;
+  }
+
+  return result;
+}
+
+// console.log(numSubarrayProductLessThanK([10, 5, 2, 6], 100));
+console.log(numSubarrayProductLessThanK([99, 100, 1], 100));
+
+//https://leetcode.com/problems/number-of-smooth-descent-periods-of-a-stock/?envType=daily-question&envId=2025-12-15
+function getDescentPeriods(prices: number[]): number {
+  let result = prices.length;
+  let continuousStartIndex = 0;
+
+  for (let i = 1; i < prices.length; i++) {
+    if (prices[i - 1] === prices[i] + 1) {
+      result += i - continuousStartIndex;
+    } else {
+      continuousStartIndex = i;
+    }
+  }
+
+  return result;
+}
+
+// console.log(getDescentPeriods([4, 3, 2, 1]));
 
 /**
  * 각 구간을 2개씩 들어가도록 묶고 그 사이의 P 개수를 곱해준다.
@@ -33,7 +73,7 @@ console.log(nextPermutation([2, 3, 1]));
  */
 //https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/?envType=daily-question&envId=2025-12-14
 function numberOfWays(corridor: string): number {
-  let totalSeat = corridor.split('').filter((c) => c === 'S').length;
+  const totalSeat = corridor.split('').filter((c) => c === 'S').length;
   if (totalSeat < 2 || totalSeat % 2 !== 0) return 0;
   if (totalSeat === 2) return 1;
 
