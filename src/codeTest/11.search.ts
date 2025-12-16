@@ -1,5 +1,40 @@
 export default {};
 
+/**
+ * Subset Sum 유형
+ * 이전에 만들 수 있던 모든 합들에 num을 하나씩 더한 새로운 합들을 추가
+ */
+//https://leetcode.com/problems/partition-equal-subset-sum/
+function canPartition(nums: number[]): boolean {
+  const total = nums.reduce((a, b) => a + b, 0);
+
+  if (total % 2 !== 0) return false;
+
+  const target = total / 2;
+
+  const dp: boolean[] = Array(target + 1).fill(false);
+
+  dp[0] = true;
+
+  for (const num of nums) {
+    // 뒤에서부터 갱신 (0/1 knapsack)
+    // 앞에서 부터 갱신하면 같은 num을 여러번 사용하는 경우가 생김
+    // ex) num = 3, target = 6 일때
+    // dp[3] = true -> dp[6] = true (3을 두번 사용)
+    for (let s = target; s >= num; s--) {
+      if (dp[s - num]) {
+        dp[s] = true;
+      }
+    }
+  }
+
+  return dp[target];
+}
+
+// console.log(canPartition([1, 3, 3, 3, 5, 5, 20]));
+console.log(canPartition([3, 3, 6, 8, 16, 16, 16, 18, 20]));
+// console.log(canPartition([1, 1, 2, 2]));
+
 //https://leetcode.com/problems/search-insert-position/
 function searchInsert(nums: number[], target: number): number {
   let left = 0;
@@ -23,8 +58,8 @@ function searchInsert(nums: number[], target: number): number {
   return left;
 }
 
-console.log(searchInsert([1, 3, 5, 6], 7));
-console.log(searchInsert([1, 2, 4, 6], 3));
+// console.log(searchInsert([1, 3, 5, 6], 7));
+// console.log(searchInsert([1, 2, 4, 6], 3));
 
 //https://leetcode.com/problems/search-in-rotated-sorted-array/
 function search(nums: number[], target: number): number {
