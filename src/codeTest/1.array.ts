@@ -6,6 +6,41 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+function maxProfit2(prices: number[]): number {
+  let result = 0;
+  let prevMin = Number.MAX_SAFE_INTEGER;
+
+  // 현재 뽑히는 가격(=== 매도 가격) 이때 앞에 가장 작은 매수가격이랑 해서 판다
+  for (const price of prices) {
+    if (prevMin < price) {
+      result += price - prevMin;
+      prevMin = price;
+    } else {
+      prevMin = Math.min(prevMin, price);
+    }
+  }
+
+  return result;
+}
+
+// console.log(maxProfit2([7, 6, 1, 5, 3, 6, 4]));
+
+//https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+function maxProfit(prices: number[]): number {
+  let result = 0;
+  let min = prices[0];
+
+  for (let i = 1; i < prices.length; i++) {
+    result = Math.max(result, prices[i] - min);
+    min = Math.min(min, prices[i]);
+  }
+
+  return result;
+}
+
+// console.log(maxProfit([7, 1, 5, 3, 6, 4]));
+
 //https://leetcode.com/problems/next-permutation/description/
 function nextPermutation(nums: number[]): void {
   // 왼쪽이 끝자리 수보다 작은면 스왑한다.
@@ -39,7 +74,6 @@ function numSubarrayProductLessThanK(nums: number[], k: number): number {
       prefix = prefix / nums[left];
       left++;
     }
-    // console.log(prefix, i, left);
     result += i - left;
   }
 
@@ -47,7 +81,7 @@ function numSubarrayProductLessThanK(nums: number[], k: number): number {
 }
 
 // console.log(numSubarrayProductLessThanK([10, 5, 2, 6], 100));
-console.log(numSubarrayProductLessThanK([99, 100, 1], 100));
+// console.log(numSubarrayProductLessThanK([99, 100, 1], 100));
 
 //https://leetcode.com/problems/number-of-smooth-descent-periods-of-a-stock/?envType=daily-question&envId=2025-12-15
 function getDescentPeriods(prices: number[]): number {
