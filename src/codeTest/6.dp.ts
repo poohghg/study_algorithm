@@ -1,5 +1,30 @@
 export default {};
 
+//https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/
+/**
+ * 상태 전이
+ * buy1: 첫 번째 매수 후의 최대 이익
+ * sell1: 첫 번째 매도 후의 최대 이익
+ * buy2: 두 번째 매수 후의 최대 이익
+ * sell2: 두 번째 매도 후의 최대 이익
+ * 가능한이유? 각 상태는 이전 상태에 의존하며, 각 단계에서 최적의 선택을 하기 때문에 전체 최적해를 구성할 수 있다.
+ */
+function maxProfit(prices: number[]): number {
+  let [buy1, sell1, buy2, sell2] = [-prices[0], 0, -prices[0], 0];
+
+  for (let i = 1; i < prices.length; i++) {
+    const price = prices[i];
+    buy1 = Math.max(buy1, -price);
+    sell1 = Math.max(sell1, price + buy1);
+    buy2 = Math.max(buy2, sell1 - price);
+    sell2 = Math.max(sell2, buy2 + price);
+  }
+
+  return sell2;
+}
+
+console.log(maxProfit([3, 3, 5, 0, 0, 3, 1, 4]));
+
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/minimum-plans-to-reach-target-bandwidth/problem?isFullScreen=true
 function findMinimumPlansForBandwidth(
   planSizes: number[],

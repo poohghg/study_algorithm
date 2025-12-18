@@ -6,6 +6,34 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/?envType=daily-question&envId=2025-12-18
+function maxProfit3(prices: number[], strategy: number[], k: number): number {
+  const n = prices.length;
+  const prefixSums = prices.reduce((acc, price, index) => {
+    acc.push(price * strategy[index] + (acc[index - 1] ?? 0));
+    return acc;
+  }, [] as number[]);
+  const totalSum = prefixSums[n - 1];
+
+  let maxSum = totalSum;
+  for (let i = 0; i <= n - k; i++) {
+    // 해당 구간의 누적합을 뺀다
+    // 누적합은 i+k - i-1
+    let currentSum =
+      totalSum - prefixSums[i - 1 + k] + (prefixSums[i - 1] ?? 0);
+
+    for (let j = i + k / 2; j < i + k; j++) {
+      currentSum += prices[j];
+    }
+
+    maxSum = Math.max(maxSum, currentSum);
+  }
+
+  return maxSum;
+}
+
+console.log(maxProfit3([5, 4, 3], [1, 1, 0], 2));
+
 // https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
 function maxProfit2(prices: number[]): number {
   let result = 0;
