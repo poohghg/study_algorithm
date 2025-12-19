@@ -12,52 +12,49 @@ function findAllPeople(
   meetings: number[][],
   firstPerson: number,
 ): number[] {
-  const meetingsTimeTable = meetings.reduce(
-    (acc, currentValue) => {
-      const [p1, p2, time] = currentValue;
-      const graph = acc[time] ?? [];
+  const timeTable: Record<number, number[][]> = {};
+  const times: number[] = [];
+  for (const [p1, p2, time] of meetings) {
+    if (!timeTable[time]) {
+      times.push(time);
+      timeTable[time] = [];
+    }
+    timeTable[time].push([p1, p2]);
+  }
+  times.sort((a, b) => a - b);
 
-      if (!graph[p1]) graph[p1] = [];
-      if (!graph[p2]) graph[p2] = [];
-      graph[p1].push(p2);
-      graph[p2].push(p1);
+  const hasSecretive = new Set<number>();
+  hasSecretive.add(0);
+  hasSecretive.add(firstPerson);
 
-      acc[time] = graph;
-      return acc;
-    },
-    [] as number[][][],
-  );
-
-  const set = new Set<number>();
-  set.add(0);
-  set.add(firstPerson);
-
-  for (const graph of meetingsTimeTable) {
-    if (!graph) continue;
-    const visited = Array.from({ length: graph.length }, () => false);
-    const q: number[] = [];
-
-    for (let i = 0; i < graph.length; i++) {
-      if (graph[i] && set.has(i)) {
-        q.push(i);
-        visited[i] = true;
-      }
+  for (const time of times) {
+    // make graph
+    const stack: number[] = [];
+    const graph: Record<number, number[]> = {};
+    for (const [t1, t2] of timeTable[time]) {
+      if (!graph[t1]) graph[t1] = [];
+      if (!graph[t2]) graph[t2] = [];
+      graph[t1].push(t2);
+      graph[t2].push(t1);
+      if (hasSecretive.has(t1)) stack.push(t1);
+      if (hasSecretive.has(t2)) stack.push(t2);
     }
 
-    let head = 0;
-    while (head < q.length) {
-      const currentNode = q[head++];
+    const visited = new Set<number>();
+    while (stack.length) {
+      const currentNode = stack.pop()!;
+      if (visited.has(currentNode)) continue;
+
+      visited.add(currentNode);
+      hasSecretive.add(currentNode);
 
       for (const next of graph[currentNode]) {
-        if (visited[next]) continue;
-        visited[next] = true;
-        q.push(next);
-        set.add(next);
+        stack.push(next);
       }
     }
   }
 
-  return Array.from(set);
+  return Array.from(hasSecretive);
 }
 
 console.log(
