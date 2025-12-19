@@ -6,6 +6,72 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/find-all-people-with-secret/?envType=daily-question&envId=2025-12-19
+function findAllPeople(
+  n: number,
+  meetings: number[][],
+  firstPerson: number,
+): number[] {
+  const meetingsTimeTable = meetings.reduce(
+    (acc, currentValue) => {
+      const [p1, p2, time] = currentValue;
+      const graph = acc[time] ?? [];
+
+      if (!graph[p1]) graph[p1] = [];
+      if (!graph[p2]) graph[p2] = [];
+      graph[p1].push(p2);
+      graph[p2].push(p1);
+
+      acc[time] = graph;
+      return acc;
+    },
+    [] as number[][][],
+  );
+
+  const set = new Set<number>();
+  set.add(0);
+  set.add(firstPerson);
+
+  for (const graph of meetingsTimeTable) {
+    if (!graph) continue;
+    const visited = Array.from({ length: graph.length }, () => false);
+    const q: number[] = [];
+
+    for (let i = 0; i < graph.length; i++) {
+      if (graph[i] && set.has(i)) {
+        q.push(i);
+        visited[i] = true;
+      }
+    }
+
+    let head = 0;
+    while (head < q.length) {
+      const currentNode = q[head++];
+
+      for (const next of graph[currentNode]) {
+        if (visited[next]) continue;
+        visited[next] = true;
+        q.push(next);
+        set.add(next);
+      }
+    }
+  }
+
+  return Array.from(set);
+}
+
+console.log(
+  findAllPeople(
+    4,
+    [
+      [3, 1, 3],
+      [1, 2, 2],
+      [0, 3, 3],
+    ],
+    3,
+  ),
+);
+
 // https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/?envType=daily-question&envId=2025-12-18
 function maxProfit3(prices: number[], strategy: number[], k: number): number {
   const n = prices.length;
@@ -32,7 +98,7 @@ function maxProfit3(prices: number[], strategy: number[], k: number): number {
   return maxSum;
 }
 
-console.log(maxProfit3([5, 4, 3], [1, 1, 0], 2));
+// console.log(maxProfit3([5, 4, 3], [1, 1, 0], 2));
 
 // https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
 function maxProfit2(prices: number[]): number {
