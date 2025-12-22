@@ -1,5 +1,41 @@
 export default {};
 
+/**
+ * 각 컬럼을 마지막으로 특정 컬럼을 선택했을 때의 최대 길이
+ * 각 컬럼을 선택할 수 있는지 여부는 이전에 선택한 컬럼에 의존
+ * 가능한이유? 각 상태는 이전 상태에 의존하며, 각 단계에서 최적의 선택을 하기 때문에 전체 최적해를 구성할 수 있다.
+ * 시간 복잡도 O(n^2 * m) n: 문자열 길이, m: 문자열 개수
+ */
+
+//https://leetcode.com/problems/delete-columns-to-make-sorted-iii/?envType=daily-question&envId=2025-12-22
+function minDeletionSize(strs: string[]): number {
+  const canPos = (c1: number, c2: number) => {
+    for (const str of strs) {
+      if (str[2] < str[c1]) return false;
+    }
+    return true;
+  };
+
+  const n = strs[0].length;
+  const dp = Array.from({ length: n }, (): number => 1);
+
+  let max = 1;
+  for (let i = 1; i < n; i++) {
+    for (let j = i - 1; 0 <= j; j--) {
+      if (dp[j] + 1 <= dp[i]) continue;
+      if (canPos(j, i)) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+      }
+    }
+    max = Math.max(max, dp[i]);
+  }
+
+  return n - max;
+}
+
+console.log(minDeletionSize(['babca', 'bbazb']));
+// console.log(minDeletionSize(['ghi', 'def', 'abc']));
+
 //https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/
 /**
  * 상태 전이
@@ -23,7 +59,7 @@ function maxProfit(prices: number[]): number {
   return sell2;
 }
 
-console.log(maxProfit([3, 3, 5, 0, 0, 3, 1, 4]));
+// console.log(maxProfit([3, 3, 5, 0, 0, 3, 1, 4]));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/minimum-plans-to-reach-target-bandwidth/problem?isFullScreen=true
 function findMinimumPlansForBandwidth(
