@@ -6,6 +6,24 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/apple-redistribution-into-boxes/?envType=daily-question&envId=2025-12-24
+function minimumBoxes(apple: number[], capacity: number[]): number {
+  capacity.sort((a, b) => b - a);
+
+  let appleSum = apple.reduce((a, b) => a + b);
+  let result = 0;
+
+  for (const n of capacity) {
+    if (appleSum <= 0) break;
+    appleSum -= n;
+    result++;
+  }
+
+  return result;
+}
+
+console.log(minimumBoxes([1, 3, 2], [4, 3, 1, 5, 2]));
+
 //https://leetcode.com/problems/find-all-people-with-secret/?envType=daily-question&envId=2025-12-19
 function findAllPeople(
   n: number,
@@ -57,17 +75,17 @@ function findAllPeople(
   return Array.from(hasSecretive);
 }
 
-console.log(
-  findAllPeople(
-    4,
-    [
-      [3, 1, 3],
-      [1, 2, 2],
-      [0, 3, 3],
-    ],
-    3,
-  ),
-);
+// console.log(
+//   findAllPeople(
+//     4,
+//     [
+//       [3, 1, 3],
+//       [1, 2, 2],
+//       [0, 3, 3],
+//     ],
+//     3,
+//   ),
+// );
 
 // https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/?envType=daily-question&envId=2025-12-18
 function maxProfit3(prices: number[], strategy: number[], k: number): number {

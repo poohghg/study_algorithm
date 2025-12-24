@@ -1,13 +1,57 @@
 export default {};
 
+//https://leetcode.com/problems/two-best-non-overlapping-events/?envType=daily-question&envId=2025-12-23
+function maxTwoEvents(events: number[][]): number {
+  const search = (index: number) => {
+    const startTime = events[index][0];
+    let start = 0;
+    let end = index - 1;
+    let target = -1;
+
+    while (start <= end) {
+      const mid = Math.floor((start + end) / 2);
+      const midEndTime = events[mid][1];
+      if (midEndTime < startTime) {
+        target = mid;
+        start = mid + 1;
+      } else {
+        end = mid - 1;
+      }
+    }
+
+    return target;
+  };
+
+  const n = events.length;
+  const dp = Array.from({ length: n + 1 }, () => 0);
+  let result = 0;
+
+  events.sort((a, b) => a[1] - b[1]);
+  for (let i = 0; i < n; i++) {
+    dp[i + 1] = Math.max(events[i][2], dp[i]);
+    const prevIndex = search(i);
+    result = Math.max(result, dp[prevIndex + 1] + events[i][2]);
+  }
+
+  return result;
+}
+
+console.log(
+  maxTwoEvents([
+    [1, 3, 2],
+    [4, 5, 1],
+    [7, 8, 1],
+    [6, 9, 3],
+  ]),
+);
+
 /**
+ * https://leetcode.com/problems/delete-columns-to-make-sorted-iii/?envType=daily-question&envId=2025-12-22
  * 각 컬럼을 마지막으로 특정 컬럼을 선택했을 때의 최대 길이
  * 각 컬럼을 선택할 수 있는지 여부는 이전에 선택한 컬럼에 의존
  * 가능한이유? 각 상태는 이전 상태에 의존하며, 각 단계에서 최적의 선택을 하기 때문에 전체 최적해를 구성할 수 있다.
  * 시간 복잡도 O(n^2 * m) n: 문자열 길이, m: 문자열 개수
  */
-
-//https://leetcode.com/problems/delete-columns-to-make-sorted-iii/?envType=daily-question&envId=2025-12-22
 function minDeletionSize(strs: string[]): number {
   const canPos = (c1: number, c2: number) => {
     for (const str of strs) {
@@ -33,7 +77,7 @@ function minDeletionSize(strs: string[]): number {
   return n - max;
 }
 
-console.log(minDeletionSize(['babca', 'bbazb']));
+// console.log(minDeletionSize(['babca', 'bbazb']));
 // console.log(minDeletionSize(['ghi', 'def', 'abc']));
 
 //https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/
