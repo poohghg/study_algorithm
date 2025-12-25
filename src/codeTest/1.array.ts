@@ -6,6 +6,75 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/maximum-candies-allocated-to-k-children/
+function maximumCandies(candies: number[], k: number): number {
+  const sum = candies.reduce((a, b) => a + b);
+  if (sum < k) return 0;
+
+  // candies.sort((a, b) => b - a);
+  // const rightIndex = candies.length < k ? candies.length : k;
+  // const arr = candies.slice(0, rightIndex);
+
+  const canAccept = (n: number) => {
+    let count = 0;
+    for (const candy of candies) {
+      count += Math.floor(candy / n);
+      if (k <= count) return true;
+    }
+    return k <= count;
+  };
+
+  let min = 0;
+  let max = Math.max(...candies);
+  let result = 0;
+  while (min <= max) {
+    const mid = Math.floor((min + max) / 2);
+    if (canAccept(mid)) {
+      result = mid;
+      min = mid + 1;
+    } else {
+      max = mid - 1;
+    }
+  }
+  return result;
+}
+
+// console.log(maximumCandies([99, 1, 1, 1], 3));
+console.log(maximumCandies([4, 7, 5], 4));
+
+//https://leetcode.com/problems/maximize-happiness-of-selected-children/?envType=daily-question&envId=2025-12-25
+function maximumHappinessSum(happiness: number[], k: number): number {
+  happiness.sort((a, b) => b - a);
+
+  let result = 0;
+  for (let i = 0; i < k; i++) {
+    result += Math.max(happiness[i] - i, 0);
+  }
+
+  return result;
+}
+
+// console.log(maximumHappinessSum([1, 2, 3], 2));
+
+// https://leetcode.com/problems/delete-columns-to-make-sorted/?envType=daily-question&envId=2025-12-24
+function minDeletionSize(strs: string[]): number {
+  const n = strs[0].length;
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 1; j < strs.length; j++) {
+      if (strs[j][i] < strs[j - 1][i]) {
+        result++;
+        break;
+      }
+    }
+  }
+
+  return result;
+}
+
+// console.log(minDeletionSize(['cba', 'daf', 'ghi']));
+
 //https://leetcode.com/problems/apple-redistribution-into-boxes/?envType=daily-question&envId=2025-12-24
 function minimumBoxes(apple: number[], capacity: number[]): number {
   capacity.sort((a, b) => b - a);
@@ -22,7 +91,7 @@ function minimumBoxes(apple: number[], capacity: number[]): number {
   return result;
 }
 
-console.log(minimumBoxes([1, 3, 2], [4, 3, 1, 5, 2]));
+// console.log(minimumBoxes([1, 3, 2], [4, 3, 1, 5, 2]));
 
 //https://leetcode.com/problems/find-all-people-with-secret/?envType=daily-question&envId=2025-12-19
 function findAllPeople(
