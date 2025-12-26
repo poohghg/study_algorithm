@@ -1,5 +1,30 @@
 export default {};
 
+//https://leetcode.com/problems/minimum-penalty-for-a-shop/?envType=daily-question&envId=2025-12-26
+function bestClosingTime(customers: string): number {
+  let penalty = Array.from(customers).filter((v) => v === 'Y').length;
+  let minPenalty = penalty;
+  let resultIndex = 0;
+
+  for (let i = 0; i < customers.length; i++) {
+    const value = customers[i];
+
+    if (value === 'Y') {
+      penalty -= 1;
+    } else if (value === 'N') {
+      penalty += 1;
+    }
+
+    if (penalty < minPenalty) {
+      minPenalty = penalty;
+      resultIndex = i + 1;
+    }
+  }
+  return resultIndex;
+}
+
+console.log(bestClosingTime('YYNY'));
+
 // https://school.programmers.co.kr/learn/courses/30/lessons/92344
 const solution1 = (board: number[][], skill: number[][]) => {
   const n = board.length;
@@ -40,17 +65,17 @@ const solution1 = (board: number[][], skill: number[][]) => {
   return result;
 };
 
-console.log(
-  solution1(
-    [
-      [1, 2, 3],
-      [4, 5, 6],
-      [7, 8, 9],
-    ],
-    [
-      [1, 1, 1, 2, 2, 4],
-      [1, 0, 0, 1, 1, 2],
-      [2, 2, 0, 2, 0, 100],
-    ],
-  ),
-);
+// console.log(
+//   solution1(
+//     [
+//       [1, 2, 3],
+//       [4, 5, 6],
+//       [7, 8, 9],
+//     ],
+//     [
+//       [1, 1, 1, 2, 2, 4],
+//       [1, 0, 0, 1, 1, 2],
+//       [2, 2, 0, 2, 0, 100],
+//     ],
+//   ),
+// );

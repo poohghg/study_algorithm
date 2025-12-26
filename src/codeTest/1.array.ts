@@ -6,6 +6,65 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/rearranging-fruits/?envType=daily-question&envId=2025-12-26
+function minCost(basket1: number[], basket2: number[]): number {
+  const n = basket1.length;
+  const totalNumbers: Record<number, [number, number]> = {};
+
+  for (let i = 0; i < n; i++) {
+    const v1 = basket1[i];
+    const v2 = basket2[i];
+
+    if (!totalNumbers[v1]) {
+      totalNumbers[v1] = [0, 0];
+    }
+
+    if (!totalNumbers[v2]) {
+      totalNumbers[v2] = [0, 0];
+    }
+
+    totalNumbers[v1][0] = totalNumbers[v1][0] + 1;
+    totalNumbers[v2][1] = totalNumbers[v2][1] + 1;
+  }
+
+  const b1Move: number[] = [];
+  const b2Move: number[] = [];
+  for (const [key, [b1Count, b2Count]] of Object.entries(totalNumbers)) {
+    const totalCount = b1Count + b2Count;
+    if (totalCount % 2 === 1) return -1;
+
+    const half = totalCount / 2;
+
+    if (b1Count > half) {
+      b1Move.push(...Array(b1Count - half).fill(Number(key)));
+    }
+
+    if (b2Count > half) {
+      b2Move.push(...Array(b2Count - half).fill(Number(key)));
+    }
+  }
+
+  const globalMin = Math.min(...basket1, ...basket2);
+  b2Move.sort((a, b) => b - a);
+  let result = 0;
+  for (let i = 0; i < Math.max(b1Move.length, b2Move.length); i++) {
+    result += Math.min(b1Move[i], b2Move[i], globalMin * 2);
+  }
+
+  return result;
+}
+
+// console.log(minCost([4, 4, 4, 4, 5], [5, 5, 5, 3, 3]));
+// 21 21
+console.log(
+  minCost(
+    [84, 80, 43, 8, 80, 88, 43, 14, 100, 88],
+    [32, 32, 42, 68, 68, 100, 42, 84, 14, 8],
+  ),
+);
+// console.log(minCost([4, 4, 4, 4], [5, 5, 2, 2]));
+// console.log(minCost([4, 2, 2, 2, 4, 4, 4, 4], [1, 4, 1, 2, 1, 1, 5, 5]));
+
 //https://leetcode.com/problems/maximum-candies-allocated-to-k-children/
 function maximumCandies(candies: number[], k: number): number {
   const sum = candies.reduce((a, b) => a + b);
@@ -40,7 +99,7 @@ function maximumCandies(candies: number[], k: number): number {
 }
 
 // console.log(maximumCandies([99, 1, 1, 1], 3));
-console.log(maximumCandies([4, 7, 5], 4));
+// console.log(maximumCandies([4, 7, 5], 4));
 
 //https://leetcode.com/problems/maximize-happiness-of-selected-children/?envType=daily-question&envId=2025-12-25
 function maximumHappinessSum(happiness: number[], k: number): number {

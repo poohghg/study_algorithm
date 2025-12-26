@@ -1,7 +1,30 @@
 export default {};
 
-//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/lexicographical-letter-combinations-phone-digits/problem?isFullScreen=true
+function subsets(nums: number[]): number[][] {
+  const result: number[][] = [];
+  const temp: number[] = [];
 
+  const dfs = (level: number, start: number) => {
+    result.push([...temp]);
+
+    if (level === nums.length) {
+      return;
+    }
+
+    for (let i = start; i < nums.length; i++) {
+      temp.push(nums[i]);
+      dfs(level + 1, i + 1);
+      temp.pop();
+    }
+  };
+
+  dfs(0, 0);
+  return result;
+}
+
+console.log(subsets([1, 2, 3]));
+
+//https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/lexicographical-letter-combinations-phone-digits/problem?isFullScreen=true
 const minTasksToCancelForNoConflict = (digits: string): string[] => {
   const padMap = new Map<string, string[]>([
     ['2', ['a', 'b', 'c']],
@@ -32,7 +55,7 @@ const minTasksToCancelForNoConflict = (digits: string): string[] => {
   return result;
 };
 
-console.log(minTasksToCancelForNoConflict('203'));
+// console.log(minTasksToCancelForNoConflict('203'));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/place-n-cameras-no-conflict-blocked-grid/problem?isFullScreen=true
 const canPlaceSecurityCameras = (N: number, grid: number[][]): boolean => {
@@ -69,14 +92,14 @@ const canPlaceSecurityCameras = (N: number, grid: number[][]): boolean => {
   return result;
 };
 
-console.log(
-  canPlaceSecurityCameras(4, [
-    [0, 1, 0, 0],
-    [0, 0, 0, 1],
-    [1, 0, 0, 0],
-    [0, 0, 1, 0],
-  ]),
-);
+// console.log(
+//   canPlaceSecurityCameras(4, [
+//     [0, 1, 0, 0],
+//     [0, 0, 0, 1],
+//     [1, 0, 0, 0],
+//     [0, 0, 1, 0],
+//   ]),
+// );
 
 const solution1 = (n: number) => {
   const result: number[][] = [];
