@@ -1,3 +1,5 @@
+import PriorityQueue from '../dataStructure/PriorityQueue';
+
 export default {};
 
 /**
@@ -5,6 +7,85 @@ export default {};
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
+
+const l = () => {
+  const array = Array.from({ length: 45 }, (_, i) => i + 1);
+  const result = new Set<number>();
+
+  while (result.size < 6) {
+    const r = Math.random() * array.length;
+    const n = array[Math.floor(r)];
+    result.add(n);
+  }
+
+  return Array.from(result).sort((a, b) => a - b);
+};
+
+console.log(l());
+
+function mostBooked(n: number, meetings: number[][]): number {
+  const counts: number[] = Array(n).fill(0);
+  const nodes: [number, number][] = [];
+
+  for (let i = 0; i < n; i++) {
+    counts[i]++;
+
+    if (!meetings[i]) {
+      break;
+    }
+
+    nodes.push([i, meetings[i][1]]);
+  }
+
+  // 만약에 미니힙이라면?
+  // [인덱스,엔드타임]
+  const meetingsEndTimes = new PriorityQueue<[number, number]>((a, b) => {
+    if (a[1] === b[1]) {
+      return a[0] < b[0];
+    }
+    return a[1] < b[1];
+  });
+
+  for (const node of nodes) {
+    meetingsEndTimes.push(node);
+  }
+
+  for (let i = n; i < meetings.length; i++) {
+    const [start, end] = meetings[i];
+    const duration = end - start;
+
+    /**
+     * end 타임이 시작시간 보다 적다면 우선순위큐에 있는 원소를 팝한다.
+     * 이때 다시 미팀룽을 올릴 방법을 알아보자
+     */
+
+    console.log(meetingsEndTimes.peak);
+    break;
+    // const [idx, endTime] = meetingsEndTimes.pop()!;
+    // counts[idx]++;
+    // meetingsEndTimes.push([idx, endTime + duration]);
+  }
+
+  let result = 0;
+  let max = 0;
+  for (let i = 0; i < n; i++) {
+    if (max < counts[i]) {
+      result = i;
+      max = counts[i];
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  mostBooked(2, [
+    [0, 10],
+    [1, 2],
+    [12, 14],
+    [13, 15],
+  ]),
+);
 
 //https://leetcode.com/problems/rearranging-fruits/?envType=daily-question&envId=2025-12-26
 function minCost(basket1: number[], basket2: number[]): number {
@@ -27,28 +108,29 @@ function minCost(basket1: number[], basket2: number[]): number {
     totalNumbers[v2][1] = totalNumbers[v2][1] + 1;
   }
 
-  const b1Move: number[] = [];
-  const b2Move: number[] = [];
+  const moves: number[] = [];
+  let globalMin = Number.MAX_SAFE_INTEGER;
   for (const [key, [b1Count, b2Count]] of Object.entries(totalNumbers)) {
     const totalCount = b1Count + b2Count;
     if (totalCount % 2 === 1) return -1;
 
+    globalMin = Math.min(globalMin, Number(key));
+
     const half = totalCount / 2;
 
     if (b1Count > half) {
-      b1Move.push(...Array(b1Count - half).fill(Number(key)));
+      moves.push(...Array(b1Count - half).fill(Number(key)));
     }
 
     if (b2Count > half) {
-      b2Move.push(...Array(b2Count - half).fill(Number(key)));
+      moves.push(...Array(b2Count - half).fill(Number(key)));
     }
   }
 
-  const globalMin = Math.min(...basket1, ...basket2);
-  b2Move.sort((a, b) => b - a);
+  moves.sort((a, b) => a - b);
   let result = 0;
-  for (let i = 0; i < Math.max(b1Move.length, b2Move.length); i++) {
-    result += Math.min(b1Move[i], b2Move[i], globalMin * 2);
+  for (let i = 0; i < moves.length / 2; i++) {
+    result += Math.min(moves[i], globalMin * 2);
   }
 
   return result;
@@ -56,12 +138,12 @@ function minCost(basket1: number[], basket2: number[]): number {
 
 // console.log(minCost([4, 4, 4, 4, 5], [5, 5, 5, 3, 3]));
 // 21 21
-console.log(
-  minCost(
-    [84, 80, 43, 8, 80, 88, 43, 14, 100, 88],
-    [32, 32, 42, 68, 68, 100, 42, 84, 14, 8],
-  ),
-);
+// console.log(
+//   minCost(
+//     [84, 80, 43, 8, 80, 88, 43, 14, 100, 88],
+//     [32, 32, 42, 68, 68, 100, 42, 84, 14, 8],
+//   ),
+// );
 // console.log(minCost([4, 4, 4, 4], [5, 5, 2, 2]));
 // console.log(minCost([4, 2, 2, 2, 4, 4, 4, 4], [1, 4, 1, 2, 1, 1, 5, 5]));
 
