@@ -8,67 +8,50 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
-const l = () => {
-  const array = Array.from({ length: 45 }, (_, i) => i + 1);
-  const result = new Set<number>();
-
-  while (result.size < 6) {
-    const r = Math.random() * array.length;
-    const n = array[Math.floor(r)];
-    result.add(n);
-  }
-
-  return Array.from(result).sort((a, b) => a - b);
-};
-
-console.log(l());
-
 function mostBooked(n: number, meetings: number[][]): number {
   const counts: number[] = Array(n).fill(0);
-  const nodes: [number, number][] = [];
-
-  for (let i = 0; i < n; i++) {
-    counts[i]++;
-
-    if (!meetings[i]) {
-      break;
-    }
-
-    nodes.push([i, meetings[i][1]]);
-  }
-
-  // 만약에 미니힙이라면?
-  // [인덱스,엔드타임]
-  const meetingsEndTimes = new PriorityQueue<[number, number]>((a, b) => {
+  const freeRooms = new PriorityQueue<number>((a, b) => a < b);
+  // [room,endTime]
+  const busyRooms = new PriorityQueue<[number, number]>((a, b) => {
     if (a[1] === b[1]) {
       return a[0] < b[0];
     }
     return a[1] < b[1];
   });
 
-  for (const node of nodes) {
-    meetingsEndTimes.push(node);
+  for (let i = 0; i < n; i++) {
+    freeRooms.push(i);
   }
 
-  for (let i = n; i < meetings.length; i++) {
-    const [start, end] = meetings[i];
+  meetings.sort((a, b) => a[0] - b[0]);
+
+  for (const [start, end] of meetings) {
     const duration = end - start;
 
-    /**
-     * end 타임이 시작시간 보다 적다면 우선순위큐에 있는 원소를 팝한다.
-     * 이때 다시 미팀룽을 올릴 방법을 알아보자
-     */
+    while (busyRooms.size && busyRooms.peak![1] <= start) {
+      const [index, _] = busyRooms.pop()!;
+      freeRooms.push(index);
+    }
 
-    console.log(meetingsEndTimes.peak);
-    break;
-    // const [idx, endTime] = meetingsEndTimes.pop()!;
-    // counts[idx]++;
-    // meetingsEndTimes.push([idx, endTime + duration]);
+    let room: number;
+    let endTime: number;
+
+    if (freeRooms.size) {
+      room = freeRooms.pop()!;
+      endTime = end;
+    } else {
+      const [prevRoom, prevEndTime] = busyRooms.pop()!;
+      room = prevRoom;
+      endTime = prevEndTime + duration;
+    }
+
+    counts[room]++;
+    busyRooms.push([room, endTime]);
   }
 
   let result = 0;
-  let max = 0;
-  for (let i = 0; i < n; i++) {
+  let max = counts[0];
+  for (let i = 1; i < n; i++) {
     if (max < counts[i]) {
       result = i;
       max = counts[i];
@@ -78,14 +61,32 @@ function mostBooked(n: number, meetings: number[][]): number {
   return result;
 }
 
+// console.log(
+//   mostBooked(2, [
+//     [0, 10],
+//     [1, 2],
+//     [12, 14],
+//     [13, 15],
+//   ]),
+// );
+
 console.log(
   mostBooked(2, [
     [0, 10],
-    [1, 2],
-    [12, 14],
-    [13, 15],
+    [1, 5],
+    [2, 7],
+    [3, 4],
   ]),
 );
+
+// console.log(
+//   mostBooked(4, [
+//     [19, 20],
+//     [14, 15],
+//     [13, 14],
+//     [11, 20],
+//   ]),
+// );
 
 //https://leetcode.com/problems/rearranging-fruits/?envType=daily-question&envId=2025-12-26
 function minCost(basket1: number[], basket2: number[]): number {
