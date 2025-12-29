@@ -1,5 +1,56 @@
 export default {};
 
+// /https://leetcode.com/problems/pyramid-transition-matrix/?envType=daily-question&envId=2025-12-29
+function pyramidTransition(bottom: string, allowed: string[]): boolean {
+  const map = new Map<string, string[]>();
+
+  for (const char of allowed) {
+    const key = char.substring(0, 2);
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)?.push(char[2]);
+  }
+
+  const memo = new Map<string, boolean>();
+
+  const dfs = (str: string) => {
+    if (memo.has(str)) return memo.get(str);
+
+    const n = str.length;
+
+    if (n === 1) return true;
+
+    for (let i = 0; i < n - 1; i++) {
+      if (!map.has(str.substring(i, i + 2))) {
+        memo.set(str, false);
+        return false;
+      }
+    }
+
+    const helper = (i: number, curr: string) => {
+      // 위 row가 가능한지?
+      if (i === n - 1) dfs(curr);
+      const front = str.substring(i, i + 2);
+
+      return false;
+    };
+
+    // 두개의 검증값
+  };
+
+  const bottomFront = bottom.substring(0, 2);
+  for (const char of allowed) {
+    const front = char.substring(0, 2);
+    if (front === bottomFront) {
+      console.log(char);
+    }
+  }
+
+  return false;
+}
+
+// console.log(pyramidTransition('AAAA', ['AAB', 'AAC', 'BCD', 'BBE', 'DEF']));
+console.log(pyramidTransition('BCD', ['BCC', 'CDE', 'CEA', 'FFF']));
+
 function subsets(nums: number[]): number[][] {
   const result: number[][] = [];
   const temp: number[] = [];
@@ -22,7 +73,7 @@ function subsets(nums: number[]): number[][] {
   return result;
 }
 
-console.log(subsets([1, 2, 3]));
+// console.log(subsets([1, 2, 3]));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/lexicographical-letter-combinations-phone-digits/problem?isFullScreen=true
 const minTasksToCancelForNoConflict = (digits: string): string[] => {
