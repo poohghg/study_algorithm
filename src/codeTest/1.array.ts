@@ -8,6 +8,49 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/fruit-into-baskets/description/?envType=daily-question&envId=2025-12-30
+function totalFruit(fruits: number[]): number {
+  const n = fruits.length;
+  // 내가 가진 과일 종류
+  const indexes = [];
+  let set = new Set<number>();
+  let result = 0;
+
+  for (let i = 0; i < n; i++) {
+    const fruit = fruits[i];
+
+    if (!set.has(fruit)) {
+      set.add(fruit);
+      indexes.push(i);
+    }
+
+    if (2 < set.size) {
+      // 장바구니에 3개의 과일 있다면
+      // 첫번째 인덱스가 아니라 앞에 있는 인덱스가 어디까지 연결되어 있는지 확인해야한다.
+      const firstIndex = indexes.shift()!;
+      const frontFruit: number = fruits[i - 1];
+
+      for (let j = i - 2; firstIndex <= j; j--) {
+        if (frontFruit !== fruits[j]) {
+          indexes[0] = j + 1;
+          break;
+        }
+      }
+
+      result = Math.max(result, i - firstIndex);
+      set = new Set<number>([frontFruit, fruits[i]]);
+    }
+  }
+
+  return Math.max(n - indexes[0], result);
+}
+
+// console.log(totalFruit([1, 1]));
+console.log(totalFruit([0, 1, 2, 2]));
+// console.log(totalFruit([1, 0, 1, 4, 1, 4, 1, 2, 3]));
+// console.log(totalFruit([3, 3, 3, 1, 2, 1, 1, 2, 3, 3, 4]));
+
+//https://leetcode.com/problems/meeting-rooms-iii/description/
 function mostBooked(n: number, meetings: number[][]): number {
   const counts: number[] = Array(n).fill(0);
   const freeRooms = new PriorityQueue<number>((a, b) => a < b);
@@ -70,14 +113,14 @@ function mostBooked(n: number, meetings: number[][]): number {
 //   ]),
 // );
 
-console.log(
-  mostBooked(2, [
-    [0, 10],
-    [1, 5],
-    [2, 7],
-    [3, 4],
-  ]),
-);
+// console.log(
+//   mostBooked(2, [
+//     [0, 10],
+//     [1, 5],
+//     [2, 7],
+//     [3, 4],
+//   ]),
+// );
 
 // console.log(
 //   mostBooked(4, [

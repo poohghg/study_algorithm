@@ -1,10 +1,10 @@
 export default {};
 
 /**
+ * https://leetcode.com/problems/partition-equal-subset-sum/
  * Subset Sum 유형
  * 이전에 만들 수 있던 모든 합들에 num을 하나씩 더한 새로운 합들을 추가
  */
-//https://leetcode.com/problems/partition-equal-subset-sum/
 function canPartition(nums: number[]): boolean {
   const total = nums.reduce((a, b) => a + b, 0);
 
@@ -21,7 +21,7 @@ function canPartition(nums: number[]): boolean {
     // 앞에서 부터 갱신하면 같은 num을 여러번 사용하는 경우가 생김
     // ex) num = 3, target = 6 일때
     // dp[3] = true -> dp[6] = true (3을 두번 사용)
-    for (let s = target; s >= num; s--) {
+    for (let s = target; num <= s; s--) {
       if (dp[s - num]) {
         dp[s] = true;
       }

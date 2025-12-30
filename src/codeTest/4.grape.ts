@@ -2,6 +2,94 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/magic-squares-in-grid/?envType=daily-question&envId=2025-12-30
+function numMagicSquaresInside(grid: number[][]): number {
+  const n = grid.length;
+  const m = grid[0].length;
+
+  // dp는 해당 지점에서 [가로,세로,대각선의 합을 지정하고 있다]
+  // const dp = Array.from({ length: n - 2 }, () =>
+  //   Array.from({ length: m - 2 }, (): [number, number, number] => [0, 0, 0]),
+  // );
+  // const rowDp =
+
+  const validNum = (n: number) => 0 < n && n < 10;
+
+  const validGrid = (r: number, c: number) => {
+    const set = new Set();
+
+    for (let i = r; i <= r + 2; i++) {
+      for (let j = c; j <= c + 2; j++) {
+        if (!validNum(grid[i][j])) return false;
+        set.add(grid[i][j]);
+      }
+    }
+
+    return set.size === 9;
+  };
+
+  const isSameSum = (r: number, c: number) => {
+    const sum = grid[r][c] + grid[r][c + 1] + grid[r][c + 2];
+
+    for (let i = r + 1; i <= r + 2; i++) {
+      let rowSum = 0;
+      for (let j = c; j <= c + 2; j++) {
+        rowSum += grid[i][j];
+      }
+      if (sum !== rowSum) return false;
+    }
+
+    for (let i = c; i <= c + 2; i++) {
+      let colSum = 0;
+      for (let j = r; j <= r + 2; j++) {
+        colSum += grid[j][i];
+      }
+      if (sum !== colSum) return false;
+    }
+
+    let diagonalSum = 0;
+    let reverseDiagonalSum = 0;
+    for (let i = 0; i <= 2; i++) {
+      diagonalSum += grid[r + i][c + i];
+      reverseDiagonalSum += grid[r + i][c + 2 - i];
+    }
+
+    return sum === diagonalSum && sum === reverseDiagonalSum;
+  };
+
+  let result = 0;
+  for (let i = 0; i < n - 2; i++) {
+    for (let j = 0; j < m - 2; j++) {
+      if (validGrid(i, j) && isSameSum(i, j)) {
+        result++;
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  numMagicSquaresInside([
+    [3, 2, 9, 2, 7],
+    [6, 1, 8, 4, 2],
+    [7, 5, 3, 2, 7],
+    [2, 9, 4, 9, 6],
+    [4, 3, 8, 2, 5],
+  ]),
+);
+
+// console.log(
+//   numMagicSquaresInside([
+//     [4, 3, 8, 4],
+//     [9, 5, 1, 9],
+//     [2, 7, 6, 2],
+//     [4, 3, 8, 4],
+//     [9, 5, 1, 9],
+//     [2, 7, 6, 2],
+//   ]),
+// );
+
 //https://leetcode.com/problems/count-covered-buildings/?envType=daily-question&envId=2025-12-11
 function countCoveredBuildings(n: number, buildings: number[][]): number {
   const rows = Array.from({ length: n + 1 }, () => [
@@ -31,15 +119,15 @@ function countCoveredBuildings(n: number, buildings: number[][]): number {
   return result;
 }
 
-console.log(
-  countCoveredBuildings(5, [
-    [1, 3],
-    [3, 2],
-    [3, 3],
-    [3, 5],
-    [5, 3],
-  ]),
-);
+// console.log(
+//   countCoveredBuildings(5, [
+//     [1, 3],
+//     [3, 2],
+//     [3, 3],
+//     [3, 5],
+//     [5, 3],
+//   ]),
+// );
 
 //https://leetcode.com/problems/surrounded-regions/description/
 function solve1(board: string[][]): void {
