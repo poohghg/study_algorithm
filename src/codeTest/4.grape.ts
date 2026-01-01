@@ -2,6 +2,157 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
+// https://leetcode.com/problems/find-the-maximum-number-of-fruits-collected/?envType=daily-question&envId=2026-01-01
+function maxCollectedFruits(fruits: number[][]): number {
+  const n = fruits.length;
+  const dp = Array.from({ length: n }, () =>
+    Array(n).fill(Number.MIN_SAFE_INTEGER),
+  );
+
+  const maxArea = Math.floor(n / 2);
+  dp[0][n - 1] = fruits[0][n - 1];
+  // 위 -> 아래
+  for (let r = 1; r < n - 1; r++) {
+    // 최대 확장가능한 범위
+    for (let c = maxArea; c < n; c++) {
+      const v = fruits[r][c];
+      dp[r][c] =
+        Math.max(
+          dp[r - 1][c],
+          dp[r - 1][c - 1],
+          c + 1 < n ? dp[r - 1][c + 1] : Number.MIN_SAFE_INTEGER,
+        ) + v;
+    }
+  }
+
+  dp[n - 1][0] = fruits[n - 1][0];
+  for (let c = 1; c < n - 1; c++) {
+    for (let r = maxArea; r < n; r++) {
+      const v = fruits[r][c];
+      dp[r][c] =
+        Math.max(
+          dp[r][c - 1],
+          dp[r - 1][c - 1],
+          r + 1 < n ? dp[r + 1][c - 1] : Number.MIN_SAFE_INTEGER,
+        ) + v;
+    }
+  }
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    result += fruits[i][i];
+  }
+  // target의 위/왼쪽 블락으로 가는경우는 대각선에 포함되지 않으므로 더해준다.
+  // 대각선의합 + target의 위 블락 + target의 왼쪽블락
+  return result + dp[n - 2][n - 1] + dp[n - 1][n - 2];
+}
+
+console.log(
+  maxCollectedFruits([
+    [1, 2, 3, 4],
+    [5, 6, 8, 7],
+    [9, 10, 11, 12],
+    [13, 14, 15, 16],
+  ]),
+);
+
+console.log(
+  maxCollectedFruits([
+    [1, 2, 3, 4, 1],
+    [1, 2, 3, 4, 1],
+    [1, 2, 3, 4, 1],
+    [1, 2, 3, 4, 1],
+    [1, 2, 3, 4, 1],
+  ]),
+);
+
+/**
+ * https://leetcode.com/problems/last-day-where-you-can-still-cross/?envType=daily-question&envId=2025-12-31
+ * 해당 날짜에 갈수 있는지 없는지 판단하기위해 이진 탐색을 사용한다.
+ * BFS로 갈수 있는지 없는지 판단한다.
+ * 이때 출발점을 모두 스택에 넣고 도착점에 도달하는지 확인한다.
+ * 시간 복잡도: O(row * col * log(cells.length))
+ */
+
+function latestDayToCross(row: number, col: number, cells: number[][]): number {
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const validPos = (i: number, j: number) =>
+    0 <= i && i < row && 0 <= j && j < col;
+
+  const canReach = (n: number) => {
+    const visited = Array.from({ length: row }, () => Array(col).fill(false));
+    const maps: number[][] = Array.from({ length: row }, () =>
+      Array(col).fill(0),
+    );
+    cells.slice(0, n).map(([r, c]) => (maps[r - 1][c - 1] = 1));
+
+    const stack: [number, number][] = [];
+    for (let i = 0; i < col; i++) {
+      if (maps[0][i] === 0) {
+        stack.push([0, i]);
+      }
+    }
+
+    while (stack.length) {
+      const [x, y] = stack.pop()!;
+      visited[x][y] = true;
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [x + dx, y + dy];
+        if (validPos(nx, ny) && !visited[nx][ny] && maps[nx][ny] === 0) {
+          if (nx === row - 1) return true;
+          stack.push([nx, ny]);
+        }
+      }
+    }
+    return false;
+  };
+
+  // cells는 이분 탐색으로 검색한다.
+  let left = 0;
+  let right = cells.length - 1;
+  let result = 0;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (canReach(mid)) {
+      left = mid + 1;
+      result = mid;
+    } else {
+      right = mid - 1;
+    }
+  }
+  return result;
+}
+
+// console.log(
+//   latestDayToCross(2, 2, [
+//     [1, 1],
+//     [2, 1],
+//     [1, 2],
+//     [2, 2],
+//   ]),
+// );
+
+// console.log(
+//   latestDayToCross(3, 3, [
+//     [1, 2],
+//     [2, 1],
+//     [3, 3],
+//     [2, 2],
+//     [1, 1],
+//     [1, 3],
+//     [2, 3],
+//     [3, 2],
+//     [3, 1],
+//   ]),
+// );
+
 //https://leetcode.com/problems/magic-squares-in-grid/?envType=daily-question&envId=2025-12-30
 function numMagicSquaresInside(grid: number[][]): number {
   const n = grid.length;
@@ -69,15 +220,15 @@ function numMagicSquaresInside(grid: number[][]): number {
   return result;
 }
 
-console.log(
-  numMagicSquaresInside([
-    [3, 2, 9, 2, 7],
-    [6, 1, 8, 4, 2],
-    [7, 5, 3, 2, 7],
-    [2, 9, 4, 9, 6],
-    [4, 3, 8, 2, 5],
-  ]),
-);
+// console.log(
+//   numMagicSquaresInside([
+//     [3, 2, 9, 2, 7],
+//     [6, 1, 8, 4, 2],
+//     [7, 5, 3, 2, 7],
+//     [2, 9, 4, 9, 6],
+//     [4, 3, 8, 2, 5],
+//   ]),
+// );
 
 // console.log(
 //   numMagicSquaresInside([

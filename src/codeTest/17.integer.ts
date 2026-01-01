@@ -1,5 +1,23 @@
 export default {};
 
+//https://leetcode.com/problems/plus-one/?envType=daily-question&envId=2026-01-01
+function plusOne(digits: number[]): number[] {
+  for (let i = digits.length - 1; 0 <= i; i--) {
+    if (digits[i] === 9) {
+      digits[i] = 0;
+    } else {
+      digits[i] = digits[i] + 1;
+      return digits;
+    }
+  }
+
+  digits.unshift(1);
+  return digits;
+}
+
+console.log(plusOne([9, 8, 9]));
+console.log(plusOne([5, 9, 9]));
+
 //https://leetcode.com/problems/count-square-sum-triples/?envType=daily-question&envId=2025-12-08
 function countTriples(n: number): number {
   let result = 0;
