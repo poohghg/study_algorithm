@@ -1,48 +1,5 @@
 export default {};
 
-//https://leetcode.com/problems/soup-servings/?envType=daily-question&envId=2026-01-02
-function soupServings(n: number): number {
-  const actions = [
-    [-4, 0],
-    [-3, -1],
-    [-2, -2],
-    [-1, -3],
-  ];
-
-  // const dp = Array.from({ length: n + 1 }, () => Array(n + 1).fill(0));
-
-  // +
-  let result = 0;
-  const dfs = (count: number, current: [number, number]) => {
-    const [a, b] = current;
-    // 두 스프가 모두 떨어졌으면 그반만큼 더한다.
-    if (a <= 0 && b <= 0) {
-      return 0.5;
-    }
-
-    if (a <= 0) {
-      return 1;
-    }
-
-    if (b <= 0) {
-      return 0;
-    }
-
-    const result = 0.25 * (1 + 2);
-
-    // for (const [deltaA, deltaB] of actions) {
-    //   dfs(count + 1, [a + deltaA, b + deltaB]);
-    // }
-  };
-
-  const m = Math.ceil(n / 25);
-  dfs(0, [m, m]);
-  return result * 0.25;
-}
-
-console.log(soupServings(100));
-
-// 다시하기중
 // /https://leetcode.com/problems/pyramid-transition-matrix/?envType=daily-question&envId=2025-12-29
 function pyramidTransition(bottom: string, allowed: string[]): boolean {
   const map = new Map<string, string[]>();

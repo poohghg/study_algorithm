@@ -1,5 +1,107 @@
 export default {};
 
+//https://leetcode.com/problems/maximize-win-from-two-segments/
+function maximizeWin(prizePositions: number[], k: number): number {
+  // 선택할 수 있는 구간은 2개
+  // DP로 이전 최대 구간 + 현재 구간의 값을 구해서 최대값을 만들수 있지않을까?
+  const counts = prizePositions.reduce((acc, v) => {
+    acc.set(v, (acc.get(v) ?? 0) + 1);
+    return acc;
+  }, new Map<number, number>());
+
+  const countKeys = Array.from(counts.keys());
+
+  const bs = (r: number) => {
+    let result = 0;
+    for (let i = r - k; i <= r; i++) {
+      result += counts.get(i) ?? 0;
+    }
+    return result;
+  };
+
+  const dp = Array.from({ length: counts.size + 1 }, () => 0);
+
+  // let prevMax = 0;
+  let result = 0;
+  for (let i = 0; i < countKeys.length; i++) {
+    const key = countKeys[i];
+    // 현재를 끝구간으로 다음 max을 업데이트 해준다.
+    dp[i + 1] = Math.max(dp[i], bs(key));
+    // 현재 시작부터 + k까지 갯수를 구한다.
+    let currentCount = 0;
+    for (let j = key; j <= key + k; j++) {
+      currentCount += counts.get(j) ?? 0;
+    }
+    result = Math.max(result, currentCount + dp[i]);
+  }
+
+  return result;
+}
+
+// console.log(maximizeWin([1, 1, 2, 2, 3, 3, 5], 2));
+// console.log(maximizeWin([1, 2, 3, 4], 0));
+console.log(maximizeWin([1, 1, 2, 2, 3, 3, 9, 10, 100, 100, 100], 2));
+// console.log(maximizeWin([1, 1, 1, 1, 4, 4, 5, 5, 5, 10, 10, 11], 2));
+
+// https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/?envType=daily-question&envId=2026-01-03
+function numOfWays(n: number): number {
+  // [2가지 색상,3가지 색상]
+  // 2가지 조합 -> [3,2]
+  // 3가지 조합 -> [2,2]
+  let comb2 = 6;
+  let comb3 = 6;
+  const mod = Math.pow(10, 9) + 7;
+  for (let i = 2; i <= n; i++) {
+    const nextComb2 = (comb2 * 3 + comb3 * 2) % mod;
+    const nextComb3 = (comb2 * 2 + comb3 * 2) % mod;
+    comb2 = nextComb2;
+    comb3 = nextComb3;
+  }
+  return (comb2 + comb3) % mod;
+}
+
+//https://leetcode.com/problems/soup-servings/?envType=daily-question&envId=2026-01-02
+function soupServings(n: number): number {
+  const actions = [
+    [-4, 0],
+    [-3, -1],
+    [-2, -2],
+    [-1, -3],
+  ];
+
+  // const dp = Array.from({ length: n + 1 }, () => Array(n + 1).fill(0));
+
+  // +
+  let result = 0;
+  const dfs = (count: number, current: [number, number]) => {
+    const [a, b] = current;
+    // 두 스프가 모두 떨어졌으면 그반만큼 더한다.
+    if (a <= 0 && b <= 0) {
+      return 0.5;
+    }
+
+    if (a <= 0) {
+      return 1;
+    }
+
+    if (b <= 0) {
+      return 0;
+    }
+
+    const result = 0.25 * (1 + 2);
+
+    // for (const [deltaA, deltaB] of actions) {
+    //   dfs(count + 1, [a + deltaA, b + deltaB]);
+    // }
+  };
+
+  const m = Math.ceil(n / 25);
+  dfs(0, [m, m]);
+  return result * 0.25;
+}
+
+// console.log(soupServings(100));
+
 //https://leetcode.com/problems/two-best-non-overlapping-events/?envType=daily-question&envId=2025-12-23
 function maxTwoEvents(events: number[][]): number {
   const search = (index: number) => {
@@ -23,6 +125,7 @@ function maxTwoEvents(events: number[][]): number {
   };
 
   const n = events.length;
+  // dp[i]: i번째 이벤트까지 고려했을 때의 최대 가치
   const dp = Array.from({ length: n + 1 }, () => 0);
   let result = 0;
 
@@ -36,14 +139,14 @@ function maxTwoEvents(events: number[][]): number {
   return result;
 }
 
-console.log(
-  maxTwoEvents([
-    [1, 3, 2],
-    [4, 5, 1],
-    [7, 8, 1],
-    [6, 9, 3],
-  ]),
-);
+// console.log(
+//   maxTwoEvents([
+//     [1, 3, 2],
+//     [4, 5, 1],
+//     [7, 8, 1],
+//     [6, 9, 3],
+//   ]),
+// );
 
 /**
  * https://leetcode.com/problems/delete-columns-to-make-sorted-iii/?envType=daily-question&envId=2025-12-22
