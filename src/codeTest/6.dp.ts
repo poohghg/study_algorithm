@@ -3,44 +3,32 @@ export default {};
 //https://leetcode.com/problems/maximize-win-from-two-segments/
 function maximizeWin(prizePositions: number[], k: number): number {
   // 선택할 수 있는 구간은 2개
-  // DP로 이전 최대 구간 + 현재 구간의 값을 구해서 최대값을 만들수 있지않을까?
-  const counts = prizePositions.reduce((acc, v) => {
-    acc.set(v, (acc.get(v) ?? 0) + 1);
-    return acc;
-  }, new Map<number, number>());
-
-  const countKeys = Array.from(counts.keys());
-
-  const bs = (r: number) => {
-    let result = 0;
-    for (let i = r - k; i <= r; i++) {
-      result += counts.get(i) ?? 0;
-    }
-    return result;
-  };
-
-  const dp = Array.from({ length: counts.size + 1 }, () => 0);
+  // DP로 이전 최대 구간 + 현재 구간의 값을 구해서 값을 더해서 최대값을 만들수 있지않을까?
+  const n = prizePositions.length;
+  const dp = Array(n).fill(0);
 
   // let prevMax = 0;
   let result = 0;
-  for (let i = 0; i < countKeys.length; i++) {
-    const key = countKeys[i];
-    // 현재를 끝구간으로 다음 max을 업데이트 해준다.
-    dp[i + 1] = Math.max(dp[i], bs(key));
-    // 현재 시작부터 + k까지 갯수를 구한다.
-    let currentCount = 0;
-    for (let j = key; j <= key + k; j++) {
-      currentCount += counts.get(j) ?? 0;
+  let left = 0;
+  for (let right = 0; right < n; right++) {
+    while (k < prizePositions[right] - prizePositions[left]) {
+      left++;
     }
-    result = Math.max(result, currentCount + dp[i]);
+
+    const size = right - left + 1;
+
+    // 현재 구간의 최대값과 이전 구간의 최대값을 비교
+    dp[right] = Math.max(dp[right - 1] ?? 0, size);
+    // 이전 구간의 최대값 + 현재 구간의 값
+    result = Math.max(result, (dp[left - 1] ?? 0) + size);
   }
 
   return result;
 }
 
-// console.log(maximizeWin([1, 1, 2, 2, 3, 3, 5], 2));
+console.log(maximizeWin([1, 1, 2, 2, 3, 3, 5], 2));
 // console.log(maximizeWin([1, 2, 3, 4], 0));
-console.log(maximizeWin([1, 1, 2, 2, 3, 3, 9, 10, 100, 100, 100], 2));
+// console.log(maximizeWin([1, 1, 2, 2, 3, 3, 9, 10, 100, 100, 100], 2));
 // console.log(maximizeWin([1, 1, 1, 1, 4, 4, 5, 5, 5, 10, 10, 11], 2));
 
 // https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/?envType=daily-question&envId=2026-01-03
