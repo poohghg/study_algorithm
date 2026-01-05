@@ -1,9 +1,16 @@
 export default {};
 
 //https://leetcode.com/problems/four-divisors/?envType=daily-question&envId=2026-01-05
+/**
+ * 약수를 구하기 위해 제곱근까지만 확인할수 있다
+ * 이유는 약수는 쌍으로 존재하기 때문이다.
+ * 예를들어 36의 약수는 (1,36), (2,18), (3,12), (4,9), (6,6) 이다
+ * 따라서 제곱근인 6까지만 확인하면 나머지 약수는 쌍으로 알수 있다.
+ * 단 제곱근이 정수인 경우는 약수가 홀수개이기 때문에 제외한다.
+ */
 function sumFourDivisors(nums: number[]): number {
   const getFactorSum = (n: number) => {
-    if (n < 8) return 0;
+    if (n < 6) return 0;
 
     const sqrtN = Math.sqrt(n);
 
