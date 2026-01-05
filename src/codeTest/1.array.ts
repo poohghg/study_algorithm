@@ -8,6 +8,39 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+/**
+ * https://leetcode.com/problems/maximum-matrix-sum/?envType=daily-question&envId=2026-01-05
+ * 매트릭스 기준 음수는 단 하나가 될 수 있다.
+ * row 기준으로 보면 음수가 짝수개면 모두 양수로 바꿀 수 있다.
+ * 음수가 홀수개면 가장 절대값이 작은 수를 음수로 남겨둬야 한다.
+ * 이때 작은수를 row[0]에 둔다고 생각하보면 된다.
+ * 나머지는 모두 양수로 바꿔서 더해주면 된다.
+ */
+function maxMatrixSum(matrix: number[][]): number {
+  let min = Number.MAX_SAFE_INTEGER;
+  let negativeCount = 0;
+  let sum = 0;
+
+  for (const row of matrix) {
+    for (const n of row) {
+      if (n < 0) negativeCount++;
+      const absN = Math.abs(n);
+      min = Math.min(min, absN);
+      sum += absN;
+    }
+  }
+
+  return negativeCount % 2 === 0 ? sum : sum - min * 2;
+}
+
+console.log(
+  maxMatrixSum([
+    [-1, 0, -1],
+    [-2, 1, 3],
+    [3, 2, 2],
+  ]),
+);
+
 //https://leetcode.com/problems/fruit-into-baskets/description/?envType=daily-question&envId=2025-12-30
 function totalFruit(fruits: number[]): number {
   const n = fruits.length;
@@ -46,7 +79,7 @@ function totalFruit(fruits: number[]): number {
 }
 
 // console.log(totalFruit([1, 1]));
-console.log(totalFruit([0, 1, 2, 2]));
+// console.log(totalFruit([0, 1, 2, 2]));
 // console.log(totalFruit([1, 0, 1, 4, 1, 4, 1, 2, 3]));
 // console.log(totalFruit([3, 3, 3, 1, 2, 1, 1, 2, 3, 3, 4]));
 

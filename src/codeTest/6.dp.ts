@@ -7,7 +7,6 @@ function maximizeWin(prizePositions: number[], k: number): number {
   const n = prizePositions.length;
   const dp = Array(n).fill(0);
 
-  // let prevMax = 0;
   let result = 0;
   let left = 0;
   for (let right = 0; right < n; right++) {
@@ -16,7 +15,6 @@ function maximizeWin(prizePositions: number[], k: number): number {
     }
 
     const size = right - left + 1;
-
     // 현재 구간의 최대값과 이전 구간의 최대값을 비교
     dp[right] = Math.max(dp[right - 1] ?? 0, size);
     // 이전 구간의 최대값 + 현재 구간의 값

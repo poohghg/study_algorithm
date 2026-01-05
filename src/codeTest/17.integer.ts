@@ -1,5 +1,36 @@
 export default {};
 
+//https://leetcode.com/problems/four-divisors/?envType=daily-question&envId=2026-01-05
+function sumFourDivisors(nums: number[]): number {
+  const getFactorSum = (n: number) => {
+    let count = 2;
+    let sum = 1 + n;
+
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n % i === 0) {
+        count++;
+
+        if (n / i !== i) {
+          count++;
+        }
+
+        if (4 < count) {
+          return 0;
+        }
+
+        sum += i + n / i;
+      }
+    }
+
+    1 >> 6;
+    return count === 4 ? sum : 0;
+  };
+
+  return nums.reduce((acc, n) => acc + getFactorSum(n), 0);
+}
+
+console.log(sumFourDivisors([21, 4, 7]));
+
 //https://leetcode.com/problems/plus-one/?envType=daily-question&envId=2026-01-01
 function plusOne(digits: number[]): number[] {
   for (let i = digits.length - 1; 0 <= i; i--) {
@@ -15,8 +46,8 @@ function plusOne(digits: number[]): number[] {
   return digits;
 }
 
-console.log(plusOne([9, 8, 9]));
-console.log(plusOne([5, 9, 9]));
+// console.log(plusOne([9, 8, 9]));
+// console.log(plusOne([5, 9, 9]));
 
 //https://leetcode.com/problems/count-square-sum-triples/?envType=daily-question&envId=2025-12-08
 function countTriples(n: number): number {
@@ -46,7 +77,7 @@ function countTriples(n: number): number {
   return result;
 }
 
-console.log(countTriples(10));
+// console.log(countTriples(10));
 
 //https://leetcode.com/problems/3sum/description/
 function threeSum(nums: number[]): number[][] {
