@@ -3,26 +3,24 @@ export default {};
 //https://leetcode.com/problems/four-divisors/?envType=daily-question&envId=2026-01-05
 function sumFourDivisors(nums: number[]): number {
   const getFactorSum = (n: number) => {
+    if (n < 8) return 0;
+
+    const sqrtN = Math.sqrt(n);
+
+    if (Number.isInteger(sqrtN) && sqrtN * sqrtN === n) return 0;
+
     let count = 2;
     let sum = 1 + n;
-
-    for (let i = 2; i <= Math.sqrt(n); i++) {
+    for (let i = 2; i <= sqrtN; i++) {
       if (n % i === 0) {
-        count++;
-
-        if (n / i !== i) {
-          count++;
-        }
-
+        count += 2;
+        sum += i + n / i;
         if (4 < count) {
           return 0;
         }
-
-        sum += i + n / i;
       }
     }
 
-    1 >> 6;
     return count === 4 ? sum : 0;
   };
 
