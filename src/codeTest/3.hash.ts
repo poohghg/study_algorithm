@@ -1,8 +1,43 @@
 export default {};
 
-// https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/top-k-frequent-events-with-order-preservation/problem?isFullScreen=true
+//https://leetcode.com/problems/count-special-triplets/?envType=daily-question&envId=2026-01-06
+
+const mod = Math.pow(10, 9) + 7;
+const max = Math.pow(10, 5);
+const totalMap = new Uint32Array(max + 1);
+const leftMaps = new Uint32Array(max + 1);
+
+function specialTriplets(nums: number[]): number {
+  totalMap.fill(0);
+  leftMaps.fill(0);
+
+  for (const num of nums) {
+    totalMap[num]++;
+  }
+
+  let result = 0;
+  for (let i = 0; i < nums.length - 1; i++) {
+    const num = nums[i];
+    const target = num * 2;
+
+    if (target <= max) {
+      const leftCount = leftMaps[target];
+      leftMaps[num]++;
+      const rightCount = totalMap[target] - leftMaps[target];
+      result += leftCount * rightCount;
+    } else {
+      leftMaps[num]++;
+    }
+  }
+
+  return result % mod;
+}
+
+console.log(specialTriplets([8, 4, 2, 8, 4]));
+// console.log(specialTriplets([84, 2, 93, 1, 2, 2, 26]));
 
 /***
+ * https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/top-k-frequent-events-with-order-preservation/problem?isFullScreen=true
  * 전체를 정렬하면 O(n log n)인데,
  * 상위 k개만 필요하니까 k개의 원소만 유지하는 min-heap을 유지
  * 힙의 크기가 k를 초과하면, 가장 우선순위가 낮은 원소를 제거
@@ -60,7 +95,7 @@ function getTopKFrequentEvents(events: number[], k: number): number[] {
     .map((v) => v[2]);
 }
 
-console.log(getTopKFrequentEvents([4, 4, 1, 2, 2, 3, 1, 3, 2], 3));
+// console.log(getTopKFrequentEvents([4, 4, 1, 2, 2, 3, 1, 3, 2], 3));
 
 /**
  * https://school.programmers.co.kr/learn/courses/30/lessons/131127

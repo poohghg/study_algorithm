@@ -1,5 +1,53 @@
 export default {};
 
+class TreeNode {
+  val: number;
+  left: TreeNode | null;
+  right: TreeNode | null;
+
+  constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+    this.val = val === undefined ? 0 : val;
+    this.left = left === undefined ? null : left;
+    this.right = right === undefined ? null : right;
+  }
+}
+
+function maxLevelSum(root: TreeNode | null): number {
+  const sums = new Map<number, number>();
+
+  const dfs = (node: TreeNode | null, level: number) => {
+    if (!node) return;
+
+    sums.set(level, (sums.get(level) ?? 0) + node.val);
+    dfs(node.left, level + 1);
+    dfs(node.right, level + 1);
+  };
+
+  dfs(root, 1);
+
+  let result = 0;
+  let max = Number.MIN_SAFE_INTEGER;
+  for (const [level, sum] of sums) {
+    if (max < sum) {
+      max = sum;
+      result = level;
+    }
+  }
+
+  return result;
+}
+
+//  [1,7,0,7,-8,null,null]
+console.log(
+  maxLevelSum(
+    new TreeNode(
+      1,
+      new TreeNode(7, new TreeNode(7), new TreeNode(-8)),
+      new TreeNode(0),
+    ),
+  ),
+);
+
 function verifySameMultisetDifferentStructure(
   root1: number[],
   root2: number[],
@@ -70,12 +118,12 @@ function verifySameMultisetDifferentStructure(
   return sameMultiset(v1, v2) && !sameStructures(s1, s2);
 }
 
-console.log(
-  verifySameMultisetDifferentStructure(
-    [4, 2, 5, 1, 3, 100001, 100001],
-    [3, 1, 5, 100001, 2, 4, 100001],
-  ),
-);
+// console.log(
+//   verifySameMultisetDifferentStructure(
+//     [4, 2, 5, 1, 3, 100001, 100001],
+//     [3, 1, 5, 100001, 2, 4, 100001],
+//   ),
+// );
 
 const getBinarySearchTreeHeight = (
   values: number[],
