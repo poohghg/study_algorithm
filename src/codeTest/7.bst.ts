@@ -1,5 +1,7 @@
 export default {};
 
+const mod = Math.pow(10, 9) + 7;
+
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -11,6 +13,38 @@ class TreeNode {
     this.right = right === undefined ? null : right;
   }
 }
+
+//https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/?envType=daily-question&envId=2026-01-07
+function maxProduct(root: TreeNode | null): number {
+  const getTotalSum = (node: TreeNode | null): number => {
+    if (!node) return 0;
+    return node.val + getTotalSum(node.left) + getTotalSum(node.right);
+  };
+
+  const totalSum = getTotalSum(root);
+
+  let max = 0;
+  const dfs = (node: TreeNode | null): number => {
+    if (!node) return 0;
+
+    const currentSum = node.val + dfs(node.left) + dfs(node.right);
+    max = Math.max(max, (totalSum - currentSum) * currentSum);
+    return currentSum;
+  };
+
+  dfs(root);
+  return max % mod;
+}
+
+console.log(
+  maxProduct(
+    new TreeNode(
+      1,
+      new TreeNode(2, new TreeNode(4), new TreeNode(5)),
+      new TreeNode(3, new TreeNode(6)),
+    ),
+  ),
+);
 
 function maxLevelSum(root: TreeNode | null): number {
   const sums = new Map<number, number>();
@@ -38,15 +72,15 @@ function maxLevelSum(root: TreeNode | null): number {
 }
 
 //  [1,7,0,7,-8,null,null]
-console.log(
-  maxLevelSum(
-    new TreeNode(
-      1,
-      new TreeNode(7, new TreeNode(7), new TreeNode(-8)),
-      new TreeNode(0),
-    ),
-  ),
-);
+// console.log(
+//   maxLevelSum(
+//     new TreeNode(
+//       1,
+//       new TreeNode(7, new TreeNode(7), new TreeNode(-8)),
+//       new TreeNode(0),
+//     ),
+//   ),
+// );
 
 function verifySameMultisetDifferentStructure(
   root1: number[],

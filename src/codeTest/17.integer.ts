@@ -1,5 +1,34 @@
 export default {};
 
+const mod = Math.pow(10, 9) + 7;
+
+//https://leetcode.com/problems/ways-to-express-an-integer-as-sum-of-powers/?envType=daily-question&envId=2026-01-07
+function numberOfWays(n: number, x: number): number {
+  const nums: number[] = [];
+
+  let i = 1;
+  while (true) {
+    const pow = Math.pow(i++, x);
+    if (n < pow) break;
+    nums.push(pow);
+  }
+
+  const dp = new Array(n + 1).fill(0);
+  dp[0] = 1;
+
+  for (const num of nums) {
+    for (let j = n; num <= j; j--) {
+      if (dp[j - num]) {
+        dp[j] += dp[j - num];
+      }
+    }
+  }
+
+  return dp[n] % mod;
+}
+
+console.log(numberOfWays(7, 1));
+
 //https://leetcode.com/problems/four-divisors/?envType=daily-question&envId=2026-01-05
 /**
  * 약수를 구하기 위해 제곱근까지만 확인할수 있다
@@ -34,7 +63,7 @@ function sumFourDivisors(nums: number[]): number {
   return nums.reduce((acc, n) => acc + getFactorSum(n), 0);
 }
 
-console.log(sumFourDivisors([21, 4, 7]));
+// console.log(sumFourDivisors([21, 4, 7]));
 
 //https://leetcode.com/problems/plus-one/?envType=daily-question&envId=2026-01-01
 function plusOne(digits: number[]): number[] {
