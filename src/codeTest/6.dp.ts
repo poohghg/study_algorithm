@@ -1,5 +1,40 @@
 export default {};
 
+// lcs
+function maxDotProduct(nums1: number[], nums2: number[]): number {
+  // 0 -1 4 4
+  // -1 -1 1
+  // 4 4 5
+  // 4 4 6
+
+  const n = nums1.length;
+  const m = nums2.length;
+  const dp = Array.from({ length: n + 1 }, () =>
+    Array(m + 1).fill(Number.MIN_SAFE_INTEGER),
+  );
+
+  for (let i = 1; i <= n; i++) {
+    const n1 = nums1[i - 1];
+    for (let j = 1; j <= m; j++) {
+      const n2 = nums2[j - 1];
+      // 확장가능한가?
+      const current = n1 * n2;
+
+      dp[i][j] = Math.max(
+        current,
+        dp[i - 1][j - 1] + current,
+        dp[i - 1][j],
+        dp[i][j - 1],
+      );
+    }
+  }
+
+  return dp[n][m];
+}
+
+console.log(maxDotProduct([2, 1, -2, 5], [3, 0, -6]));
+// console.log(maxDotProduct([-1, -1], [1, 1]));
+
 //https://leetcode.com/problems/maximize-win-from-two-segments/
 function maximizeWin(prizePositions: number[], k: number): number {
   // 선택할 수 있는 구간은 2개
@@ -24,7 +59,7 @@ function maximizeWin(prizePositions: number[], k: number): number {
   return result;
 }
 
-console.log(maximizeWin([1, 1, 2, 2, 3, 3, 5], 2));
+// console.log(maximizeWin([1, 1, 2, 2, 3, 3, 5], 2));
 // console.log(maximizeWin([1, 2, 3, 4], 0));
 // console.log(maximizeWin([1, 1, 2, 2, 3, 3, 9, 10, 100, 100, 100], 2));
 // console.log(maximizeWin([1, 1, 1, 1, 4, 4, 5, 5, 5, 10, 10, 11], 2));
@@ -1062,6 +1097,28 @@ const solution4 = (picks: number[], minerals: string[]) => {
 //     ],
 //   ),
 // );
+
+// LCS-string
+
+const longestCommonSubsequence = (text1: string, text2: string) => {
+  const dp = Array.from({ length: text1.length + 1 }, (): number[] =>
+    Array(text2.length + 1).fill(0),
+  );
+
+  for (let i = 1; i <= text1.length; i++) {
+    for (let j = 1; j <= text2.length; j++) {
+      if (text1[i - 1] === text2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  return dp[text1.length][text2.length];
+};
+
+console.log(longestCommonSubsequence('abcde', 'ace'));
 
 // https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence/problem?isFullScreen=true
 const largestCommonSubsequence = (a: number[], b: number[]) => {};
