@@ -14,6 +14,61 @@ class TreeNode {
   }
 }
 
+function subtreeWithAllDeepest(root: TreeNode | null): TreeNode | null {
+  const dfs = (
+    node: TreeNode | null,
+  ): { node: TreeNode | null; depth: number } => {
+    if (!node)
+      return {
+        node: null,
+        depth: 0,
+      };
+
+    const leftNode = dfs(node.left);
+    const rightNode = dfs(node.right);
+
+    if (leftNode.depth === rightNode.depth) {
+      return {
+        node: node,
+        depth: leftNode.depth + 1,
+      };
+    } else if (leftNode.depth < rightNode.depth) {
+      return {
+        node: rightNode.node,
+        depth: rightNode.depth + 1,
+      };
+    } else {
+      return {
+        node: leftNode.node,
+        depth: leftNode.depth,
+      };
+    }
+  };
+
+  return dfs(root).node;
+}
+
+//[0,1,3,null,2]
+console.log(
+  subtreeWithAllDeepest(
+    new TreeNode(0, new TreeNode(1, null, new TreeNode(2)), new TreeNode(3)),
+  ),
+);
+
+// console.log(
+//   subtreeWithAllDeepest(
+//     new TreeNode(
+//       3,
+//       new TreeNode(
+//         5,
+//         new TreeNode(6),
+//         new TreeNode(2, new TreeNode(7), new TreeNode(4)),
+//       ),
+//       new TreeNode(1, new TreeNode(0), new TreeNode(8)),
+//     ),
+//   ),
+// );
+
 //https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/?envType=daily-question&envId=2026-01-07
 function maxProduct(root: TreeNode | null): number {
   const getTotalSum = (node: TreeNode | null): number => {
@@ -36,15 +91,15 @@ function maxProduct(root: TreeNode | null): number {
   return max % mod;
 }
 
-console.log(
-  maxProduct(
-    new TreeNode(
-      1,
-      new TreeNode(2, new TreeNode(4), new TreeNode(5)),
-      new TreeNode(3, new TreeNode(6)),
-    ),
-  ),
-);
+// console.log(
+//   maxProduct(
+//     new TreeNode(
+//       1,
+//       new TreeNode(2, new TreeNode(4), new TreeNode(5)),
+//       new TreeNode(3, new TreeNode(6)),
+//     ),
+//   ),
+// );
 
 function maxLevelSum(root: TreeNode | null): number {
   const sums = new Map<number, number>();

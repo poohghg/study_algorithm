@@ -148,6 +148,8 @@ class BinarySearchTree<T = number> {
   }
 
   // Binary Search Tree: Lowest Common Ancestor
+  //  2
+  //1 . 3
   lca(v1: T, v2: T) {
     let currentNode = this.root;
     while (currentNode) {
