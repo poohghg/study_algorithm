@@ -1,12 +1,39 @@
 export default {};
 
-// lcs
-function maxDotProduct(nums1: number[], nums2: number[]): number {
-  // 0 -1 4 4
-  // -1 -1 1
-  // 4 4 5
-  // 4 4 6
+//https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/?envType=daily-question&envId=2026-01-10
+function minimumDeleteSum(s1: string, s2: string): number {
+  const n = s1.length;
+  const m = s2.length;
+  // const dp = Array.from({ length: n + 1 }, () => Array(m + 1).fill(0));
+  const dp = Array.from({ length: n + 1 }, () =>
+    new Uint32Array(m + 1).fill(0),
+  );
 
+  for (let i = 1; i <= n; i++) {
+    const char = s1[i - 1];
+    for (let j = 1; j <= m; j++) {
+      const char2 = s2[j - 1];
+      // 확장한다.
+      if (char === char2) {
+        dp[i][j] = dp[i - 1][j - 1] + char.charCodeAt(0);
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  const totalSum = Array.from(s1 + s2).reduce(
+    (acc, c) => acc + c.charCodeAt(0),
+    0,
+  );
+
+  return totalSum - dp[n][m] * 2;
+}
+
+// console.log(minimumDeleteSum('sea', 'eat'));
+console.log(minimumDeleteSum('dabc', 'dcba'));
+
+function maxDotProduct(nums1: number[], nums2: number[]): number {
   const n = nums1.length;
   const m = nums2.length;
   const dp = Array.from({ length: n + 1 }, () =>
@@ -32,7 +59,7 @@ function maxDotProduct(nums1: number[], nums2: number[]): number {
   return dp[n][m];
 }
 
-console.log(maxDotProduct([2, 1, -2, 5], [3, 0, -6]));
+// console.log(maxDotProduct([2, 1, -2, 5], [3, 0, -6]));
 // console.log(maxDotProduct([-1, -1], [1, 1]));
 
 //https://leetcode.com/problems/maximize-win-from-two-segments/
@@ -1099,7 +1126,6 @@ const solution4 = (picks: number[], minerals: string[]) => {
 // );
 
 // LCS-string
-
 const longestCommonSubsequence = (text1: string, text2: string) => {
   const dp = Array.from({ length: text1.length + 1 }, (): number[] =>
     Array(text2.length + 1).fill(0),
@@ -1118,7 +1144,7 @@ const longestCommonSubsequence = (text1: string, text2: string) => {
   return dp[text1.length][text2.length];
 };
 
-console.log(longestCommonSubsequence('abcde', 'ace'));
+// console.log(longestCommonSubsequence('abcde', 'ace'));
 
 // https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence/problem?isFullScreen=true
 const largestCommonSubsequence = (a: number[], b: number[]) => {};
