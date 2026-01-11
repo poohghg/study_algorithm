@@ -1,5 +1,82 @@
 export default {};
 
+function maximalRectangle(matrix: string[][]): number {
+  const getWidth = (r: number, c: number) => {
+    let k = c - 1;
+    let h = dp[r][c];
+    let size = h;
+
+    while (0 <= k && 0 < dp[r][k]) {
+      const w = c - k + 1;
+      h = Math.min(h, dp[r][k]);
+      size = Math.max(size, w * h);
+      k--;
+    }
+
+    return size;
+  };
+
+  const n = matrix.length;
+  const m = matrix[0].length;
+  // 각 높이를 저장한다.
+  const dp = Array.from({ length: n + 1 }, () => new Uint32Array(m).fill(0));
+
+  let max = 0;
+  for (let i = 1; i <= n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (matrix[i - 1][j] === '0') dp[i][j] = 0;
+      else {
+        dp[i][j] = dp[i - 1][j] + 1;
+        max = Math.max(max, getWidth(i, j));
+      }
+    }
+  }
+
+  function largestRectangleArea(heights: number[] = [3, 1, 3, 2, 2]): number {
+    const stack: number[] = [];
+    let maxArea = 0;
+    heights.push(0); // Sentinel to ensure all heights are processed
+
+    for (let i = 0; i < heights.length; i++) {
+      while (
+        0 < stack.length &&
+        heights[i] < heights[stack[stack.length - 1]]
+      ) {
+        const height = heights[stack.pop()!];
+        const width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;
+        maxArea = Math.max(maxArea, height * width);
+        console.log(maxArea);
+      }
+      stack.push(i);
+    }
+
+    return maxArea;
+  }
+
+  console.log(dp);
+  largestRectangleArea();
+
+  return max;
+}
+
+//
+console.log(
+  maximalRectangle([
+    ['1', '0', '1', '0', '0'],
+    ['1', '0', '1', '1', '1'],
+    ['1', '1', '1', '1', '1'],
+    ['1', '0', '0', '1', '0'],
+  ]),
+);
+
+// console.log(
+//   maximalRectangle([
+//     ['0', '0', '1'],
+//     ['1', '1', '1'],
+//   ]),
+// );
+
+//lca
 //https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/?envType=daily-question&envId=2026-01-10
 function minimumDeleteSum(s1: string, s2: string): number {
   const n = s1.length;
@@ -31,7 +108,7 @@ function minimumDeleteSum(s1: string, s2: string): number {
 }
 
 // console.log(minimumDeleteSum('sea', 'eat'));
-console.log(minimumDeleteSum('dabc', 'dcba'));
+// console.log(minimumDeleteSum('dabc', 'dcba'));
 
 function maxDotProduct(nums1: number[], nums2: number[]): number {
   const n = nums1.length;
@@ -206,7 +283,7 @@ function maxTwoEvents(events: number[][]): number {
 function minDeletionSize(strs: string[]): number {
   const canPos = (c1: number, c2: number) => {
     for (const str of strs) {
-      if (str[2] < str[c1]) return false;
+      if (str[c2] < str[c1]) return false;
     }
     return true;
   };
