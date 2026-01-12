@@ -53,21 +53,19 @@ function maximalRectangle(matrix: string[][]): number {
     return maxArea;
   }
 
-  console.log(dp);
   largestRectangleArea();
 
   return max;
 }
 
-//
-console.log(
-  maximalRectangle([
-    ['1', '0', '1', '0', '0'],
-    ['1', '0', '1', '1', '1'],
-    ['1', '1', '1', '1', '1'],
-    ['1', '0', '0', '1', '0'],
-  ]),
-);
+// console.log(
+//   maximalRectangle([
+//     ['1', '0', '1', '0', '0'],
+//     ['1', '0', '1', '1', '1'],
+//     ['1', '1', '1', '1', '1'],
+//     ['1', '0', '0', '1', '0'],
+//   ]),
+// );
 
 // console.log(
 //   maximalRectangle([

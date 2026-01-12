@@ -1,5 +1,47 @@
 export default {};
 
+//https://leetcode.com/problems/new-21-game/?envType=daily-question&envId=2026-01-11
+function new21Game(n: number, k: number, maxPts: number): number {
+  // k점 미만일대 뽑는다
+  // 종료한 점수가 n 이하일 경우의수는?
+  const dp = Array(n + 1).fill(0);
+  //
+  for (let i = 1; i <= n; i++) {
+    // i-1 ~ i-max
+    // 1이면 0만더한다.
+    // 2이면 1
+    // 5라면 4 3 2 1
+    // 15라면 14 13 12 11 10 9 8 7 6 5
+    for (let j = i - 1; i - maxPts <= j && j <= 1; j--) {}
+  }
+
+  // const memo = new Map<number, number>();
+  // const r = 1 / maxPts;
+  // const dfs = (score: number) => {
+  //   if (memo.has(score)) return memo.get(score)!;
+  //
+  //   if (k <= score) {
+  //     return score <= n ? 1 : 0;
+  //   }
+  //
+  //   // 현재점수가 15일대 봅을수 잇는수는 ? // 1 2
+  //   let totalScore = 0;
+  //   for (let i = score + 1; i <= score + maxPts; i++) {
+  //     totalScore += dfs(score + i);
+  //   }
+  //
+  //   memo.set(score, r * totalScore);
+  //   return memo.get(score)!;
+  // };
+  //
+  // return dfs(0);
+  return 0;
+}
+
+// console.log(new21Game(21, 17, 10));
+console.log(new21Game(6, 1, 10));
+// console.log(new21Game(1, 1, 1));
+
 // /https://leetcode.com/problems/pyramid-transition-matrix/?envType=daily-question&envId=2025-12-29
 function pyramidTransition(bottom: string, allowed: string[]): boolean {
   const map = new Map<string, string[]>();

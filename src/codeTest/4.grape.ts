@@ -2,6 +2,27 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/minimum-time-visiting-all-points/?envType=daily-question&envId=2026-01-11
+function minTimeToVisitAllPoints(points: number[][]): number {
+  let result = 0;
+
+  for (let i = 1; i < points.length; i++) {
+    const dx = Math.abs(points[i][0] - points[i - 1][0]);
+    const dy = Math.abs(points[i][1] - points[i - 1][1]);
+    result += Math.max(dx, dy);
+  }
+
+  return result;
+}
+
+console.log(
+  minTimeToVisitAllPoints([
+    [1, 1],
+    [3, 4],
+    [-1, 0],
+  ]),
+);
+
 // https://leetcode.com/problems/find-the-maximum-number-of-fruits-collected/?envType=daily-question&envId=2026-01-01
 function maxCollectedFruits(fruits: number[][]): number {
   const n = fruits.length;
