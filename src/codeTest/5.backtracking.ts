@@ -4,19 +4,15 @@ export default {};
 function new21Game(n: number, k: number, maxPts: number): number {
   // k점 미만일대 뽑는다
   // 종료한 점수가 n 이하일 경우의수는?
+
+  const r = 1 / maxPts;
   const dp = Array(n + 1).fill(0);
-  //
+
   for (let i = 1; i <= n; i++) {
-    // i-1 ~ i-max
-    // 1이면 0만더한다.
-    // 2이면 1
-    // 5라면 4 3 2 1
-    // 15라면 14 13 12 11 10 9 8 7 6 5
     for (let j = i - 1; i - maxPts <= j && j <= 1; j--) {}
   }
 
   // const memo = new Map<number, number>();
-  // const r = 1 / maxPts;
   // const dfs = (score: number) => {
   //   if (memo.has(score)) return memo.get(score)!;
   //
@@ -35,6 +31,9 @@ function new21Game(n: number, k: number, maxPts: number): number {
   // };
   //
   // return dfs(0);
+
+  console.log(dp);
+
   return 0;
 }
 

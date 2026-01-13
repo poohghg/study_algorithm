@@ -14,6 +14,29 @@ class TreeNode {
   }
 }
 
+//https://leetcode.com/problems/separate-squares-i/description/?envType=daily-question&envId=2026-01-13
+function separateSquares(squares: number[][]): number {
+  // x,y,l
+  const widths: number[] = [0];
+
+  for (const [x, y, l] of squares) {
+    for (let i = y; i < y + l; i++) {
+      widths[i] = (widths[i] ?? 0) + l;
+    }
+  }
+
+  console.log(widths);
+
+  return 1;
+}
+
+console.log(
+  separateSquares([
+    [0, 0, 2],
+    [1, 1, 1],
+  ]),
+);
+
 function subtreeWithAllDeepest(root: TreeNode | null): TreeNode | null {
   const dfs = (
     node: TreeNode | null,
@@ -49,11 +72,11 @@ function subtreeWithAllDeepest(root: TreeNode | null): TreeNode | null {
 }
 
 //[0,1,3,null,2]
-console.log(
-  subtreeWithAllDeepest(
-    new TreeNode(0, new TreeNode(1, null, new TreeNode(2)), new TreeNode(3)),
-  ),
-);
+// console.log(
+//   subtreeWithAllDeepest(
+//     new TreeNode(0, new TreeNode(1, null, new TreeNode(2)), new TreeNode(3)),
+//   ),
+// );
 
 // console.log(
 //   subtreeWithAllDeepest(
