@@ -16,18 +16,42 @@ class TreeNode {
 
 //https://leetcode.com/problems/separate-squares-i/description/?envType=daily-question&envId=2026-01-13
 function separateSquares(squares: number[][]): number {
-  // x,y,l
-  const widths: number[] = [0];
+  const getBottomArea = (h: number) => {
+    let bottomArea = 0;
+    for (const [_, y, l] of squares) {
+      if (h <= y) continue;
+      if (y + l <= h) {
+        bottomArea += l * l;
+      } else {
+        bottomArea += (h - y) * l;
+      }
+    }
 
-  for (const [x, y, l] of squares) {
-    for (let i = y; i < y + l; i++) {
-      widths[i] = (widths[i] ?? 0) + l;
+    return bottomArea;
+  };
+
+  let totalArea = 0;
+  let minY = Infinity;
+  let maxY = -Infinity;
+
+  for (const [_, y, l] of squares) {
+    totalArea += l * l;
+    minY = Math.min(y, minY);
+    maxY = Math.max(y + l, maxY);
+  }
+
+  const target = totalArea / 2;
+  for (let i = 0; i < 60; i++) {
+    const mid = (minY + maxY) / 2;
+
+    if (getBottomArea(mid) < target) {
+      minY = mid;
+    } else {
+      maxY = mid;
     }
   }
 
-  console.log(widths);
-
-  return 1;
+  return minY;
 }
 
 console.log(
