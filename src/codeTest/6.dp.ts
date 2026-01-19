@@ -1,5 +1,42 @@
 export default {};
 
+function maxSideLength(mat: number[][], threshold: number): number {
+  const m = mat.length,
+    n = mat[0].length;
+  const prefix: number[][] = Array.from({ length: m + 1 }, () =>
+    Array(n + 1).fill(0),
+  );
+
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      prefix[i + 1][j + 1] =
+        mat[i][j] + prefix[i][j + 1] + prefix[i + 1][j] - prefix[i][j];
+    }
+  }
+
+  // [
+  //   [0, 0, 0, 0],
+  //   [0, 3, 4, 6],
+  //   [0, 8, 11, 17],
+  //   [0, 12, 17, 26],
+  // ];
+
+  console.log(prefix);
+
+  return 1;
+}
+
+console.log(
+  maxSideLength(
+    [
+      [3, 1, 2],
+      [5, 2, 4],
+      [4, 2, 3],
+    ],
+    12,
+  ),
+);
+
 function maximalRectangle(matrix: string[][]): number {
   const getWidth = (r: number, c: number) => {
     let k = c - 1;

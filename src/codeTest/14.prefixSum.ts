@@ -1,5 +1,39 @@
 export default {};
 
+//https://leetcode.com/problems/sum-of-matrix-after-queries/
+function matrixSumQueries(n: number, queries: number[][]): number {
+  const rows: Set<number> = new Set();
+  const cols: Set<number> = new Set();
+  const size = queries.length;
+
+  let sum = 0;
+  for (let i = size - 1; 0 <= i; i--) {
+    const [type, index, value] = queries[i];
+
+    if (type === 0) {
+      if (rows.has(index)) continue;
+      rows.add(index);
+      sum += value * (n - cols.size);
+    } else {
+      if (cols.has(index)) continue;
+      cols.add(index);
+      sum += value * (n - rows.size);
+    }
+  }
+
+  return sum;
+}
+
+console.log(
+  matrixSumQueries(3, [
+    [0, 0, 4],
+    [0, 1, 2],
+    [1, 0, 1],
+    [0, 2, 3],
+    [1, 2, 1],
+  ]),
+);
+
 //https://leetcode.com/problems/minimum-penalty-for-a-shop/?envType=daily-question&envId=2025-12-26
 function bestClosingTime(customers: string): number {
   let penalty = Array.from(customers).filter((v) => v === 'Y').length;

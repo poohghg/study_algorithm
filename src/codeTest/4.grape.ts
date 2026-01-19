@@ -1,6 +1,47 @@
 import PriorityQueue from '../dataStructure/PriorityQueue';
 
+const mod = Math.pow(10, 9) + 7;
+
 export default {};
+
+//https://leetcode.com/problems/maximum-square-area-by-removing-fences-from-a-field/?envType=daily-question&envId=2026-01-16
+function maximizeSquareArea(
+  m: number,
+  n: number,
+  hFences: number[],
+  vFences: number[],
+): number {
+  const mmm = BigInt(Math.pow(10, 9) + 7);
+  hFences.push(1, m);
+  vFences.push(1, n);
+
+  hFences.sort((a, b) => a - b);
+  const hGapSet = new Set<number>();
+  for (let i = 0; i < hFences.length; i++) {
+    for (let j = i + 1; j < hFences.length; j++) {
+      hGapSet.add(hFences[j] - hFences[i]);
+    }
+  }
+
+  let max = 0;
+  vFences.sort((a, b) => a - b);
+  for (let i = 0; i < vFences.length; i++) {
+    for (let j = i + 1; j < vFences.length; j++) {
+      const diff = vFences[j] - vFences[i];
+      if (max < diff && hGapSet.has(diff)) {
+        max = diff;
+      }
+    }
+  }
+
+  if (max === 0) return -1;
+  const ans = (BigInt(max) * BigInt(max)) % mmm;
+  return Number(ans);
+}
+
+// 1 2 3
+//m = 4, n = 3, hFences = [2,3], vFences = [2]
+console.log(maximizeSquareArea(4, 4, [2], [2, 3]));
 
 //https://leetcode.com/problems/minimum-time-visiting-all-points/?envType=daily-question&envId=2026-01-11
 function minTimeToVisitAllPoints(points: number[][]): number {
@@ -15,13 +56,13 @@ function minTimeToVisitAllPoints(points: number[][]): number {
   return result;
 }
 
-console.log(
-  minTimeToVisitAllPoints([
-    [1, 1],
-    [3, 4],
-    [-1, 0],
-  ]),
-);
+// console.log(
+//   minTimeToVisitAllPoints([
+//     [1, 1],
+//     [3, 4],
+//     [-1, 0],
+//   ]),
+// );
 
 // https://leetcode.com/problems/find-the-maximum-number-of-fruits-collected/?envType=daily-question&envId=2026-01-01
 function maxCollectedFruits(fruits: number[][]): number {
@@ -68,24 +109,24 @@ function maxCollectedFruits(fruits: number[][]): number {
   return result + dp[n - 2][n - 1] + dp[n - 1][n - 2];
 }
 
-console.log(
-  maxCollectedFruits([
-    [1, 2, 3, 4],
-    [5, 6, 8, 7],
-    [9, 10, 11, 12],
-    [13, 14, 15, 16],
-  ]),
-);
-
-console.log(
-  maxCollectedFruits([
-    [1, 2, 3, 4, 1],
-    [1, 2, 3, 4, 1],
-    [1, 2, 3, 4, 1],
-    [1, 2, 3, 4, 1],
-    [1, 2, 3, 4, 1],
-  ]),
-);
+// console.log(
+//   maxCollectedFruits([
+//     [1, 2, 3, 4],
+//     [5, 6, 8, 7],
+//     [9, 10, 11, 12],
+//     [13, 14, 15, 16],
+//   ]),
+// );
+//
+// console.log(
+//   maxCollectedFruits([
+//     [1, 2, 3, 4, 1],
+//     [1, 2, 3, 4, 1],
+//     [1, 2, 3, 4, 1],
+//     [1, 2, 3, 4, 1],
+//     [1, 2, 3, 4, 1],
+//   ]),
+// );
 
 /**
  * https://leetcode.com/problems/last-day-where-you-can-still-cross/?envType=daily-question&envId=2025-12-31
