@@ -2,6 +2,22 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+//https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/?envType=daily-question&envId=2026-01-20
+
+function minBitwiseArray(nums: number[]): number[] {
+  const a = 7; // 00000000000000000000000000000101
+  const b = 8; // 00000000000000000000000000000011
+
+  console.log(a.toString(2));
+  console.log(b.toString(2));
+  // 1111 => 10진법
+  // console.log(parseInt('1111', 2));
+  console.log(a & b);
+  return [];
+}
+
+console.log(minBitwiseArray([2, 3, 5, 7]));
+
 //https://leetcode.com/problems/ways-to-express-an-integer-as-sum-of-powers/?envType=daily-question&envId=2026-01-07
 function numberOfWays(n: number, x: number): number {
   const nums: number[] = [];
@@ -27,8 +43,7 @@ function numberOfWays(n: number, x: number): number {
   return dp[n] % mod;
 }
 
-console.log(numberOfWays(7, 1));
-
+// console.log(numberOfWays(7, 1));
 //https://leetcode.com/problems/four-divisors/?envType=daily-question&envId=2026-01-05
 /**
  * 약수를 구하기 위해 제곱근까지만 확인할수 있다

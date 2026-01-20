@@ -8,6 +8,51 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/max-consecutive-ones-iii/
+function longestOnes(nums: number[], k: number): number {
+  let max = 0;
+  let zeros = 0;
+  let left = 0;
+
+  for (let right = 0; right < nums.length; right++) {
+    if (nums[right] === 0) zeros++;
+
+    while (k < zeros) {
+      if (nums[left] === 0) zeros--;
+      left++;
+    }
+
+    max = Math.max(max, right - left + 1);
+  }
+
+  return max;
+}
+
+console.log(longestOnes([1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2));
+
+//https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/description/?envType=daily-question&envId=2026-01-20
+function longestSubarray(nums: number[]): number {
+  let max = 0;
+  let prevCount = 0;
+  let count = 0;
+
+  for (let i = 0; i <= nums.length; i++) {
+    if (nums[i] === 1) {
+      count++;
+    } else {
+      max = Math.max(count + prevCount, max);
+      prevCount = count;
+      count = 0;
+    }
+  }
+
+  return Math.min(max, nums.length - 1);
+}
+
+// console.log(longestSubarray([0, 1, 1, 1, 0, 1, 1, 0, 1]));
+
+console.log(longestSubarray([1, 1, 1]));
+
 /**
  * https://leetcode.com/problems/maximum-matrix-sum/?envType=daily-question&envId=2026-01-05
  * 매트릭스 기준 음수는 단 하나가 될 수 있다.
@@ -33,13 +78,13 @@ function maxMatrixSum(matrix: number[][]): number {
   return negativeCount % 2 === 0 ? sum : sum - min * 2;
 }
 
-console.log(
-  maxMatrixSum([
-    [-1, 0, -1],
-    [-2, 1, 3],
-    [3, 2, 2],
-  ]),
-);
+// console.log(
+//   maxMatrixSum([
+//     [-1, 0, -1],
+//     [-2, 1, 3],
+//     [3, 2, 2],
+//   ]),
+// );
 
 //https://leetcode.com/problems/fruit-into-baskets/description/?envType=daily-question&envId=2025-12-30
 function totalFruit(fruits: number[]): number {
