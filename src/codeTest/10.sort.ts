@@ -1,17 +1,45 @@
 export default {};
 
-function removeDuplicatesTwo(nums: number[]): number {
-  let index = 1;
+function sortMatrix(grid: number[][]): number[][] {
+  const n = grid.length;
+  const result = Array.from({ length: n }, () => Array(n).fill(0));
 
-  for (let i = 1; i < nums.length; i++) {
-    if (nums[i - 1] !== nums[i]) {
+  for (let i = 0; i < n; i++) {
+    const temp: number[] = [];
+
+    for (let j = 0; j < n - i; j++) {
+      temp.push(grid[i + j][j]);
+    }
+
+    temp.sort((a, b) => b - a);
+    for (let j = 0; j < n - i; j++) {
+      result[i + j][j] = temp[j];
     }
   }
 
-  console.log(nums);
+  for (let i = 1; i < n; i++) {
+    const temp: number[] = [];
+    for (let j = 0; j < n - i; j++) {
+      temp.push(grid[j][i + j]);
+    }
 
-  return index;
+    temp.sort((a, b) => a - b);
+
+    for (let j = 0; j < n - i; j++) {
+      result[j][i + j] = temp[j];
+    }
+  }
+
+  return result;
 }
+
+console.log(
+  sortMatrix([
+    [1, 7, 3],
+    [9, 8, 2],
+    [4, 5, 6],
+  ]),
+);
 
 //https://leetcode.com/problems/relative-sort-array/?envType=problem-list-v2&envId=counting-sort
 function relativeSortArray(arr1: number[], arr2: number[]): number[] {
@@ -35,7 +63,7 @@ function relativeSortArray(arr1: number[], arr2: number[]): number[] {
   });
 }
 
-console.log(relativeSortArray([28, 22, 6, 8, 44, 17], [22, 28, 8, 6]));
+// console.log(relativeSortArray([28, 22, 6, 8, 44, 17], [22, 28, 8, 6]));
 
 // [1,1,2,2,3,_]
 // console.log(removeDuplicatesTwo([1, 1, 1, 2, 2, 3]));
@@ -62,7 +90,7 @@ function arrayPairSum(nums: number[]): number {
   return result;
 }
 
-console.log(arrayPairSum([6, 2, 6, 5, 1, 2]));
+// console.log(arrayPairSum([6, 2, 6, 5, 1, 2]));
 
 // https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 function removeDuplicates(nums: number[]): number {
