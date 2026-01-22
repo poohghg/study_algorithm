@@ -7,6 +7,44 @@ export default {};
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
+//https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/?envType=daily-question&envId=2026-01-22
+
+function minimumPairRemoval(nums: number[]): number {
+  const isSorted = (nums: number[]) => {
+    for (let i = 0; i < nums.length - 1; i++) {
+      if (nums[i + 1] < nums[i]) return false;
+    }
+    return true;
+  };
+
+  // if (isSorted(nums)) {
+  //   return 0;
+  // }
+
+  let removeCount = 0;
+  while (nums.length) {
+    if (isSorted(nums)) {
+      return removeCount;
+    }
+
+    let min = Number.MAX_SAFE_INTEGER;
+    let minIndex = 0;
+    for (let i = 0; i < nums.length - 1; i++) {
+      if (nums[i] + nums[i + 1] < min) {
+        min = nums[i] + nums[i + 1];
+        minIndex = i;
+      }
+    }
+
+    nums.splice(minIndex, 1, min);
+    nums.splice(minIndex + 1, 1);
+    removeCount++;
+  }
+
+  return 0;
+}
+
+console.log(minimumPairRemoval([5, 3, 2, 1]));
 
 //https://leetcode.com/problems/max-consecutive-ones-iii/
 function longestOnes(nums: number[], k: number): number {

@@ -1,5 +1,31 @@
 export default {};
 
+//https://leetcode.com/problems/valid-sudoku/description/?envType=daily-question&envId=2026-01-22
+function isValidSudoku(board: string[][]): boolean {
+  const rows = Array.from({ length: 9 }, () => new Set<string>());
+  const cols = Array.from({ length: 9 }, () => new Set<string>());
+  const boxes = Array.from({ length: 9 }, () => new Set<string>());
+
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const v = board[i][j];
+      if (v === '.') continue;
+
+      const boxIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+
+      if (rows[i].has(v) || cols[j].has(v) || boxes[boxIndex].has(v)) {
+        return false;
+      }
+
+      rows[i].add(v);
+      cols[j].add(v);
+      boxes[boxIndex].add(v);
+    }
+  }
+
+  return true;
+}
+
 //https://leetcode.com/problems/new-21-game/?envType=daily-question&envId=2026-01-11
 function new21Game(n: number, k: number, maxPts: number): number {
   // k점 미만일대 뽑는다
