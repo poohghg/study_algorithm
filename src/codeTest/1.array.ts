@@ -7,8 +7,52 @@ export default {};
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
-//https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/?envType=daily-question&envId=2026-01-22
 
+function maxAverageRatio(classes: number[][], extraStudents: number): number {
+  // 통과/학생수
+  // 전체 학생수가 적을수록 증가률이 높아짐
+  const maxHeap = new PriorityQueue<[number, number, number]>((a, b) => {
+    return a[2] > b[2];
+  });
+
+  let oneCount = 0;
+  for (const [p, t] of classes) {
+    if (p / t === 1) {
+      oneCount++;
+    } else {
+      const increase = (p + 1) / (t + 1) - p / t;
+      maxHeap.push([p, t, increase]);
+    }
+  }
+
+  while (extraStudents && maxHeap.size) {
+    const [p, t] = maxHeap.pop()!;
+    const [np, nt] = [p + 1, t + 1];
+    const increase = (np + 1) / (nt + 1) - np / nt;
+    maxHeap.push([np, nt, increase]);
+    extraStudents--;
+  }
+
+  const calcedData = maxHeap.data.reduce((acc, [pass, total]) => {
+    return acc + pass / total;
+  }, 0);
+
+  return (calcedData + oneCount) / classes.length;
+}
+
+console.log(
+  maxAverageRatio(
+    [
+      [2, 4],
+      [3, 9],
+      [4, 5],
+      [2, 10],
+    ],
+    4,
+  ),
+);
+
+//https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/?envType=daily-question&envId=2026-01-22
 function minimumPairRemoval(nums: number[]): number {
   const isSorted = (nums: number[]) => {
     for (let i = 0; i < nums.length - 1; i++) {
@@ -16,10 +60,6 @@ function minimumPairRemoval(nums: number[]): number {
     }
     return true;
   };
-
-  // if (isSorted(nums)) {
-  //   return 0;
-  // }
 
   let removeCount = 0;
   while (nums.length) {
@@ -44,7 +84,7 @@ function minimumPairRemoval(nums: number[]): number {
   return 0;
 }
 
-console.log(minimumPairRemoval([5, 3, 2, 1]));
+// console.log(minimumPairRemoval([5, 2, 1, 3]));
 
 //https://leetcode.com/problems/max-consecutive-ones-iii/
 function longestOnes(nums: number[], k: number): number {
@@ -66,7 +106,7 @@ function longestOnes(nums: number[], k: number): number {
   return max;
 }
 
-console.log(longestOnes([1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2));
+// console.log(longestOnes([1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2));
 
 //https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/description/?envType=daily-question&envId=2026-01-20
 function longestSubarray(nums: number[]): number {
