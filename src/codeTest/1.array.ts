@@ -7,6 +7,52 @@ export default {};
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
+//https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/?envType=daily-question&envId=2026-01-25
+function minimumDifference(nums: number[], k: number): number {
+  nums.sort((a, b) => b - a);
+
+  if (nums.length === k) {
+    return nums[0] - nums[k - 1];
+  }
+
+  let result = Number.MAX_SAFE_INTEGER;
+  for (let i = 0; i <= nums.length - k; i++) {
+    result = Math.min(result, nums[i] - nums[i + k - 1]);
+  }
+
+  return result;
+}
+
+// console.log(
+//   minimumDifference(
+//     [
+//       11181, 23291, 24520, 92567, 19530, 12631, 11048, 37325, 36730, 45935,
+//       43785, 85701, 60558, 4847, 88701, 27809, 76264, 73637, 50367, 48998,
+//       31556, 28617, 60992, 76542, 71383, 22035, 95023, 89149, 54342, 12712,
+//       93885, 1243, 5682, 75211, 60667, 68766, 94505, 67043, 98893, 80977, 6367,
+//       13446, 64482, 13383, 71717, 22432, 49079, 52101, 61754, 98448, 42679,
+//       35519, 523, 93809, 91584, 12763, 49377, 42131, 9990, 23324, 22887, 91557,
+//       21905, 49635, 14267,
+//     ],
+//     39,
+//   ),
+// );
+
+//https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/?envType=daily-question&envId=2026-01-25
+function minPairSum(nums: number[]): number {
+  nums.sort((a, b) => a - b);
+
+  const n = nums.length;
+  let result = 0;
+
+  for (let i = 0; i < n / 2; i++) {
+    result = Math.max(result, nums[i] + nums[n - i - 1]);
+  }
+
+  return result;
+}
+
+console.log(minPairSum([3, 5, 4, 2, 4, 6]));
 
 function maxAverageRatio(classes: number[][], extraStudents: number): number {
   // 통과/학생수
@@ -40,17 +86,17 @@ function maxAverageRatio(classes: number[][], extraStudents: number): number {
   return (calcedData + oneCount) / classes.length;
 }
 
-console.log(
-  maxAverageRatio(
-    [
-      [2, 4],
-      [3, 9],
-      [4, 5],
-      [2, 10],
-    ],
-    4,
-  ),
-);
+// console.log(
+//   maxAverageRatio(
+//     [
+//       [2, 4],
+//       [3, 9],
+//       [4, 5],
+//       [2, 10],
+//     ],
+//     4,
+//   ),
+// );
 
 //https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/?envType=daily-question&envId=2026-01-22
 function minimumPairRemoval(nums: number[]): number {
