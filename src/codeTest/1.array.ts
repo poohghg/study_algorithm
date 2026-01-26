@@ -7,6 +7,29 @@ export default {};
  * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
+
+function minimumAbsDifference(arr: number[]): number[][] {
+  const n = arr.length;
+  let lefts: number[] = [];
+  let min = Number.MAX_SAFE_INTEGER;
+
+  arr.sort((a, b) => a - b);
+  for (let i = 0; i < n - 1; i++) {
+    const diff = Math.abs(arr[i] - arr[i + 1]);
+
+    if (diff === min) {
+      lefts.push(i);
+    } else if (diff < min) {
+      min = diff;
+      lefts = [i];
+    }
+  }
+
+  return lefts.map((i) => [arr[i], arr[i + 1]]);
+}
+
+// console.log(minimumAbsDifference([3, 8, -10, 23, 19, -4, -14, 27]));
+
 //https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/?envType=daily-question&envId=2026-01-25
 function minimumDifference(nums: number[], k: number): number {
   nums.sort((a, b) => b - a);
@@ -52,7 +75,7 @@ function minPairSum(nums: number[]): number {
   return result;
 }
 
-console.log(minPairSum([3, 5, 4, 2, 4, 6]));
+// console.log(minPairSum([3, 5, 4, 2, 4, 6]));
 
 function maxAverageRatio(classes: number[][], extraStudents: number): number {
   // 통과/학생수
