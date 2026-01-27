@@ -4,6 +4,56 @@ const mod = Math.pow(10, 9) + 7;
 
 export default {};
 
+//https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/description/?envType=daily-question&envId=2026-01-27
+function minCost(n: number, edges: number[][]): number {
+  const graph = edges.reduce(
+    (acc, current) => {
+      const [node1, node2, cost] = current;
+      acc[node1].push([node2, cost]);
+      acc[node2].push([node1, cost * 2]);
+      return acc;
+    },
+    Array.from({ length: n }, (): [number, number][] => []),
+  );
+
+  const bfs = () => {
+    const dist = new Array(n).fill(Infinity);
+    dist[0] = 0;
+
+    // 거리순 [node,cost]
+    const miniHeap = new PriorityQueue<[number, number]>((a, b) => a[1] < b[1]);
+    miniHeap.push([0, 0]);
+
+    while (miniHeap.size) {
+      const [currentNode, currentCost] = miniHeap.pop()!;
+
+      if (dist[currentNode] < currentCost) continue;
+
+      if (currentNode === n - 1) return currentCost;
+
+      for (const [node, cost] of graph[currentNode]) {
+        if (cost + currentCost < dist[node]) {
+          miniHeap.push([node, cost + currentCost]);
+          dist[node] = cost + currentCost;
+        }
+      }
+    }
+
+    return -1;
+  };
+
+  return bfs();
+}
+
+console.log(
+  minCost(4, [
+    [0, 2, 1],
+    [2, 1, 1],
+    [1, 3, 1],
+    [2, 3, 3],
+  ]),
+);
+
 //https://leetcode.com/problems/maximum-square-area-by-removing-fences-from-a-field/?envType=daily-question&envId=2026-01-16
 function maximizeSquareArea(
   m: number,
@@ -41,7 +91,7 @@ function maximizeSquareArea(
 
 // 1 2 3
 //m = 4, n = 3, hFences = [2,3], vFences = [2]
-console.log(maximizeSquareArea(4, 4, [2], [2, 3]));
+// console.log(maximizeSquareArea(4, 4, [2], [2, 3]));
 
 //https://leetcode.com/problems/minimum-time-visiting-all-points/?envType=daily-question&envId=2026-01-11
 function minTimeToVisitAllPoints(points: number[][]): number {
