@@ -4,6 +4,86 @@ const mod = Math.pow(10, 9) + 7;
 
 export default {};
 
+// https://leetcode.com/problems/minimum-cost-to-convert-string-i/?envType=daily-question&envId=2026-01-29
+function minimumCost(
+  source: string,
+  target: string,
+  original: string[],
+  changed: string[],
+  cost: number[],
+): number {
+  const delta = 97;
+  const dist = Array.from({ length: 26 }, () => Array(26).fill(Infinity));
+
+  for (let i = 0; i < 26; i++) {
+    dist[i][i] = 0;
+  }
+
+  for (let i = 0; i < original.length; i++) {
+    const s = original[i].charCodeAt(0) - delta;
+    const e = changed[i].charCodeAt(0) - delta;
+    dist[s][e] = Math.min(dist[s][e], cost[i]);
+  }
+
+  for (let k = 0; k < 26; k++) {
+    for (let i = 0; i < 26; i++) {
+      if (dist[i][k] === Infinity) continue;
+      for (let j = 0; j < 26; j++) {
+        if (dist[k][j] === Infinity) continue;
+        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+      }
+    }
+  }
+
+  let result = 0;
+  for (let i = 0; i < source.length; i++) {
+    const start = source[i].charCodeAt(0) - delta;
+    const end = target[i].charCodeAt(0) - delta;
+    const c = dist[start][end];
+
+    if (c === Infinity) {
+      return -1;
+    }
+    result += c;
+  }
+
+  return result;
+}
+
+console.log(
+  minimumCost(
+    'abcd',
+    'acbe',
+    ['a', 'b', 'c', 'c', 'e', 'd'],
+    ['b', 'c', 'b', 'e', 'b', 'e'],
+    [2, 5, 5, 1, 2, 20],
+  ),
+);
+
+//https://leetcode.com/problems/minimum-cost-path-with-teleportations/solutions/?envType=daily-question&envId=2026-01-28
+function minCost2(grid: number[][], k: number): number {
+  const n = grid.length;
+  const m = grid[0];
+  const costs = grid.flat();
+
+  // 완쪽또는 오른쪽 이동 비용은 해당 좌표의 값
+  // 텔레포트는의 비용은 0 최대 K번까지 가능
+  // 텔레포트 조건은 현재 셀보다 작거나 같은값을 가진 셀로 가능
+
+  return 0;
+}
+
+// console.log(
+//   minCost2(
+//     [
+//       [1, 3, 3],
+//       [2, 5, 4],
+//       [4, 3, 5],
+//     ],
+//     2,
+//   ),
+// );
+
 //https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/description/?envType=daily-question&envId=2026-01-27
 function minCost(n: number, edges: number[][]): number {
   const graph = edges.reduce(
@@ -45,14 +125,14 @@ function minCost(n: number, edges: number[][]): number {
   return bfs();
 }
 
-console.log(
-  minCost(4, [
-    [0, 2, 1],
-    [2, 1, 1],
-    [1, 3, 1],
-    [2, 3, 3],
-  ]),
-);
+// console.log(
+//   minCost(4, [
+//     [0, 2, 1],
+//     [2, 1, 1],
+//     [1, 3, 1],
+//     [2, 3, 3],
+//   ]),
+// );
 
 //https://leetcode.com/problems/maximum-square-area-by-removing-fences-from-a-field/?envType=daily-question&envId=2026-01-16
 function maximizeSquareArea(
