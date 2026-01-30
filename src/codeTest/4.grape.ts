@@ -50,39 +50,96 @@ function minimumCost(
   return result;
 }
 
-console.log(
-  minimumCost(
-    'abcd',
-    'acbe',
-    ['a', 'b', 'c', 'c', 'e', 'd'],
-    ['b', 'c', 'b', 'e', 'b', 'e'],
-    [2, 5, 5, 1, 2, 20],
-  ),
-);
+// console.log(
+//   minimumCost(
+//     'abcd',
+//     'acbe',
+//     ['a', 'b', 'c', 'c', 'e', 'd'],
+//     ['b', 'c', 'b', 'e', 'b', 'e'],
+//     [2, 5, 5, 1, 2, 20],
+//   ),
+// );
 
 //https://leetcode.com/problems/minimum-cost-path-with-teleportations/solutions/?envType=daily-question&envId=2026-01-28
 function minCost2(grid: number[][], k: number): number {
   const n = grid.length;
-  const m = grid[0];
-  const costs = grid.flat();
+  const m = grid[0].length;
 
-  // 완쪽또는 오른쪽 이동 비용은 해당 좌표의 값
-  // 텔레포트는의 비용은 0 최대 K번까지 가능
-  // 텔레포트 조건은 현재 셀보다 작거나 같은값을 가진 셀로 가능
+  const fillDp = (t: number) => {
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+        // 위에서 오는 경우
+        if (0 < i && dp[t][i - 1][j] !== Infinity) {
+          dp[t][i][j] = Math.min(dp[t][i][j], dp[t][i - 1][j] + grid[i][j]);
+        }
+        // 왼쪽환에서 오는 경우
+        if (0 < j && dp[t][i][j - 1] !== Infinity) {
+          dp[t][i][j] = Math.min(dp[t][i][j], dp[t][i][j - 1] + grid[i][j]);
+        }
+      }
+    }
+  };
 
-  return 0;
+  const dp = Array.from({ length: k + 1 }, () =>
+    Array.from({ length: n }, (): number[] => Array(m).fill(Infinity)),
+  );
+
+  // 초기 상태: 0번 텔레포트, 시작점
+  dp[0][0][0] = 0;
+  fillDp(0);
+
+  // 값(v) 기준 내림차순 정렬
+  const cells = grid
+    .flatMap((r, i) => r.map((v, j) => [v, i, j]))
+    .sort((a, b) => b[0] - a[0]);
+
+  console.log(cells);
+
+  for (let t = 1; t <= k; t++) {
+    let minSource = Infinity;
+    let ptr = 0;
+    // 텔레포트 갱신: grid[from] >= grid[to] 조건을 만족하는 최솟값 찾기
+    for (let i = 0; i < cells.length; i++) {
+      console.log(i, ptr);
+      const [valTo, rTo, cTo] = cells[i];
+
+      // 현재 도착하려는 셀의 값(valTo)보다 크거나 같은 모든 셀들을
+      // '텔레포트 출발지' 후보로 등록 (ptr을 이용해 중복 탐색 방지)
+      while (ptr < cells.length && valTo <= cells[ptr][0]) {
+        minSource = Math.min(
+          minSource,
+          dp[t - 1][cells[ptr][1]][cells[ptr][2]],
+        );
+        ptr++;
+      }
+
+      // 이전 층에서 온 최솟값이 있다면 현재 층의 시작점으로 할당 (비용 0)
+      dp[t][rTo][cTo] = Math.min(dp[t][rTo][cTo], minSource);
+    }
+
+    // 텔레포트 이후 걷기(Right/Down) 이동으로 비용 갱신
+    fillDp(t);
+  }
+
+  // 최대 k번까지의 모든 층 중에서 최종 목적지의 최솟값 탐색
+  let result = Infinity;
+  for (let t = 0; t <= k; t++) {
+    result = Math.min(result, dp[t][n - 1][m - 1]);
+  }
+
+  return result;
 }
 
-// console.log(
-//   minCost2(
-//     [
-//       [1, 3, 3],
-//       [2, 5, 4],
-//       [4, 3, 5],
-//     ],
-//     2,
-//   ),
-// );
+console.log(
+  minCost2(
+    [
+      [1, 3, 3],
+      [2, 5, 4],
+      [4, 3, 5],
+    ],
+    2,
+  ),
+);
 
 //https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/description/?envType=daily-question&envId=2026-01-27
 function minCost(n: number, edges: number[][]): number {
