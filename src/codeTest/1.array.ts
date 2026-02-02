@@ -8,6 +8,59 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-i/?envType=daily-question&envId=2026-02-02
+function minimumCost(nums: number[]): number {
+  const merge = (arr1: number[], arr2: number[]) => {
+    let arr1Idx = 0;
+    let arr2Idx = 0;
+    const arr: number[] = [];
+
+    while (arr1Idx < arr1.length && arr2Idx < arr2.length && arr.length < 2) {
+      if (arr1[arr1Idx] <= arr2[arr2Idx]) {
+        arr.push(arr1[arr1Idx++]);
+      } else {
+        arr.push(arr2[arr2Idx++]);
+      }
+    }
+
+    while (arr1Idx < arr1.length && arr.length < 2) arr.push(arr1[arr1Idx++]);
+    while (arr2Idx < arr2.length && arr.length < 2) arr.push(arr2[arr2Idx++]);
+
+    return arr;
+  };
+
+  const bfs = (arr: number[]): number[] => {
+    if (arr.length <= 1) return arr;
+    const mid = Math.floor(arr.length / 2);
+    const left = bfs(arr.slice(0, mid));
+    const right = bfs(arr.slice(mid));
+
+    return merge(left, right);
+  };
+
+  return [nums[0], ...bfs(nums.slice(1))].reduce((a, b) => a + b);
+}
+
+console.log(minimumCost([1, 2, 3, 12]));
+
+function nextGreatestLetter(letters: string[], target: string): string {
+  const set = new Set(letters.map((v) => v.charCodeAt(0)));
+
+  let result = letters[0];
+  let start = target.charCodeAt(0) + 1;
+
+  while (start <= 'z'.charCodeAt(0)) {
+    if (set.has(start)) {
+      return String.fromCharCode(start);
+    }
+    start++;
+  }
+
+  return result;
+}
+
+// console.log(nextGreatestLetter(['c', 'f', 'j'], 'a'));
+
 function minimumAbsDifference(arr: number[]): number[][] {
   const n = arr.length;
   let lefts: number[] = [];
@@ -197,8 +250,7 @@ function longestSubarray(nums: number[]): number {
 }
 
 // console.log(longestSubarray([0, 1, 1, 1, 0, 1, 1, 0, 1]));
-
-console.log(longestSubarray([1, 1, 1]));
+// console.log(longestSubarray([1, 1, 1]));
 
 /**
  * https://leetcode.com/problems/maximum-matrix-sum/?envType=daily-question&envId=2026-01-05

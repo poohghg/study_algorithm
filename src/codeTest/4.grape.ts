@@ -68,11 +68,9 @@ function minCost2(grid: number[][], k: number): number {
   const fillDp = (t: number) => {
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < m; j++) {
-        // 위에서 오는 경우
         if (0 < i && dp[t][i - 1][j] !== Infinity) {
           dp[t][i][j] = Math.min(dp[t][i][j], dp[t][i - 1][j] + grid[i][j]);
         }
-        // 왼쪽환에서 오는 경우
         if (0 < j && dp[t][i][j - 1] !== Infinity) {
           dp[t][i][j] = Math.min(dp[t][i][j], dp[t][i][j - 1] + grid[i][j]);
         }
@@ -84,23 +82,18 @@ function minCost2(grid: number[][], k: number): number {
     Array.from({ length: n }, (): number[] => Array(m).fill(Infinity)),
   );
 
-  // 초기 상태: 0번 텔레포트, 시작점
   dp[0][0][0] = 0;
   fillDp(0);
 
-  // 값(v) 기준 내림차순 정렬
   const cells = grid
     .flatMap((r, i) => r.map((v, j) => [v, i, j]))
     .sort((a, b) => b[0] - a[0]);
-
-  console.log(cells);
 
   for (let t = 1; t <= k; t++) {
     let minSource = Infinity;
     let ptr = 0;
     // 텔레포트 갱신: grid[from] >= grid[to] 조건을 만족하는 최솟값 찾기
     for (let i = 0; i < cells.length; i++) {
-      console.log(i, ptr);
       const [valTo, rTo, cTo] = cells[i];
 
       // 현재 도착하려는 셀의 값(valTo)보다 크거나 같은 모든 셀들을
