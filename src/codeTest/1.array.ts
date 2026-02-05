@@ -8,6 +8,27 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/transformed-array/?envType=daily-question&envId=2026-02-05
+function constructTransformedArray(nums: number[]) {
+  const n = nums.length;
+  const result = new Int8Array(nums.length);
+
+  for (let i = 0; i < n; i++) {
+    const v = nums[i];
+    let targetIndex = (v + i) % n;
+
+    if (targetIndex < 0) {
+      targetIndex = n + targetIndex;
+    }
+
+    result[i] = nums[targetIndex];
+  }
+
+  return result;
+}
+
+console.log(constructTransformedArray([-10, -10]));
+
 //https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-i/?envType=daily-question&envId=2026-02-02
 function minimumCost(nums: number[]): number {
   const merge = (arr1: number[], arr2: number[]) => {
@@ -41,7 +62,7 @@ function minimumCost(nums: number[]): number {
   return [nums[0], ...bfs(nums.slice(1))].reduce((a, b) => a + b);
 }
 
-console.log(minimumCost([1, 2, 3, 12]));
+console.log(minimumCost([1, 2, 3, 12, 5, 6, 1]));
 
 function nextGreatestLetter(letters: string[], target: string): string {
   const set = new Set(letters.map((v) => v.charCodeAt(0)));
