@@ -8,6 +8,44 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/?envType=daily-question&envId=2026-02-11
+function minimumDeletions(s: string): number {
+  let res = 0;
+  let bCount = 0;
+  for (const c of s) {
+    if (c === 'b') {
+      bCount++;
+    } else if (bCount < 1) {
+      bCount--;
+      res++;
+    }
+  }
+
+  return res;
+}
+
+// console.log(minimumDeletions('aababbab'));
+console.log(minimumDeletions('aaaaaaaaaaaaaa'));
+
+//https://leetcode.com/problems/minimum-removals-to-balance-array/?envType=daily-question&envId=2026-02-11
+function minRemoval(nums: number[], k: number): number {
+  const n = nums.length;
+  if (n === 1) return 0;
+
+  nums.sort((a, b) => a - b);
+  // 배열의 최대값이 최소값 x k 이하여야함.
+  let count = nums.length;
+  let l = 0;
+  for (let r = 1; r < n; r++) {
+    while (nums[l] * k < nums[r] && l <= r) {
+      l++;
+    }
+    count = Math.min(count, n - (r - l + 1));
+  }
+
+  return count;
+}
+
 //https://leetcode.com/problems/transformed-array/?envType=daily-question&envId=2026-02-05
 function constructTransformedArray(nums: number[]) {
   const n = nums.length;
@@ -27,7 +65,7 @@ function constructTransformedArray(nums: number[]) {
   return result;
 }
 
-console.log(constructTransformedArray([-10, -10]));
+// console.log(constructTransformedArray([-10, -10]));
 
 //https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-i/?envType=daily-question&envId=2026-02-02
 function minimumCost(nums: number[]): number {
@@ -62,7 +100,7 @@ function minimumCost(nums: number[]): number {
   return [nums[0], ...bfs(nums.slice(1))].reduce((a, b) => a + b);
 }
 
-console.log(minimumCost([1, 2, 3, 12, 5, 6, 1]));
+// console.log(minimumCost([1, 2, 3, 12, 5, 6, 1]));
 
 function nextGreatestLetter(letters: string[], target: string): string {
   const set = new Set(letters.map((v) => v.charCodeAt(0)));
