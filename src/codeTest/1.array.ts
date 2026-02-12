@@ -8,6 +8,39 @@ export default {};
  * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
  */
 
+//https://leetcode.com/problems/longest-balanced-substring-i/?envType=daily-question&envId=2026-02-12
+function longestBalanced(s: string): number {
+  const n = s.length;
+  const delta = 97;
+
+  let result = 1;
+  for (let i = 0; i < n; i++) {
+    const count = new Array(26).fill(0);
+    let distinct = 0;
+    let maxFreq = 0;
+
+    for (let j = i; j < n; j++) {
+      const index = s[j].charCodeAt(0) - delta;
+
+      if (count[index] === 0) {
+        distinct++;
+      }
+
+      count[index]++;
+      maxFreq = Math.max(maxFreq, count[index]);
+      const size = j - i + 1;
+
+      if (size === maxFreq * distinct) {
+        result = Math.max(result, size);
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(longestBalanced('zzabc'));
+
 //https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/?envType=daily-question&envId=2026-02-11
 function minimumDeletions(s: string): number {
   let res = 0;
@@ -25,7 +58,7 @@ function minimumDeletions(s: string): number {
 }
 
 // console.log(minimumDeletions('aababbab'));
-console.log(minimumDeletions('aaaaaaaaaaaaaa'));
+// console.log(minimumDeletions('aaaaaaaaaaaaaa'));
 
 //https://leetcode.com/problems/minimum-removals-to-balance-array/?envType=daily-question&envId=2026-02-11
 function minRemoval(nums: number[], k: number): number {

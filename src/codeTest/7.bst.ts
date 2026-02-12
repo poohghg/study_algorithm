@@ -14,6 +14,29 @@ class TreeNode {
   }
 }
 
+//https://leetcode.com/problems/balanced-binary-tree/?envType=daily-question&envId=2026-02-12
+function isBalanced(root: TreeNode | null): boolean {
+  let result = true;
+
+  const dfs = (tree: TreeNode | null, height: number): number => {
+    if (!tree) return height - 1;
+
+    if (!result) return height;
+
+    const leftHeight = dfs(tree.left, height + 1);
+    const rightHeight = dfs(tree.right, height + 1);
+
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      result = false;
+    }
+
+    return Math.max(leftHeight, rightHeight);
+  };
+
+  dfs(root, 0);
+  return result;
+}
+
 //https://leetcode.com/problems/separate-squares-i/description/?envType=daily-question&envId=2026-01-13
 function separateSquares(squares: number[][]): number {
   const getBottomArea = (h: number) => {
@@ -54,12 +77,12 @@ function separateSquares(squares: number[][]): number {
   return minY;
 }
 
-console.log(
-  separateSquares([
-    [0, 0, 2],
-    [1, 1, 1],
-  ]),
-);
+// console.log(
+//   separateSquares([
+//     [0, 0, 2],
+//     [1, 1, 1],
+//   ]),
+// );
 
 function subtreeWithAllDeepest(root: TreeNode | null): TreeNode | null {
   const dfs = (

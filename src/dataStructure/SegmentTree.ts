@@ -9,7 +9,8 @@ export class SegmentTree {
   }
 
   query(l: number, r: number) {
-    this._query(1, 0, this.size - 1, l, r);
+    console.log(this.tree);
+    return this._query(1, 0, this.size - 1, l, r);
   }
 
   update(index: number, value: number) {
