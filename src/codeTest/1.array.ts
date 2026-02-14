@@ -2,11 +2,29 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
-/**
- * https://school.programmers.co.kr/learn/courses/30/lessons/42889
- * 전체 스테이지의 개수 N, 게임을 이용하는 사용자가 현재 멈춰있는 스테이지의 번호가 담긴 배열 stages가 매개변수로 주어질 때,
- * 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
- */
+function longestBalancedNum(nums: number[]): number {
+  const n = nums.length;
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    const visited = new Set<number>();
+    let balance = 0;
+    for (let j = i; j < n; j++) {
+      const num = nums[j];
+      if (!visited.has(num)) {
+        balance += num % 2 === 0 ? 1 : -1;
+        visited.add(num);
+      }
+
+      if (balance === 0) {
+        result = Math.max(result, j - i + 1);
+      }
+    }
+  }
+  return result;
+}
+
+console.log(longestBalancedNum([1, 2, 3, 2]));
 
 //https://leetcode.com/problems/longest-balanced-substring-i/?envType=daily-question&envId=2026-02-12
 function longestBalanced(s: string): number {
@@ -39,7 +57,7 @@ function longestBalanced(s: string): number {
   return result;
 }
 
-console.log(longestBalanced('zzabc'));
+// console.log(longestBalanced('zzabc'));
 
 //https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/?envType=daily-question&envId=2026-02-11
 function minimumDeletions(s: string): number {

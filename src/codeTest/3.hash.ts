@@ -1,13 +1,12 @@
 export default {};
 
 //https://leetcode.com/problems/count-special-triplets/?envType=daily-question&envId=2026-01-06
-
-const mod = Math.pow(10, 9) + 7;
-const max = Math.pow(10, 5);
-const totalMap = new Uint32Array(max + 1);
-const leftMaps = new Uint32Array(max + 1);
-
 function specialTriplets(nums: number[]): number {
+  const mod = Math.pow(10, 9) + 7;
+  const max = Math.pow(10, 5);
+  const totalMap = new Uint32Array(max + 1);
+  const leftMaps = new Uint32Array(max + 1);
+
   totalMap.fill(0);
   leftMaps.fill(0);
 
