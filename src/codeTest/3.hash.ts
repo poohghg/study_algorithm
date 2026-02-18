@@ -1,5 +1,26 @@
 export default {};
 
+//https://leetcode.com/problems/count-elements-with-maximum-frequency/?envType=daily-question&envId=2026-02-18
+function maxFrequencyElements(nums: number[]): number {
+  const array = new Uint32Array(101);
+
+  let distinct = 0;
+  let max = 0;
+  for (const num of nums) {
+    array[num]++;
+    if (max === array[num]) {
+      distinct++;
+    } else if (max < array[num]) {
+      max = array[num];
+      distinct = 1;
+    }
+  }
+
+  return max * distinct;
+}
+
+console.log(maxFrequencyElements([1, 2, 2, 3, 1, 4]));
+
 //https://leetcode.com/problems/count-special-triplets/?envType=daily-question&envId=2026-01-06
 function specialTriplets(nums: number[]): number {
   const mod = Math.pow(10, 9) + 7;
@@ -32,7 +53,7 @@ function specialTriplets(nums: number[]): number {
   return result % mod;
 }
 
-console.log(specialTriplets([8, 4, 2, 8, 4]));
+// console.log(specialTriplets([8, 4, 2, 8, 4]));
 // console.log(specialTriplets([84, 2, 93, 1, 2, 2, 26]));
 
 /***

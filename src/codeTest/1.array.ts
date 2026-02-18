@@ -2,6 +2,41 @@ import PriorityQueue from '../dataStructure/PriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/compare-version-numbers/?envType=daily-question&envId=2026-02-18
+function compareVersion(version1: string, version2: string): number {
+  const convertNum = (s?: string) => {
+    if (!s) return 0;
+
+    const size = s.length - 1;
+    const p = 10 ** size;
+    const n = (parseInt(s) * p) / p;
+
+    return n;
+  };
+
+  const n = Math.max(version1.length, version2.length);
+
+  const v1s = version1.split('.');
+  const v2s = version2.split('.');
+
+  for (let i = 0; i < n; i++) {
+    const v1 = convertNum(v1s[i]);
+    const v2 = convertNum(v2s[i]);
+
+    if (v1 < v2) {
+      return -1;
+    }
+
+    if (v2 < v1) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+console.log(compareVersion('1.2', '1.10'));
+
 function longestBalancedNum(nums: number[]): number {
   const n = nums.length;
 
@@ -24,7 +59,7 @@ function longestBalancedNum(nums: number[]): number {
   return result;
 }
 
-console.log(longestBalancedNum([1, 2, 3, 2]));
+// console.log(longestBalancedNum([1, 2, 3, 2]));
 
 //https://leetcode.com/problems/longest-balanced-substring-i/?envType=daily-question&envId=2026-02-12
 function longestBalanced(s: string): number {

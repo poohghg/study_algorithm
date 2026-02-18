@@ -29,6 +29,7 @@ class TaskManager {
 
   edit(taskId: number, newPriority: number): void {
     if (!this.taskMap.has(taskId)) return;
+
     const prev = this.taskMap.get(taskId)!;
     const newTask: Task = [prev[0], taskId, newPriority];
     this.taskMap.set(taskId, newTask);
