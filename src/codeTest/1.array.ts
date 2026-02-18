@@ -6,18 +6,12 @@ export default {};
 function compareVersion(version1: string, version2: string): number {
   const convertNum = (s?: string) => {
     if (!s) return 0;
-
-    const size = s.length - 1;
-    const p = 10 ** size;
-    const n = (parseInt(s) * p) / p;
-
-    return n;
+    return parseInt(s, 10);
   };
-
-  const n = Math.max(version1.length, version2.length);
 
   const v1s = version1.split('.');
   const v2s = version2.split('.');
+  const n = Math.max(v1s.length, v2s.length);
 
   for (let i = 0; i < n; i++) {
     const v1 = convertNum(v1s[i]);
@@ -35,7 +29,7 @@ function compareVersion(version1: string, version2: string): number {
   return 0;
 }
 
-console.log(compareVersion('1.2', '1.10'));
+console.log(compareVersion('1.2', '1.0101'));
 
 function longestBalancedNum(nums: number[]): number {
   const n = nums.length;
