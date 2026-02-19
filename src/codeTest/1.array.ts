@@ -1,7 +1,5 @@
 import PriorityQueue from '../dataStructure/PriorityQueue';
 
-export default {};
-
 //https://leetcode.com/problems/compare-version-numbers/?envType=daily-question&envId=2026-02-18
 function compareVersion(version1: string, version2: string): number {
   const convertNum = (s?: string) => {
