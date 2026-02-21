@@ -3,7 +3,7 @@
  * a > b 가 참이면 maxHeap
  */
 
-export default class PriorityQueue<T = number> {
+export default class MyPriorityQueue<T = number> {
   constructor(private compare: (a: T, b: T) => boolean) {}
 
   private _data: T[] = [];

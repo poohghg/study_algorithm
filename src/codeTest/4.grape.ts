@@ -1,8 +1,65 @@
-import PriorityQueue from '../dataStructure/PriorityQueue';
+import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 const mod = Math.pow(10, 9) + 7;
 
 export default {};
+
+function trapRainWater(heightMap: number[][]): number {
+  const validPos = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
+
+  const n = heightMap.length;
+  const m = heightMap[0].length;
+  const moves = [
+    [-1, 0],
+    [1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+  const visited = Array.from({ length: n }, () => Array(m).fill(false));
+  const miniHeap = new MyPriorityQueue<[number, number, number]>(
+    (a, b) => a[0] < b[0],
+  );
+
+  for (let i = 0; i < m; i++) {
+    miniHeap.push([heightMap[0][i], 0, i]);
+    miniHeap.push([heightMap[n - 1][i], n - 1, i]);
+    visited[0][i] = true;
+    visited[n - 1][i] = true;
+  }
+
+  for (let i = 1; i < n - 1; i++) {
+    miniHeap.push([heightMap[i][0], i, 0]);
+    miniHeap.push([heightMap[i][m - 1], i, m - 1]);
+    visited[i][0] = true;
+    visited[i][m - 1] = true;
+  }
+
+  let water = 0;
+  while (miniHeap.size) {
+    const [h, x, y] = miniHeap.pop()!;
+
+    for (const [dx, dy] of moves) {
+      const [nx, ny] = [x + dx, y + dy];
+      if (validPos(nx, ny) && !visited[nx][ny]) {
+        water += Math.max(0, h - heightMap[nx][ny]);
+        miniHeap.push([Math.max(h, heightMap[nx][ny]), nx, ny]);
+        visited[nx][ny] = true;
+      }
+    }
+  }
+
+  return water;
+}
+
+console.log(
+  trapRainWater([
+    [3, 3, 3, 3, 3],
+    [3, 2, 2, 2, 3],
+    [3, 2, 1, 2, 3],
+    [3, 2, 2, 2, 3],
+    [3, 3, 3, 3, 3],
+  ]),
+);
 
 // https://leetcode.com/problems/minimum-cost-to-convert-string-i/?envType=daily-question&envId=2026-01-29
 function minimumCost(
@@ -123,16 +180,16 @@ function minCost2(grid: number[][], k: number): number {
   return result;
 }
 
-console.log(
-  minCost2(
-    [
-      [1, 3, 3],
-      [2, 5, 4],
-      [4, 3, 5],
-    ],
-    2,
-  ),
-);
+// console.log(
+//   minCost2(
+//     [
+//       [1, 3, 3],
+//       [2, 5, 4],
+//       [4, 3, 5],
+//     ],
+//     2,
+//   ),
+// );
 
 //https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/description/?envType=daily-question&envId=2026-01-27
 function minCost(n: number, edges: number[][]): number {
@@ -151,7 +208,9 @@ function minCost(n: number, edges: number[][]): number {
     dist[0] = 0;
 
     // 거리순 [node,cost]
-    const miniHeap = new PriorityQueue<[number, number]>((a, b) => a[1] < b[1]);
+    const miniHeap = new MyPriorityQueue<[number, number]>(
+      (a, b) => a[1] < b[1],
+    );
     miniHeap.push([0, 0]);
 
     while (miniHeap.size) {
@@ -1575,7 +1634,7 @@ const solution11 = (
     Array.from({ length: n + 1 }, (): number[][] => []),
   );
   const summitsSet = new Set(summits);
-  const queue = new PriorityQueue<[number, number]>((a, b) => a[1] < b[1]);
+  const queue = new MyPriorityQueue<[number, number]>((a, b) => a[1] < b[1]);
   const intensities = Array.from({ length: n + 1 }, () => Infinity);
   gates.forEach((gate) => queue.push([gate, 0]));
   gates.forEach((gate) => (intensities[gate] = 0));

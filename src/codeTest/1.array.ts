@@ -1,4 +1,4 @@
-import PriorityQueue from '../dataStructure/PriorityQueue';
+import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 //https://leetcode.com/problems/compare-version-numbers/?envType=daily-question&envId=2026-02-18
 function compareVersion(version1: string, version2: string): number {
@@ -270,7 +270,7 @@ function minPairSum(nums: number[]): number {
 function maxAverageRatio(classes: number[][], extraStudents: number): number {
   // 통과/학생수
   // 전체 학생수가 적을수록 증가률이 높아짐
-  const maxHeap = new PriorityQueue<[number, number, number]>((a, b) => {
+  const maxHeap = new MyPriorityQueue<[number, number, number]>((a, b) => {
     return a[2] > b[2];
   });
 
@@ -467,9 +467,9 @@ function totalFruit(fruits: number[]): number {
 //https://leetcode.com/problems/meeting-rooms-iii/description/
 function mostBooked(n: number, meetings: number[][]): number {
   const counts: number[] = Array(n).fill(0);
-  const freeRooms = new PriorityQueue<number>((a, b) => a < b);
+  const freeRooms = new MyPriorityQueue<number>((a, b) => a < b);
   // [room,endTime]
-  const busyRooms = new PriorityQueue<[number, number]>((a, b) => {
+  const busyRooms = new MyPriorityQueue<[number, number]>((a, b) => {
     if (a[1] === b[1]) {
       return a[0] < b[0];
     }

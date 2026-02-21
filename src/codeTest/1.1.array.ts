@@ -1,5 +1,13 @@
 export default {};
 
+//https://leetcode.com/problems/maximum-total-damage-with-spell-casting/?envType=daily-question&envId=2026-02-21
+function maximumTotalDamage(power: number[]): number {
+  const n = power.length;
+  power.sort((a, b) => a - b);
+}
+
+console.log(maximumTotalDamage([7, 1, 6, 6]));
+
 //https://leetcode.com/problems/water-bottles-ii/?envType=daily-question&envId=2026-02-20
 function maxBottlesDrunk(numBottles: number, numExchange: number): number {
   let result = 0;
@@ -19,7 +27,7 @@ function maxBottlesDrunk(numBottles: number, numExchange: number): number {
   return result;
 }
 
-console.log(maxBottlesDrunk(13, 6));
+// console.log(maxBottlesDrunk(13, 6));
 
 //https://leetcode.com/problems/find-triangular-sum-of-an-array/?envType=daily-question&envId=2026-02-20
 function triangularSum(nums: number[]): number {
