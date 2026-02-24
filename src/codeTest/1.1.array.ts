@@ -4,9 +4,10 @@ export default {};
 function maximumTotalDamage(power: number[]): number {
   const n = power.length;
   power.sort((a, b) => a - b);
+  return 1;
 }
 
-console.log(maximumTotalDamage([7, 1, 6, 6]));
+// console.log(maximumTotalDamage([7, 1, 6, 6]));
 
 //https://leetcode.com/problems/water-bottles-ii/?envType=daily-question&envId=2026-02-20
 function maxBottlesDrunk(numBottles: number, numExchange: number): number {

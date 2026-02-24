@@ -4,6 +4,103 @@ const mod = Math.pow(10, 9) + 7;
 
 export default {};
 
+//https://leetcode.com/problems/pacific-atlantic-water-flow/
+function pacificAtlantic(heights: number[][]): number[][] {
+  const isValidPos = (i: number, j: number) => {
+    return 0 <= i && i < n && 0 <= j && j < m;
+  };
+
+  const bfs = (i: number, j: number, visited: boolean[][]) => {
+    visited[i][j] = true;
+    const queue = [[i, j]];
+    while (queue.length) {
+      const [r, c] = queue.shift()!;
+      const height = heights[r][c];
+
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [r + dx, c + dy];
+        if (
+          isValidPos(nx, ny) &&
+          !visited[nx][ny] &&
+          height <= heights[nx][ny]
+        ) {
+          queue.push([nx, ny]);
+          visited[nx][ny] = true;
+        }
+      }
+    }
+  };
+
+  const getPacific = () => {
+    const visited = Array.from({ length: n }, () => Array(m).fill(false));
+
+    for (let i = 0; i < n; i++) {
+      if (!visited[i][0]) {
+        bfs(i, 0, visited);
+      }
+    }
+
+    for (let i = 0; i < m; i++) {
+      if (!visited[0][i]) {
+        bfs(0, i, visited);
+      }
+    }
+
+    return visited;
+  };
+
+  const getAtlantic = () => {
+    const visited = Array.from({ length: n }, () => Array(m).fill(false));
+
+    for (let i = 0; i < n; i++) {
+      if (!visited[i][m - 1]) {
+        bfs(i, m - 1, visited);
+      }
+    }
+
+    for (let i = 0; i < m; i++) {
+      if (!visited[n - 1][i]) {
+        bfs(n - 1, i, visited);
+      }
+    }
+
+    return visited;
+  };
+
+  const n = heights.length;
+  const m = heights[0].length;
+  const moves = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+
+  const pacific = getPacific();
+  const atlantic = getAtlantic();
+
+  const result: number[][] = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (pacific[i][j] && atlantic[i][j]) {
+        result.push([i, j]);
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  pacificAtlantic([
+    [1, 2, 2, 3, 5],
+    [3, 2, 3, 4, 4],
+    [2, 4, 5, 3, 1],
+    [6, 7, 1, 4, 5],
+    [5, 1, 1, 2, 4],
+  ]),
+);
+
 function trapRainWater(heightMap: number[][]): number {
   const validPos = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
 
@@ -51,15 +148,15 @@ function trapRainWater(heightMap: number[][]): number {
   return water;
 }
 
-console.log(
-  trapRainWater([
-    [3, 3, 3, 3, 3],
-    [3, 2, 2, 2, 3],
-    [3, 2, 1, 2, 3],
-    [3, 2, 2, 2, 3],
-    [3, 3, 3, 3, 3],
-  ]),
-);
+// console.log(
+//   trapRainWater([
+//     [3, 3, 3, 3, 3],
+//     [3, 2, 2, 2, 3],
+//     [3, 2, 1, 2, 3],
+//     [3, 2, 2, 2, 3],
+//     [3, 3, 3, 3, 3],
+//   ]),
+// );
 
 // https://leetcode.com/problems/minimum-cost-to-convert-string-i/?envType=daily-question&envId=2026-01-29
 function minimumCost(
