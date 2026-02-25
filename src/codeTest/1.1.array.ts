@@ -1,5 +1,47 @@
 export default {};
 
+//https://leetcode.com/problems/successful-pairs-of-spells-and-potions/?envType=daily-question&envId=2026-02-25
+function successfulPairs(spells: number[], potions: number[], success: number) {
+  const bs = (spell: number) => {
+    const target = Math.ceil(success / spell);
+
+    if (potions[potions.length - 1] < target) {
+      return 0;
+    }
+
+    if (target <= potions[0]) {
+      return potions.length;
+    }
+
+    let left = 1;
+    let right = potions.length - 2;
+    let result = potions.length - 1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      if (target <= potions[mid]) {
+        result = mid;
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+
+    return potions.length - result;
+  };
+
+  potions.sort((a, b) => a - b);
+  const result = new Uint32Array(spells.length);
+
+  for (let i = 0; i < spells.length; i++) {
+    result[i] = bs(spells[i]);
+  }
+
+  return result;
+}
+
+console.log(successfulPairs([1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7], 25));
+
 //https://leetcode.com/problems/maximum-total-damage-with-spell-casting/?envType=daily-question&envId=2026-02-21
 function maximumTotalDamage(power: number[]): number {
   const n = power.length;
