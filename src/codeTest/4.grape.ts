@@ -4,6 +4,47 @@ const mod = Math.pow(10, 9) + 7;
 
 export default {};
 
+// https://leetcode.com/problems/largest-submatrix-with-rearrangements/?envType=daily-question&envId=2026-03-24
+function largestSubmatrix(matrix: number[][]): number {
+  const n = matrix.length;
+  const m = matrix[0].length;
+
+  for (let i = 0; i < m; i++) {
+    let count = 0;
+    for (let j = 0; j < n; j++) {
+      if (matrix[j][i] === 1) {
+        count++;
+      } else {
+        count = 0;
+      }
+      matrix[j][i] = count;
+    }
+  }
+
+  for (let i = 0; i < n; i++) {
+    matrix[i].sort((a, b) => b - a);
+  }
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      const h = matrix[i][j];
+      result = Math.max(result, h * (j + 1));
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  largestSubmatrix([
+    [0, 0, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [0, 1, 1],
+  ]),
+);
+
 //https://leetcode.com/problems/pacific-atlantic-water-flow/
 function pacificAtlantic(heights: number[][]): number[][] {
   const isValidPos = (i: number, j: number) => {
@@ -91,15 +132,15 @@ function pacificAtlantic(heights: number[][]): number[][] {
   return result;
 }
 
-console.log(
-  pacificAtlantic([
-    [1, 2, 2, 3, 5],
-    [3, 2, 3, 4, 4],
-    [2, 4, 5, 3, 1],
-    [6, 7, 1, 4, 5],
-    [5, 1, 1, 2, 4],
-  ]),
-);
+// console.log(
+//   pacificAtlantic([
+//     [1, 2, 2, 3, 5],
+//     [3, 2, 3, 4, 4],
+//     [2, 4, 5, 3, 1],
+//     [6, 7, 1, 4, 5],
+//     [5, 1, 1, 2, 4],
+//   ]),
+// );
 
 function trapRainWater(heightMap: number[][]): number {
   const validPos = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
