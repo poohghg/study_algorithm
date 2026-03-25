@@ -1,5 +1,39 @@
 export default {};
 
+//https://leetcode.com/problems/equal-sum-grid-partition-i/?envType=daily-question&envId=2026-03-25
+function canPartitionGrid(grid: number[][]): boolean {
+  const n = grid.length;
+  const m = grid[0].length;
+  const total = grid.reduce((acc, row) => {
+    return acc + row.reduce((a, b) => a + b);
+  }, 0);
+  const half = total / 2;
+
+  const canRowPartition = () => {
+    let sum = 0;
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = 0; j < m; j++) sum += grid[i][j];
+      if (sum === half) return true;
+    }
+    return false;
+  };
+
+  const canColPartition = () => {
+    let sum = 0;
+    for (let j = 0; j < m - 1; j++) {
+      for (let i = 0; i < n; i++) sum += grid[i][j];
+      if (sum === half) return true;
+    }
+
+    return false;
+  };
+
+  if (total % 2 !== 0) return false;
+  return canRowPartition() || canColPartition();
+}
+
+console.log(canPartitionGrid([[60814, 78535, 34289]]));
+
 //https://leetcode.com/problems/successful-pairs-of-spells-and-potions/?envType=daily-question&envId=2026-02-25
 function successfulPairs(spells: number[], potions: number[], success: number) {
   const bs = (spell: number) => {
@@ -40,7 +74,7 @@ function successfulPairs(spells: number[], potions: number[], success: number) {
   return result;
 }
 
-console.log(successfulPairs([1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7], 25));
+// console.log(successfulPairs([1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7], 25));
 
 //https://leetcode.com/problems/maximum-total-damage-with-spell-casting/?envType=daily-question&envId=2026-02-21
 function maximumTotalDamage(power: number[]): number {
