@@ -7,32 +7,99 @@ function canPartitionGrid(grid: number[][]): boolean {
   const total = grid.reduce((acc, row) => {
     return acc + row.reduce((a, b) => a + b);
   }, 0);
-  const half = total / 2;
+
+  const makeTotalNums = () => {
+    return grid.reduce((acc, row) => {
+      row.forEach((n) => {
+        acc.set(n, 1 + (acc.get(n) ?? 0));
+      });
+      return acc;
+    }, new Map<number, number>());
+  };
 
   const canRowPartition = () => {
+    const leftNums = new Map<number, number>();
+    const rightNums = makeTotalNums();
+
+    let rightSum = total;
     let sum = 0;
+
     for (let i = 0; i < n - 1; i++) {
-      for (let j = 0; j < m; j++) sum += grid[i][j];
-      if (sum === half) return true;
+      for (let j = 0; j < m; j++) {
+        const n = grid[i][j];
+        sum += n;
+        rightSum -= n;
+        leftNums.set(n, (leftNums.get(n) ?? 0) + 1);
+        rightNums.set(n, rightNums.get(n)! - 1);
+        if (rightNums.get(n) === 0) rightNums.delete(n);
+      }
+
+      if (sum === rightSum) return true;
+
+      if (sum < rightSum) {
+        const splitNum = rightSum - sum;
+        if (rightNums.has(splitNum)) {
+          return true;
+        }
+      }
+
+      if (rightSum < sum) {
+        const splitNum = sum - rightSum;
+        if (leftNums.has(splitNum)) {
+          return true;
+        }
+      }
     }
     return false;
   };
 
   const canColPartition = () => {
+    const leftNums = new Map<number, number>();
+    const rightNums = makeTotalNums();
+
+    let rightSum = total;
     let sum = 0;
+
     for (let j = 0; j < m - 1; j++) {
-      for (let i = 0; i < n; i++) sum += grid[i][j];
-      if (sum === half) return true;
+      for (let i = 0; i < n; i++) {
+        const n = grid[i][j];
+
+        sum += n;
+        rightSum -= n;
+        leftNums.set(n, (leftNums.get(n) ?? 0) + 1);
+        rightNums.set(n, rightNums.get(n)! - 1);
+        if (rightNums.get(n) === 0) rightNums.delete(n);
+      }
+
+      if (sum === rightSum) return true;
+
+      if (sum < rightSum) {
+        const splitNum = rightSum - sum;
+        if (rightNums.has(splitNum)) {
+          return true;
+        }
+      }
+
+      if (rightSum < sum) {
+        const splitNum = sum - rightSum;
+        if (leftNums.has(splitNum)) {
+          return true;
+        }
+      }
     }
 
     return false;
   };
 
-  if (total % 2 !== 0) return false;
   return canRowPartition() || canColPartition();
 }
 
-console.log(canPartitionGrid([[60814, 78535, 34289]]));
+console.log(
+  canPartitionGrid([
+    [1, 2, 4], // 7
+    [2, 3, 5], // 10
+  ]),
+);
 
 //https://leetcode.com/problems/successful-pairs-of-spells-and-potions/?envType=daily-question&envId=2026-02-25
 function successfulPairs(spells: number[], potions: number[], success: number) {
