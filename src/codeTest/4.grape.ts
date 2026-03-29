@@ -1,8 +1,64 @@
 import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
+export default {};
+
 const mod = Math.pow(10, 9) + 7;
 
-export default {};
+function countSubmatrices(grid: number[][], k: number): number {
+  const getNextPoint = (x: number, y: number) => {
+    return (
+      grid[x][y] + visited[x - 1][y] + visited[x][y - 1] - visited[x - 1][y - 1]
+    );
+  };
+
+  const n = grid.length;
+  const m = grid[0].length;
+  const visited = Array.from({ length: n }, (): number[] =>
+    Array(m).fill(Infinity),
+  );
+
+  if (k < grid[0][0]) return 0;
+
+  visited[0][0] = grid[0][0];
+  let result = 1;
+
+  for (let i = 1; i < n; i++) {
+    const score = visited[i - 1][0] + grid[i][0];
+    if (k < score) break;
+    result++;
+    visited[i][0] = score;
+  }
+
+  for (let i = 1; i < m; i++) {
+    const score = visited[0][i - 1] + grid[0][i];
+    if (k < score) break;
+    result++;
+    visited[0][i] = score;
+  }
+
+  for (let i = 1; i < n; i++) {
+    for (let j = 1; j < m; j++) {
+      const score = getNextPoint(i, j);
+      if (score <= k) {
+        visited[i][j] = score;
+        result++;
+      }
+    }
+  }
+
+  return result;
+}
+
+// 45 - 12 33
+console.log(
+  countSubmatrices(
+    [
+      [7, 6, 3],
+      [6, 6, 1],
+    ],
+    18,
+  ),
+);
 
 // https://leetcode.com/problems/largest-submatrix-with-rearrangements/?envType=daily-question&envId=2026-03-24
 function largestSubmatrix(matrix: number[][]): number {
@@ -36,14 +92,14 @@ function largestSubmatrix(matrix: number[][]): number {
   return result;
 }
 
-console.log(
-  largestSubmatrix([
-    [0, 0, 1],
-    [1, 1, 1],
-    [1, 1, 1],
-    [0, 1, 1],
-  ]),
-);
+// console.log(
+//   largestSubmatrix([
+//     [0, 0, 1],
+//     [1, 1, 1],
+//     [1, 1, 1],
+//     [0, 1, 1],
+//   ]),
+// );
 
 //https://leetcode.com/problems/pacific-atlantic-water-flow/
 function pacificAtlantic(heights: number[][]): number[][] {
