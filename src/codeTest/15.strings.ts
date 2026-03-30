@@ -1,5 +1,41 @@
 export default {};
 
+//https://leetcode.com/problems/check-if-strings-can-be-made-equal-with-operations-ii/description/?envType=daily-question&envId=2026-03-30
+function checkStrings(s1: string, s2: string): boolean {
+  const makeStringMaps = (str: string) => {
+    const oddMap = new Map<string, number>();
+    const evenMap = new Map<string, number>();
+
+    for (let i = 0; i < str.length; i++) {
+      const s = str[i];
+      if (i % 2 === 0) {
+        evenMap.set(s, (evenMap.get(s) || 0) + 1);
+      } else {
+        oddMap.set(s, (oddMap.get(s) || 0) + 1);
+      }
+    }
+
+    return [oddMap, evenMap];
+  };
+
+  const isSameMap = (map1: Map<string, number>, map2: Map<string, number>) => {
+    if (map1.size !== map2.size) return false;
+
+    for (const [key, value] of map1) {
+      if (value !== map2.get(key)) return false;
+    }
+
+    return true;
+  };
+
+  const [s1OddMap, s1EvenMap] = makeStringMaps(s1);
+  const [s2OddMap, s2EvenMap] = makeStringMaps(s2);
+
+  return isSameMap(s1OddMap, s2OddMap) && isSameMap(s1EvenMap, s2EvenMap);
+}
+
+console.log(checkStrings('abcdba', 'cabdab'));
+
 //https://leetcode.com/problems/generate-parentheses/
 function generateParenthesis(n: number): string[] {
   const result: string[] = [];
@@ -23,8 +59,7 @@ function generateParenthesis(n: number): string[] {
   return result;
 }
 
-console.log(generateParenthesis(3));
-
+// console.log(generateParenthesis(3));
 //https://leetcode.com/problems/longest-common-prefix/
 function longestCommonPrefix(strs: string[]): string {
   strs.sort((a, b) => {
