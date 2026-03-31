@@ -4,6 +4,49 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+function maxProductPath(grid: number[][]): number {
+  const n = grid.length;
+  const m = grid[0].length;
+  const visited = new Set<string>();
+  let max = -1;
+
+  // 목적지가 양수이면 중간의 답
+  const memo = Array.from({ length: n }, () => Array(m).fill(0));
+
+  const canMove = (i: number, j: number) => i < n && j < m;
+
+  const dfs = (i: number, j: number, score: number) => {
+    if (i === n - 1 && j === m - 1) {
+      max = Math.max(score, max);
+      return;
+    }
+
+    for (const [dx, dy] of [
+      [0, 1],
+      [1, 0],
+    ]) {
+      const [nx, ny] = [i + dx, j + dy];
+      const key = `${nx}-${ny}`;
+      if (canMove(nx, ny) && !visited.has(key)) {
+        visited.add(key);
+        dfs(nx, ny, score * grid[nx][ny]);
+        visited.delete(key);
+      }
+    }
+  };
+
+  dfs(0, 0, grid[0][0]);
+  return max % mod;
+}
+
+console.log(
+  maxProductPath([
+    [1, -2, 1],
+    [1, -2, 1],
+    [3, -4, 1],
+  ]),
+);
+
 function countSubmatrices(grid: number[][], k: number): number {
   const getNextPoint = (x: number, y: number) => {
     return (
@@ -50,15 +93,15 @@ function countSubmatrices(grid: number[][], k: number): number {
 }
 
 // 45 - 12 33
-console.log(
-  countSubmatrices(
-    [
-      [7, 6, 3],
-      [6, 6, 1],
-    ],
-    18,
-  ),
-);
+// console.log(
+//   countSubmatrices(
+//     [
+//       [7, 6, 3],
+//       [6, 6, 1],
+//     ],
+//     18,
+//   ),
+// );
 
 // https://leetcode.com/problems/largest-submatrix-with-rearrangements/?envType=daily-question&envId=2026-03-24
 function largestSubmatrix(matrix: number[][]): number {

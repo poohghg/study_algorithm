@@ -1,5 +1,32 @@
 export default {};
 
+//https://leetcode.com/problems/construct-product-matrix/?envType=daily-question&envId=2026-03-31
+function constructProductMatrix(grid: number[][]): number[][] {
+  const n = grid.length;
+  const m = grid[0].length;
+  const mod = 12345;
+  const dp = Array.from({ length: n }, () => Array(m).fill(0));
+
+  let total = 1;
+  for (let i = n - 1; 0 <= i; i--) {
+    for (let j = m - 1; 0 <= j; j--) {
+      dp[i][j] = total;
+      total = (total * grid[i][j]) % mod;
+    }
+  }
+
+  total = 1;
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      dp[i][j] = (dp[i][j] * total) % mod;
+      total = (total * grid[i][j]) % mod;
+    }
+  }
+
+  return dp;
+}
+
 //https://leetcode.com/problems/equal-sum-grid-partition-i/?envType=daily-question&envId=2026-03-25
 function canPartitionGrid(grid: number[][]): boolean {
   const n = grid.length;
