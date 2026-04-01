@@ -12,7 +12,7 @@ function maxSumDivThree(nums: number[]): number {
     }
   }
 
-  return 0;
+  return dp[0];
 }
 
 console.log(maxSumDivThree([3, 6, 5, 1, 8]));
