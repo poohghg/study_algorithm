@@ -1,5 +1,22 @@
 export default {};
 
+//https://leetcode.com/problems/greatest-sum-divisible-by-three/?envType=daily-question&envId=2026-04-01
+function maxSumDivThree(nums: number[]): number {
+  const dp: number[] = [0, 0, 0];
+
+  for (const num of nums) {
+    const prev = dp.slice();
+    for (const v of prev) {
+      const sum = num + v;
+      dp[sum % 3] = Math.max(dp[sum % 3], sum);
+    }
+  }
+
+  return 0;
+}
+
+console.log(maxSumDivThree([3, 6, 5, 1, 8]));
+
 //https://leetcode.com/problems/construct-product-matrix/?envType=daily-question&envId=2026-03-31
 function constructProductMatrix(grid: number[][]): number[][] {
   const n = grid.length;

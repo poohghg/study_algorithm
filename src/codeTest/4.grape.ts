@@ -4,54 +4,53 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+//https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/description/
 function maxProductPath(grid: number[][]): number {
   const n = grid.length;
   const m = grid[0].length;
-
-  // min,max
-  const dp = Array.from({ length: m }, () =>
+  const mod = Math.pow(10, 9) + 7;
+  const dp = Array.from({ length: n }, () =>
     Array.from({ length: m }, () => [0, 0]),
   );
 
-  const getPosPoints = (i: number, j: number) => {
-    if (0 <= i && 0 <= j) {
-      return dp[i][j];
-    }
-    return [0, 0];
-  };
+  dp[0][0] = [grid[0][0], grid[0][0]];
 
-  let max = -1;
-  // [-1,-1] -2 [2,2]
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < m; j++) {
-      if (i === 0 && j === 0) continue;
-
-      const num = grid[i][j];
-      const [leftMin, leftMax] = getPosPoints(i, j - 1);
-      const [upMin, upMax] = getPosPoints(i - 1, j);
-      const candidates = [
-        num,
-        num * leftMin,
-        num * leftMax,
-        num * upMin,
-        num * upMax,
-      ];
-      const min = Math.min(...candidates);
-      const max = Math.max(...candidates);
-      dp[i][j] = [min, max];
-    }
+  for (let i = 1; i < n; i++) {
+    const num = grid[i][0] * dp[i - 1][0][0];
+    dp[i][0] = [num, num];
   }
 
-  console.log(dp);
+  for (let i = 1; i < m; i++) {
+    const num = grid[0][i] * dp[0][i - 1][0];
+    dp[0][i] = [num, num];
+  }
+
+  for (let i = 1; i < n; i++) {
+    for (let j = 1; j < m; j++) {
+      const num = grid[i][j];
+
+      const [upMin, upMax] = dp[i - 1][j];
+      const [leftMin, leftMax] = dp[i][j - 1];
+
+      if (num < 0) {
+        dp[i][j][0] = Math.max(upMax, leftMax) * num;
+        dp[i][j][1] = Math.min(upMin, leftMin) * num;
+      } else {
+        dp[i][j][0] = Math.min(upMin, leftMin) * num;
+        dp[i][j][1] = Math.max(upMax, leftMax) * num;
+      }
+    }
+  }
 
   return dp[n - 1][m - 1][1] < 0 ? -1 : dp[n - 1][m - 1][1] % mod;
 }
 
 console.log(
   maxProductPath([
-    [-1, -2, -3],
-    [-2, -3, -3],
-    [-3, -3, -2],
+    [-1, -4, 2],
+    [4, 3, -1],
+    [2, -4, 4],
+    [1, -1, -4],
   ]),
 );
 
