@@ -1,5 +1,92 @@
 export default {};
 
+//https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn/?envType=daily-question&envId=2026-04-02
+function maximumAmount(coins: number[][]): number {
+  const n = coins.length;
+  const m = coins[0].length;
+  const dp = Array.from({ length: n }, () =>
+    Array.from({ length: m }, (): number[] => [
+      -Infinity,
+      -Infinity,
+      -Infinity,
+    ]),
+  );
+
+  const start = coins[0][0];
+  dp[0][0][0] = start;
+
+  if (start < 0) {
+    dp[0][0][1] = 0;
+  }
+
+  for (let i = 1; i < 2; i++) {
+    const num = coins[0][i];
+    const prev = dp[0][i - 1].slice();
+
+    for (let k = 0; k < 2; k++) {
+      dp[0][i][k] = Math.max(dp[0][i][k], prev[k] + num);
+
+      if (num < 0 && k > 1) {
+        dp[0][i][k] = Math.max(dp[0][i][k], prev[k - 1]);
+      }
+    }
+  }
+
+  // for (let i = 1; i < m; i++) {
+  //   const num = coins[0][i];
+  //   dp[0][i] = dp[0][i - 1] + num;
+  //   k[0][i] = k[0][i - 1].slice();
+  //   if (num < 0) {
+  //     k[0][i].push(Math.abs(num));
+  //     k[0][i] = k[0][i].sort((a, b) => b - a).slice(0, 2);
+  //   }
+  // }
+  //
+  // for (let i = 1; i < n; i++) {
+  //   for (let j = 1; j < m; j++) {
+  //     const num = coins[i][j];
+  //     const upSum = dp[i - 1][j];
+  //     const upKSum = k[i - 1][j].reduce((a, b) => a + b, 0);
+  //     const leftSum = dp[i][j - 1];
+  //     const leftKSum = k[i][j - 1].reduce((a, b) => a + b, 0);
+  //
+  //     // 현재 자리를 확정한다.
+  //     // 각각의 자리는 무조건썸으로 ?
+  //     if (upSum + upKSum < leftSum + leftKSum) {
+  //       dp[i][j] = num + leftSum;
+  //       if (num < 0) {
+  //         k[i][j] = [Math.abs(num), ...k[i][j - 1]]
+  //           .sort((a, b) => b - a)
+  //           .slice(0, 2);
+  //       } else {
+  //         k[i][j] = k[i][j - 1].slice();
+  //       }
+  //     } else {
+  //       dp[i][j] = num + upSum;
+  //       if (num < 0) {
+  //         k[i][j] = [Math.abs(num), ...k[i - 1][j]]
+  //           .sort((a, b) => b - a)
+  //           .slice(0, 2);
+  //       } else {
+  //         k[i][j] = k[i - 1][j].slice();
+  //       }
+  //     }
+  //   }
+  // }
+  //
+  // return dp[n - 1][m - 1] + k[n - 1][m - 1].reduce((a, b) => a + b, 0);
+  return 1;
+}
+
+console.log(
+  maximumAmount([
+    [-16, 4, 1, -1],
+    [11, 9, 3, 3],
+    [-6, 17, -19, 9],
+    [14, -17, -19, -13],
+  ]),
+);
+
 //https://leetcode.com/problems/greatest-sum-divisible-by-three/?envType=daily-question&envId=2026-04-01
 function maxSumDivThree(nums: number[]): number {
   const dp: number[] = [0, 0, 0];
@@ -15,7 +102,7 @@ function maxSumDivThree(nums: number[]): number {
   return dp[0];
 }
 
-console.log(maxSumDivThree([3, 6, 5, 1, 8]));
+// console.log(maxSumDivThree([3, 6, 5, 1, 8]));
 
 //https://leetcode.com/problems/construct-product-matrix/?envType=daily-question&envId=2026-03-31
 function constructProductMatrix(grid: number[][]): number[][] {
@@ -138,12 +225,12 @@ function canPartitionGrid(grid: number[][]): boolean {
   return canRowPartition() || canColPartition();
 }
 
-console.log(
-  canPartitionGrid([
-    [1, 2, 4], // 7
-    [2, 3, 5], // 10
-  ]),
-);
+// console.log(
+//   canPartitionGrid([
+//     [1, 2, 4], // 7
+//     [2, 3, 5], // 10
+//   ]),
+// );
 
 //https://leetcode.com/problems/successful-pairs-of-spells-and-potions/?envType=daily-question&envId=2026-02-25
 function successfulPairs(spells: number[], potions: number[], success: number) {
