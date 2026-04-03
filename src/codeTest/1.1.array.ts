@@ -1,5 +1,62 @@
 export default {};
 
+/**
+ * https://leetcode.com/problems/minimum-size-subarray-in-infinite-array/
+ * 배열은 무한하므로, target 안에는 nums의 총합이 포함될 수 있다.
+ * K(반복횟수) = target / totalSum
+ * remain(남은 타겟, 실제 구해야하는 값) = target % totalSum
+ * 이로써 전체 길이 중 k * n (n은 배열의 길이) 만큼은 이미 확보된 상태가 되며, 우리는 무한 배열 내에서 합이 rem이 되는 가장 짧은 부분 배열의 길이만 찾으면 된다.
+ *
+ * 2배 길이 배열을 탐색하는 이유?
+ * 찾고자 하는 합인 remain은 항상 total_sum보다 작기 때문에, 이 합을 만드는 부분 배열의 길이는 nums의 길이 n을 넘을 수 없다.
+ * 하지만 무한 배열의 특성상, 배열의 끝부분부터 다시 처음 부분으로 이어지는 형태(Wrap-around)로 부분 배열이 형성될 수 있다.
+ * 이를 포착하기 위해서는 nums의 길이 n을 넘어서는 탐색이 필요하다. 따라서, 2n 길이의 배열을 탐색함으로써, wrap-around 형태의 부분 배열도 고려할 수 있게 된다.
+ */
+
+function minSizeSubarray(nums: number[], target: number): number {
+  const n = nums.length;
+  const totalSum = nums.reduce((a, b) => a + b);
+  const k = Math.floor(target / totalSum);
+  const remain = target % totalSum;
+
+  let left = 0;
+  let sum = 0;
+  let size = Infinity;
+  for (let right = 0; right < n * 2; right++) {
+    sum += nums[right % n];
+
+    while (remain < sum && left <= right) {
+      sum -= nums[left % n];
+      left++;
+    }
+
+    if (remain === sum) {
+      size = Math.min(size, right - left + 1);
+    }
+  }
+
+  return size === Infinity ? -1 : size + k * n;
+}
+
+console.log(minSizeSubarray([1, 1, 1, 2, 3], 4));
+
+//https://leetcode.com/problems/alternating-groups-i/
+function numberOfAlternatingGroups(colors: number[]): number {
+  const first = colors[0];
+  const last = colors[colors.length - 1];
+  const arr = [last, ...colors, first];
+
+  let count = 0;
+  for (let i = 1; i < arr.length - 1; i++) {
+    const myColor = arr[i];
+    if (myColor !== arr[i - 1] && myColor !== arr[i + 1]) count++;
+  }
+
+  return count;
+}
+
+// console.log(numberOfAlternatingGroups([0, 1, 0, 0, 1]));
+
 //https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn/?envType=daily-question&envId=2026-04-02
 function maximumAmount(coins: number[][]): number {
   const n = coins.length;
@@ -19,73 +76,59 @@ function maximumAmount(coins: number[][]): number {
     dp[0][0][1] = 0;
   }
 
-  for (let i = 1; i < 2; i++) {
+  for (let i = 1; i < n; i++) {
+    const num = coins[i][0];
+    const prev = dp[i - 1][0].slice();
+
+    for (let k = 0; k <= 2; k++) {
+      dp[i][0][k] = Math.max(dp[i][0][k], prev[k] + num);
+
+      if (num < 0 && 0 < k) {
+        dp[i][0][k] = Math.max(dp[i][0][k], prev[k - 1]);
+      }
+    }
+  }
+
+  for (let i = 1; i < m; i++) {
     const num = coins[0][i];
     const prev = dp[0][i - 1].slice();
 
-    for (let k = 0; k < 2; k++) {
+    for (let k = 0; k <= 2; k++) {
       dp[0][i][k] = Math.max(dp[0][i][k], prev[k] + num);
 
-      if (num < 0 && k > 1) {
+      if (num < 0 && 0 < k) {
         dp[0][i][k] = Math.max(dp[0][i][k], prev[k - 1]);
       }
     }
   }
 
-  // for (let i = 1; i < m; i++) {
-  //   const num = coins[0][i];
-  //   dp[0][i] = dp[0][i - 1] + num;
-  //   k[0][i] = k[0][i - 1].slice();
-  //   if (num < 0) {
-  //     k[0][i].push(Math.abs(num));
-  //     k[0][i] = k[0][i].sort((a, b) => b - a).slice(0, 2);
-  //   }
-  // }
-  //
-  // for (let i = 1; i < n; i++) {
-  //   for (let j = 1; j < m; j++) {
-  //     const num = coins[i][j];
-  //     const upSum = dp[i - 1][j];
-  //     const upKSum = k[i - 1][j].reduce((a, b) => a + b, 0);
-  //     const leftSum = dp[i][j - 1];
-  //     const leftKSum = k[i][j - 1].reduce((a, b) => a + b, 0);
-  //
-  //     // 현재 자리를 확정한다.
-  //     // 각각의 자리는 무조건썸으로 ?
-  //     if (upSum + upKSum < leftSum + leftKSum) {
-  //       dp[i][j] = num + leftSum;
-  //       if (num < 0) {
-  //         k[i][j] = [Math.abs(num), ...k[i][j - 1]]
-  //           .sort((a, b) => b - a)
-  //           .slice(0, 2);
-  //       } else {
-  //         k[i][j] = k[i][j - 1].slice();
-  //       }
-  //     } else {
-  //       dp[i][j] = num + upSum;
-  //       if (num < 0) {
-  //         k[i][j] = [Math.abs(num), ...k[i - 1][j]]
-  //           .sort((a, b) => b - a)
-  //           .slice(0, 2);
-  //       } else {
-  //         k[i][j] = k[i - 1][j].slice();
-  //       }
-  //     }
-  //   }
-  // }
-  //
-  // return dp[n - 1][m - 1] + k[n - 1][m - 1].reduce((a, b) => a + b, 0);
-  return 1;
+  for (let i = 1; i < n; i++) {
+    for (let j = 1; j < m; j++) {
+      const num = coins[i][j];
+      const up = dp[i - 1][j].slice();
+      const left = dp[i][j - 1].slice();
+
+      for (let k = 0; k <= 2; k++) {
+        dp[i][j][k] = Math.max(dp[i][j][k], up[k] + num, left[k] + num);
+
+        if (num < 0 && 0 < k) {
+          dp[i][j][k] = Math.max(dp[i][j][k], up[k - 1], left[k - 1]);
+        }
+      }
+    }
+  }
+
+  return Math.max(...dp[n - 1][m - 1]);
 }
 
-console.log(
-  maximumAmount([
-    [-16, 4, 1, -1],
-    [11, 9, 3, 3],
-    [-6, 17, -19, 9],
-    [14, -17, -19, -13],
-  ]),
-);
+// console.log(
+//   maximumAmount([
+//     [-16, 4, 1, -1],
+//     [11, 9, 3, 3],
+//     [-6, 17, -19, 9],
+//     [14, -17, -19, -13],
+//   ]),
+// );
 
 //https://leetcode.com/problems/greatest-sum-divisible-by-three/?envType=daily-question&envId=2026-04-01
 function maxSumDivThree(nums: number[]): number {
