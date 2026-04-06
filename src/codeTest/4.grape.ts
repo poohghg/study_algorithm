@@ -4,6 +4,91 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+//https://leetcode.com/problems/count-submatrices-with-equal-frequency-of-x-and-y/?envType=daily-question&envId=2026-04-06
+function numberOfSubmatrices(grid: string[][]): number {
+  const n = grid.length;
+  const m = grid[0].length;
+
+  const xCount = Array(m).fill(0);
+  const yCount = Array(m).fill(0);
+
+  let result = 0;
+
+  for (let i = 0; i < n; i++) {
+    let rowX = 0;
+    let rowY = 0;
+    for (let j = 0; j < m; j++) {
+      const char = grid[i][j];
+
+      if (char === 'X') {
+        rowX++;
+      } else if (char === 'Y') {
+        rowY++;
+      }
+
+      xCount[j] += rowX;
+      yCount[j] += rowY;
+
+      if (0 < yCount[j] && xCount[j] === yCount[j]) {
+        result++;
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  numberOfSubmatrices([
+    ['X', '.', '.'],
+    ['.', 'X', 'X'],
+    ['Y', '.', '.'],
+    ['X', '.', '.'],
+  ]),
+);
+
+//https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/?envType=daily-question&envId=2026-04-06
+function minAbsDiff(grid: number[][], k: number): number[][] {
+  const rows = grid.length;
+  const cols = grid[0].length;
+
+  const res: number[][] = Array.from({ length: rows - k + 1 }, () =>
+    new Array(cols - k + 1).fill(0),
+  );
+
+  for (let r = 0; r <= rows - k; r++) {
+    for (let c = 0; c <= cols - k; c++) {
+      let window: number[] = [];
+
+      for (let i = 0; i < k; i++)
+        for (let j = 0; j < k; j++) window.push(grid[r + i][c + j]);
+
+      window.sort((a, b) => a - b);
+
+      let minDiff = Infinity;
+      for (let i = 0; i < window.length - 1; i++) {
+        const d = window[i + 1] - window[i];
+        if (d > 0) minDiff = Math.min(minDiff, d);
+      }
+
+      res[r][c] = minDiff === Infinity ? 0 : minDiff;
+    }
+  }
+
+  return res;
+}
+
+// console.log(
+//   minAbsDiff(
+//     [
+//       [1, -2, 3],
+//       [2, 3, 5],
+//       [3, 5, 1],
+//     ],
+//     2,
+//   ),
+// );
+
 //https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/description/
 function maxProductPath(grid: number[][]): number {
   const n = grid.length;
@@ -45,14 +130,14 @@ function maxProductPath(grid: number[][]): number {
   return dp[n - 1][m - 1][1] < 0 ? -1 : dp[n - 1][m - 1][1] % mod;
 }
 
-console.log(
-  maxProductPath([
-    [-1, -4, 2],
-    [4, 3, -1],
-    [2, -4, 4],
-    [1, -1, -4],
-  ]),
-);
+// console.log(
+//   maxProductPath([
+//     [-1, -4, 2],
+//     [4, 3, -1],
+//     [2, -4, 4],
+//     [1, -1, -4],
+//   ]),
+// );
 
 function countSubmatrices(grid: number[][], k: number): number {
   const getNextPoint = (x: number, y: number) => {
