@@ -4,6 +4,27 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+//https://leetcode.com/problems/decode-the-slanted-ciphertext/?envType=daily-question&envId=2026-04-07
+function decodeCiphertext(encodedText: string, rows: number): string {
+  const cols = Math.floor(encodedText.length / rows);
+
+  let reulst = '';
+  for (let i = 0; i < cols; i++) {
+    let row = 0;
+    let col = i;
+
+    while (row < rows && col < cols) {
+      reulst += encodedText[row * cols + col];
+      row++;
+      col++;
+    }
+  }
+
+  return reulst.trimEnd();
+}
+
+console.log(decodeCiphertext('iveo    eed   l te   olc', 4));
+
 //https://leetcode.com/problems/count-submatrices-with-equal-frequency-of-x-and-y/?envType=daily-question&envId=2026-04-06
 function numberOfSubmatrices(grid: string[][]): number {
   const n = grid.length;
@@ -38,14 +59,14 @@ function numberOfSubmatrices(grid: string[][]): number {
   return result;
 }
 
-console.log(
-  numberOfSubmatrices([
-    ['X', '.', '.'],
-    ['.', 'X', 'X'],
-    ['Y', '.', '.'],
-    ['X', '.', '.'],
-  ]),
-);
+// console.log(
+//   numberOfSubmatrices([
+//     ['X', '.', '.'],
+//     ['.', 'X', 'X'],
+//     ['Y', '.', '.'],
+//     ['X', '.', '.'],
+//   ]),
+// );
 
 //https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/?envType=daily-question&envId=2026-04-06
 function minAbsDiff(grid: number[][], k: number): number[][] {
