@@ -1,41 +1,39 @@
 export default {};
 
-function maxSideLength(mat: number[][], threshold: number): number {
-  const m = mat.length,
-    n = mat[0].length;
-  const prefix: number[][] = Array.from({ length: m + 1 }, () =>
+function findMaxForm(strs: string[], m: number, n: number): number {
+  const dp = Array.from({ length: m + 1 }, (): number[] =>
     Array(n + 1).fill(0),
   );
 
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      prefix[i + 1][j + 1] =
-        mat[i][j] + prefix[i][j + 1] + prefix[i + 1][j] - prefix[i][j];
+  const getCounts = (str: string) => {
+    let zeroCount = 0;
+    let oneCount = 0;
+
+    for (const s of str) {
+      if (s === '0') {
+        zeroCount++;
+      } else {
+        oneCount++;
+      }
+    }
+
+    return [zeroCount, oneCount];
+  };
+
+  for (const str of strs) {
+    const [zeroCount, oneCount] = getCounts(str);
+
+    for (let i = m; zeroCount <= i; i--) {
+      for (let j = n; oneCount <= j; j--) {
+        dp[i][j] = Math.max(dp[i][j], dp[i - zeroCount][j - oneCount] + 1);
+      }
     }
   }
 
-  // [
-  //   [0, 0, 0, 0],
-  //   [0, 3, 4, 6],
-  //   [0, 8, 11, 17],
-  //   [0, 12, 17, 26],
-  // ];
-
-  console.log(prefix);
-
-  return 1;
+  return dp[m][n];
 }
 
-console.log(
-  maxSideLength(
-    [
-      [3, 1, 2],
-      [5, 2, 4],
-      [4, 2, 3],
-    ],
-    12,
-  ),
-);
+console.log(findMaxForm(['10', '0001', '111001', '1', '0'], 5, 3));
 
 function maximalRectangle(matrix: string[][]): number {
   const getWidth = (r: number, c: number) => {
@@ -72,7 +70,7 @@ function maximalRectangle(matrix: string[][]): number {
   function largestRectangleArea(heights: number[] = [3, 1, 3, 2, 2]): number {
     const stack: number[] = [];
     let maxArea = 0;
-    heights.push(0); // Sentinel to ensure all heights are processed
+    heights.push(0);
 
     for (let i = 0; i < heights.length; i++) {
       while (
@@ -82,7 +80,6 @@ function maximalRectangle(matrix: string[][]): number {
         const height = heights[stack.pop()!];
         const width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;
         maxArea = Math.max(maxArea, height * width);
-        console.log(maxArea);
       }
       stack.push(i);
     }

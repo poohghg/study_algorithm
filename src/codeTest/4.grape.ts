@@ -8,19 +8,19 @@ const mod = Math.pow(10, 9) + 7;
 function decodeCiphertext(encodedText: string, rows: number): string {
   const cols = Math.floor(encodedText.length / rows);
 
-  let reulst = '';
+  let result = '';
   for (let i = 0; i < cols; i++) {
     let row = 0;
     let col = i;
 
     while (row < rows && col < cols) {
-      reulst += encodedText[row * cols + col];
+      result += encodedText[row * cols + col];
       row++;
       col++;
     }
   }
 
-  return reulst.trimEnd();
+  return result.trimEnd();
 }
 
 console.log(decodeCiphertext('iveo    eed   l te   olc', 4));

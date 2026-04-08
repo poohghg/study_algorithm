@@ -1,5 +1,28 @@
 export default {};
 
+//https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/description/?envType=daily-question&envId=2026-04-08
+function minOperations(nums: number[]): number {
+  const stack: number[] = [];
+
+  let result = 0;
+  for (const num of nums) {
+    while (stack.length && num < stack.at(-1)!) {
+      stack.pop();
+    }
+
+    if (num === 0) continue;
+
+    if (stack.length === 0 || stack.at(-1)! < num) {
+      result++;
+      stack.push(num);
+    }
+  }
+
+  return result;
+}
+
+console.log(minOperations([1, 2, 2, 1, 2]));
+
 //https://leetcode.com/problems/longest-valid-parentheses/solutions/4619860/determine-the-length-of-the-longest-vali-id2u/
 function longestValidParentheses(s: string): number {
   const queue: number[] = [-1];
@@ -21,8 +44,8 @@ function longestValidParentheses(s: string): number {
   return max;
 }
 
-console.log(longestValidParentheses(')(()())'));
-console.log(longestValidParentheses('()())'));
+// console.log(longestValidParentheses(')(()())'));
+// console.log(longestValidParentheses('()())'));
 
 //https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/next-greater-element-with-offset/problem?isFullScreen=true
 const findNextGreaterElementsWithDistance = (
