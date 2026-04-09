@@ -1,5 +1,62 @@
 export default {};
 
+//https://leetcode.com/problems/number-of-substrings-with-only-1s/?envType=daily-question&envId=2026-04-09
+function numSub(s: string): number {
+  const mod = Math.pow(10, 9) + 7;
+
+  const getLenCount = (len: number) => {
+    return (len * (len + 1)) / 2;
+  };
+
+  let result = 0;
+  let count = 0;
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+
+    if (char === '0') {
+      result += getLenCount(count);
+      count = 0;
+    } else {
+      count++;
+    }
+  }
+
+  result += getLenCount(count);
+  return result % mod;
+}
+
+console.log(numSub('0110111'));
+
+//https://leetcode.com/problems/all-divisions-with-the-highest-score-of-a-binary-array/
+function maxScoreIndices(nums: number[]): number[] {
+  let leftZero = 0;
+  let rightOne = nums.reduce((acc, v) => acc + v);
+  let result: number[] = [0];
+  let max = leftZero + rightOne;
+
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    if (num === 0) {
+      leftZero++;
+    } else {
+      rightOne--;
+    }
+
+    if (max === leftZero + rightOne) {
+      result.push(i + 1);
+    }
+
+    if (max < leftZero + rightOne) {
+      max = leftZero + rightOne;
+      result = [i + 1];
+    }
+  }
+
+  return result;
+}
+
+// console.log(maxScoreIndices([0, 0, 0]));
+
 /**
  * https://leetcode.com/problems/minimum-size-subarray-in-infinite-array/
  * 배열은 무한하므로, target 안에는 nums의 총합이 포함될 수 있다.
@@ -38,7 +95,7 @@ function minSizeSubarray(nums: number[], target: number): number {
   return size === Infinity ? -1 : size + k * n;
 }
 
-console.log(minSizeSubarray([1, 1, 1, 2, 3], 4));
+// console.log(minSizeSubarray([1, 1, 1, 2, 3], 4));
 
 //https://leetcode.com/problems/alternating-groups-i/
 function numberOfAlternatingGroups(colors: number[]): number {
