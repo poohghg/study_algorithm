@@ -1,5 +1,78 @@
 export default {};
 
+//https://leetcode.com/problems/subarray-sums-divisible-by-k/
+//function subarraysDivByK(nums: number[], k: number): number {
+//
+// };
+
+/**
+ * https://leetcode.com/problems/maximum-subarray-sum-with-length-divisible-by-k/?envType=daily-question&envId=2026-04-10
+ * (현재까지 확인한 원소의 개수) % k == (이전에 뺐던 지점의 원소 개수) % k 는 두 지점 사이의 원소 개수가 k의 배수임을 의미한다.
+ * 따라서, 현재까지의 누적 합에서 나머지가 같은 이전 누적 합을 빼면, 그 사이의 원소 개수가 k의 배수인 부분 배열의 합을 구할 수 있다.
+ * 이때, 나머지가 같은 이전 누적 합들 중 가장 작은 값(최솟값)을 빼야 최대 합을 얻을 수 있다.
+ * 이유는, 누적 합에서 더 작은 값을 빼면 더 큰 결과가 나오기 때문이다.
+ * 따라서, 나머지가 같은 이전 누적 합들 중 가장 작은 값(최솟값)을 저장하면서 탐색해야 한다.
+ */
+function maxSubarraySum(nums: number[], k: number): number {
+  const mindMods = Array.from({ length: k }, () => Infinity);
+  mindMods[0] = 0;
+  let result = -Infinity;
+  let prefixSum = 0;
+
+  for (let i = 0; i < nums.length; i++) {
+    prefixSum += nums[i];
+    const mod = (i + 1) % k;
+
+    if (mindMods[mod] !== Infinity) {
+      result = Math.max(result, prefixSum - mindMods[mod]);
+    }
+
+    mindMods[mod] = Math.min(mindMods[mod], prefixSum);
+  }
+
+  return result;
+}
+
+// console.log(maxSubarraySum([-5, 1, 2, -3, 4, 1, 2], 3));
+console.log(maxSubarraySum([1, 2], 1));
+// console.log(maxSubarraySum([-1, -2, -3, -4, -5], 4));
+
+//https://leetcode.com/problems/minimum-distance-between-three-equal-elements-i/description/?envType=daily-question&envId=2026-04-10
+function minimumDistance(nums: number[]): number {
+  const map = new Map<number, number[]>();
+  for (let i = 0; i < nums.length; i++) {
+    const n = nums[i];
+
+    if (!map.has(n)) {
+      map.set(n, []);
+    }
+
+    map.get(n)!.push(i);
+  }
+
+  const sumOfNum = (v1: number, v2: number) => {
+    return Math.abs(v1 - v2);
+  };
+
+  let result = Infinity;
+  for (const [k, value] of map) {
+    const size = value.length;
+    if (size < 3) continue;
+
+    for (let i = 0; i < size - 2; i++) {
+      const sum =
+        sumOfNum(value[i], value[i + 1]) +
+        sumOfNum(value[i], value[i + 2]) +
+        sumOfNum(value[i + 1], value[i + 2]);
+      result = Math.min(result, sum);
+    }
+  }
+
+  return result === Infinity ? -1 : result;
+}
+
+// console.log(minimumDistance([1, 1, 2, 3, 2, 1, 2]));
+
 //https://leetcode.com/problems/number-of-substrings-with-only-1s/?envType=daily-question&envId=2026-04-09
 function numSub(s: string): number {
   const mod = Math.pow(10, 9) + 7;
@@ -25,7 +98,7 @@ function numSub(s: string): number {
   return result % mod;
 }
 
-console.log(numSub('0110111'));
+// console.log(numSub('0110111'));
 
 //https://leetcode.com/problems/all-divisions-with-the-highest-score-of-a-binary-array/
 function maxScoreIndices(nums: number[]): number[] {
