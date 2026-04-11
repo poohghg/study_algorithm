@@ -1,9 +1,31 @@
 export default {};
 
+/**
+ * 현재까지의 누적 합을 K로 나눈 나머지"가 "과거의 어떤 시점에서의 누적 합을 K로 나눈 나머지"와 같다면,
+ * 그 두 지점 사이의 부분 배열의 합은 K로 나누어 떨어진다.
+ * 현재 누적 합 % K == 과거 누적 합 % K 를 만족하는 이유는 누적 합이 K로 나누어 떨어지는 경우, 즉 누적 합 % K == 0인 경우를 생각해보면
+ * 이 때는 현재 누적 합과 과거 누적 합이 모두 K로 나누어 떨어지는 경우가 된다.
+ * 두 누적합의 구간을 구할 때 현재 누적합에서 과거 누적합을 뺀다. 이때 나머지는 서로 상쇄되어 없어지기 때문에 결과적으로 그 구간의 합이 K로 나누어 떨어지는 경우가 된다.
+ */
+
 //https://leetcode.com/problems/subarray-sums-divisible-by-k/
-//function subarraysDivByK(nums: number[], k: number): number {
-//
-// };
+function subarraysDivByK(nums: number[], k: number): number {
+  const mods = Array(k).fill(0);
+  mods[0] = 1;
+
+  let result = 0;
+  let prefix = 0;
+  for (const num of nums) {
+    prefix += num;
+    const mod = ((prefix % k) + k) % k;
+    result += mods[mod];
+    mods[mod]++;
+  }
+
+  return result;
+}
+
+console.log(subarraysDivByK([4, 5, 0, -2, -3, 1], 5));
 
 /**
  * https://leetcode.com/problems/maximum-subarray-sum-with-length-divisible-by-k/?envType=daily-question&envId=2026-04-10
@@ -34,8 +56,6 @@ function maxSubarraySum(nums: number[], k: number): number {
 }
 
 // console.log(maxSubarraySum([-5, 1, 2, -3, 4, 1, 2], 3));
-console.log(maxSubarraySum([1, 2], 1));
-// console.log(maxSubarraySum([-1, -2, -3, -4, -5], 4));
 
 //https://leetcode.com/problems/minimum-distance-between-three-equal-elements-i/description/?envType=daily-question&envId=2026-04-10
 function minimumDistance(nums: number[]): number {
