@@ -1,5 +1,23 @@
 export default {};
 
+function countPalindromicSubsequence(s: string): number {
+  const chars = new Set(s);
+
+  let result = 0;
+  for (const c of chars) {
+    const left = s.indexOf(c);
+    const right = s.lastIndexOf(c);
+
+    if (left !== right) {
+      result += new Set(s.slice(left + 1, right)).size;
+    }
+  }
+
+  return result;
+}
+
+// console.log(countPalindromicSubsequence('aabca'));
+
 //https://leetcode.com/problems/minimum-distance-to-the-target-element/?envType=daily-question&envId=2026-04-13
 function getMinDistance(nums: number[], target: number, start: number): number {
   let result = Infinity;
@@ -16,7 +34,24 @@ function getMinDistance(nums: number[], target: number, start: number): number {
   return result;
 }
 
-console.log(getMinDistance([1, 1, 1, 1, 1], 1, 1));
+// console.log(getMinDistance([1, 1, 1, 1, 1], 1, 1));
+
+function minSubarray(nums: number[], p: number): number {
+  const mods = Array(p).fill(-1);
+  mods[0] = 0;
+
+  let prefix = 0;
+
+  for (let i = 0; i < nums.length; i++) {
+    const n = nums[i];
+    prefix += n;
+    console.log('test', prefix % p);
+  }
+
+  return 1;
+}
+
+console.log(minSubarray([6, 4, 5, 1, 5], 5));
 
 /**
  * https://leetcode.com/problems/subarray-sums-divisible-by-k/
