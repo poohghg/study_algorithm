@@ -1,5 +1,77 @@
 export default {};
 
+//https://leetcode.com/problems/closest-equal-element-queries/solutions/7932156/solved-using-binary-search-and-hash-map-46v3v/?envType=daily-question&envId=2026-04-16
+function solveQueries(nums: number[], queries: number[]): number[] {
+  const bs = (arr: number[], target: number) => {
+    let left = 0;
+    let right = arr.length;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      if (target === arr[mid]) {
+        return mid;
+      }
+
+      if (target < arr[mid]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+
+    return 0;
+  };
+
+  const size = nums.length;
+  const numsMap = queries.reduce((acc, index) => {
+    acc.set(nums[index], []);
+    return acc;
+  }, new Map<number, number[]>());
+
+  for (let i = 0; i < size; i++) {
+    const num = nums[i];
+    if (numsMap.has(num)) {
+      numsMap.get(num)!.push(i);
+    }
+  }
+
+  let result: number[] = [];
+
+  for (const query of queries) {
+    const num = nums[query];
+    let pos = numsMap.get(num)!;
+
+    if (pos.length < 2) {
+      result.push(-1);
+      continue;
+    }
+
+    let min = Infinity;
+    const index = bs(pos, query);
+    const x = pos[index];
+
+    // 좌측이랑 거리
+    if (index === 0) {
+      min = Math.min(x + size - pos[pos.length - 1]);
+    } else {
+      min = Math.min(x - pos[index - 1]);
+    }
+
+    // 우측이랑 거리
+    if (index === pos.length - 1) {
+      min = Math.min(min, Math.abs(pos[0] + size - x));
+    } else {
+      min = Math.min(min, pos[index + 1] - x);
+    }
+
+    result.push(min);
+  }
+
+  return result;
+}
+
+console.log(solveQueries([1, 3, 1, 4, 1, 3, 2], [0, 3, 5]));
+
 function minNumberOfSeconds(
   mountainHeight: number,
   workerTimes: number[],
