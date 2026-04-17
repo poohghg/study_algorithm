@@ -1,5 +1,36 @@
 export default {};
 
+function minMirrorPairDistance(nums: number[]): number {
+  const reverse = (num: number) => {
+    let result = 0;
+    let division = num;
+
+    while (0 < division) {
+      const last = division % 10;
+      division = Math.floor(division / 10);
+      result = result * 10 + last;
+    }
+
+    return result;
+  };
+
+  const map = new Map<number, number>();
+  let result = Infinity;
+  for (let i = nums.length - 1; 0 <= i; i--) {
+    const reverseNum = reverse(nums[i]);
+
+    if (map.has(reverseNum)) {
+      result = Math.min(result, map.get(reverseNum)! - i);
+    }
+
+    map.set(nums[i], i);
+  }
+
+  return result === Infinity ? -1 : result;
+}
+
+console.log(minMirrorPairDistance([120, 21]));
+
 //https://leetcode.com/problems/closest-equal-element-queries/solutions/7932156/solved-using-binary-search-and-hash-map-46v3v/?envType=daily-question&envId=2026-04-16
 function solveQueries(nums: number[], queries: number[]): number[] {
   const bs = (arr: number[], target: number) => {
@@ -70,7 +101,7 @@ function solveQueries(nums: number[], queries: number[]): number[] {
   return result;
 }
 
-console.log(solveQueries([1, 3, 1, 4, 1, 3, 2], [0, 3, 5]));
+// console.log(solveQueries([1, 3, 1, 4, 1, 3, 2], [0, 3, 5]));
 
 function minNumberOfSeconds(
   mountainHeight: number,
@@ -104,7 +135,7 @@ function minNumberOfSeconds(
   return res;
 }
 
-console.log(minNumberOfSeconds(10, [3, 2, 2, 4]));
+// console.log(minNumberOfSeconds(10, [3, 2, 2, 4]));
 
 function countPalindromicSubsequence(s: string): number {
   const chars = new Set(s);
