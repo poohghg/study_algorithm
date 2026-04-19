@@ -1,5 +1,31 @@
 export default {};
 
+//https://leetcode.com/problems/maximum-distance-between-a-pair-of-values/?envType=daily-question&envId=2026-04-19
+function maxDistance(nums1: number[], nums2: number[]): number {
+  const size = nums2.length;
+  let max = 0;
+  let j = 0;
+
+  for (let i = 0; i < nums1.length; i++) {
+    const num1 = nums1[i];
+
+    while (j < i && j < size) {
+      if (j === size - 1) break;
+      j++;
+    }
+
+    while (num1 <= nums2[j] && j < size) {
+      max = Math.max(max, j - i);
+      if (j === size - 1) break;
+      j++;
+    }
+  }
+
+  return max;
+}
+
+console.log(maxDistance([30, 29, 19, 5], [25, 25, 25, 25, 25]));
+
 function minMirrorPairDistance(nums: number[]): number {
   const reverse = (num: number) => {
     let result = 0;
@@ -29,7 +55,7 @@ function minMirrorPairDistance(nums: number[]): number {
   return result === Infinity ? -1 : result;
 }
 
-console.log(minMirrorPairDistance([120, 21]));
+// console.log(minMirrorPairDistance([120, 21]));
 
 //https://leetcode.com/problems/closest-equal-element-queries/solutions/7932156/solved-using-binary-search-and-hash-map-46v3v/?envType=daily-question&envId=2026-04-16
 function solveQueries(nums: number[], queries: number[]): number[] {
