@@ -1,5 +1,43 @@
 export default {};
 
+//https://leetcode.com/problems/two-furthest-houses-with-different-colors/?envType=daily-question&envId=2026-04-20
+function maxDistance1(colors: number[]): number {
+  const numsMap = new Map<number, [number, number]>();
+
+  for (let i = 0; i < colors.length; i++) {
+    const color = colors[i];
+
+    if (!numsMap.has(color)) {
+      numsMap.set(color, [i, i]);
+      continue;
+    }
+
+    numsMap.get(color)![1] = i;
+  }
+
+  let max = 0;
+  for (const [color, [start, end]] of numsMap) {
+    // [start, i-1];
+    for (let i = colors.length - 1; start < i; i--) {
+      if (colors[i] !== color) {
+        max = Math.max(max, i - start);
+        break;
+      }
+    }
+
+    for (let i = 0; i < end; i++) {
+      if (colors[i] !== color) {
+        max = Math.max(max, end - i);
+        break;
+      }
+    }
+  }
+
+  return max;
+}
+
+console.log(maxDistance1([1, 8, 3, 8, 3]));
+
 //https://leetcode.com/problems/maximum-distance-between-a-pair-of-values/?envType=daily-question&envId=2026-04-19
 function maxDistance(nums1: number[], nums2: number[]): number {
   const size = nums2.length;
@@ -24,7 +62,7 @@ function maxDistance(nums1: number[], nums2: number[]): number {
   return max;
 }
 
-console.log(maxDistance([30, 29, 19, 5], [25, 25, 25, 25, 25]));
+// console.log(maxDistance([30, 29, 19, 5], [25, 25, 25, 25, 25]));
 
 function minMirrorPairDistance(nums: number[]): number {
   const reverse = (num: number) => {
