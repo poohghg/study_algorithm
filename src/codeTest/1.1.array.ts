@@ -1,5 +1,77 @@
 export default {};
 
+//https://leetcode.com/problems/minimize-hamming-distance-after-swap-operations/?envType=daily-question&envId=2026-04-21
+function minimumHammingDistance(
+  source: number[],
+  target: number[],
+  allowedSwaps: number[][],
+): number {
+  const graph = allowedSwaps.reduce((acc, [node1, node2]) => {
+    if (!acc.has(node1)) acc.set(node1, []);
+    if (!acc.has(node2)) acc.set(node2, []);
+    acc.get(node1)!.push(node2);
+    acc.get(node2)!.push(node1);
+    return acc;
+  }, new Map<number, number[]>());
+
+  const size = source.length;
+
+  const bfs = (s: number, t: number) => {
+    const visited = new Set<number>();
+    const q = [s];
+    visited.add(s);
+
+    while (q.length) {
+      const node = q.shift()!;
+
+      for (const nextNode of graph.get(node) ?? []) {
+        if (source[nextNode] === t && !fixed.has(nextNode)) return nextNode;
+        if (!visited.has(nextNode)) {
+          q.push(nextNode);
+          visited.add(nextNode);
+        }
+      }
+    }
+
+    return -1;
+  };
+
+  // 여기서 유니온 파인드 개념
+  // 해당 노드에서 갈 수 있는 노드들을 미리 구한다.
+  console.log(graph);
+
+  const fixed = new Set<number>();
+  for (let i = 0; i < size; i++) {
+    // 확정
+    if (source[i] === target[i]) {
+      fixed.add(i);
+      continue;
+    }
+
+    const swapIndex = bfs(i, target[i]);
+
+    if (swapIndex !== -1) {
+      fixed.add(i);
+      [source[i], source[swapIndex]] = [source[swapIndex], source[i]];
+    }
+  }
+
+  return size - fixed.size;
+}
+
+console.log(
+  minimumHammingDistance(
+    [5, 1, 2, 4, 3],
+    [1, 5, 4, 2, 3],
+    [
+      [0, 4],
+      [4, 2],
+      [1, 3],
+      [1, 4],
+    ],
+  ),
+);
+
 //https://leetcode.com/problems/two-furthest-houses-with-different-colors/?envType=daily-question&envId=2026-04-20
 function maxDistance1(colors: number[]): number {
   const numsMap = new Map<number, [number, number]>();
@@ -17,7 +89,6 @@ function maxDistance1(colors: number[]): number {
 
   let max = 0;
   for (const [color, [start, end]] of numsMap) {
-    // [start, i-1];
     for (let i = colors.length - 1; start < i; i--) {
       if (colors[i] !== color) {
         max = Math.max(max, i - start);
@@ -36,7 +107,7 @@ function maxDistance1(colors: number[]): number {
   return max;
 }
 
-console.log(maxDistance1([1, 8, 3, 8, 3]));
+// console.log(maxDistance1([1, 8, 3, 8, 3]));
 
 //https://leetcode.com/problems/maximum-distance-between-a-pair-of-values/?envType=daily-question&envId=2026-04-19
 function maxDistance(nums1: number[], nums2: number[]): number {
