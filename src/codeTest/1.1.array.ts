@@ -1,5 +1,49 @@
 export default {};
 
+//https://leetcode.com/problems/sum-of-distances/?envType=daily-question&envId=2026-04-23
+function distance(nums: number[]): number[] {
+  const numsMap = new Map<number, number[]>();
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    if (!numsMap.has(num)) {
+      numsMap.set(num, [0]);
+    }
+    numsMap.get(num)!.push(numsMap.get(num)!.at(-1)! + i);
+  }
+
+  const idxOfNums = new Map<number, number>(
+    Array.from(numsMap.keys()).map((num) => [num, 0]),
+  );
+
+  const result: number[] = [];
+
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+
+    if (numsMap.get(num)!.length === 2) {
+      result.push(0);
+      continue;
+    }
+
+    const prefix = numsMap.get(num)!;
+    const currentIdx = idxOfNums.get(num)!;
+
+    const left = currentIdx * i - prefix[currentIdx];
+
+    const right =
+      prefix.at(-1)! -
+      prefix[currentIdx] -
+      (prefix.length - 1 - currentIdx) * i;
+
+    result.push(left + right);
+    idxOfNums.set(num, currentIdx + 1);
+  }
+
+  return result;
+}
+
+console.log(distance([1, 3, 1, 1, 2]));
+
 //https://leetcode.com/problems/minimize-hamming-distance-after-swap-operations/?envType=daily-question&envId=2026-04-21
 function minimumHammingDistance(
   source: number[],
@@ -59,18 +103,18 @@ function minimumHammingDistance(
   return size - fixed.size;
 }
 
-console.log(
-  minimumHammingDistance(
-    [5, 1, 2, 4, 3],
-    [1, 5, 4, 2, 3],
-    [
-      [0, 4],
-      [4, 2],
-      [1, 3],
-      [1, 4],
-    ],
-  ),
-);
+// console.log(
+//   minimumHammingDistance(
+//     [5, 1, 2, 4, 3],
+//     [1, 5, 4, 2, 3],
+//     [
+//       [0, 4],
+//       [4, 2],
+//       [1, 3],
+//       [1, 4],
+//     ],
+//   ),
+// );
 
 //https://leetcode.com/problems/two-furthest-houses-with-different-colors/?envType=daily-question&envId=2026-04-20
 function maxDistance1(colors: number[]): number {
