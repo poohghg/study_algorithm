@@ -4,6 +4,61 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+function containsCycle(grid: string[][]): boolean {
+  const m = grid.length;
+  const n = grid[0].length;
+  const visited = Array.from({ length: m }, (): boolean[] => Array(n).fill(0));
+
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const canMove = (r: number, c: number) => 0 <= r && r < m && 0 <= c && c < n;
+
+  const dfs = (sx: number, sy: number, x: number, y: number, count: number) => {
+    for (const [dx, dy] of moves) {
+      const [nx, ny] = [x + dx, y + dy];
+      if (canMove(nx, ny) && grid[sx][sy] === grid[nx][ny]) {
+        if (sx === nx && sy === ny && 3 < count) return true;
+        if (!visited[nx][ny]) {
+          visited[nx][ny] = true;
+          if (dfs(sx, sy, nx, ny, count + 1)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  };
+
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (visited[i][j]) continue;
+      visited[i][j] = true;
+
+      if (dfs(i, j, i, j, 1)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+console.log(
+  containsCycle([
+    ['c', 'a', 'd'],
+    ['a', 'a', 'a'],
+    ['a', 'a', 'd'],
+    ['a', 'c', 'd'],
+    ['a', 'b', 'c'],
+  ]),
+);
+
 //https://leetcode.com/problems/decode-the-slanted-ciphertext/?envType=daily-question&envId=2026-04-07
 function decodeCiphertext(encodedText: string, rows: number): string {
   const cols = Math.floor(encodedText.length / rows);
@@ -23,7 +78,7 @@ function decodeCiphertext(encodedText: string, rows: number): string {
   return result.trimEnd();
 }
 
-console.log(decodeCiphertext('iveo    eed   l te   olc', 4));
+// console.log(decodeCiphertext('iveo    eed   l te   olc', 4));
 
 //https://leetcode.com/problems/count-submatrices-with-equal-frequency-of-x-and-y/?envType=daily-question&envId=2026-04-06
 function numberOfSubmatrices(grid: string[][]): number {
