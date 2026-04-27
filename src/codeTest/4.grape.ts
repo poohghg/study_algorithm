@@ -4,6 +4,100 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+function hasValidPath(grid: number[][]): boolean {
+  const moves: Record<number, number[][]> = {
+    1: [
+      [0, 1],
+      [0, -1],
+    ],
+    2: [
+      [1, 0],
+      [-1, 0],
+    ],
+    3: [
+      [1, 0],
+      [0, -1],
+    ],
+    4: [
+      [1, 0],
+      [0, 1],
+    ],
+    5: [
+      [-1, 0],
+      [0, -1],
+    ],
+    6: [
+      [-1, 0],
+      [0, 1],
+    ],
+  };
+
+  const n = grid[0].length;
+  const m = grid.length;
+  const visited = Array.from({ length: m }, (): boolean[] =>
+    Array(n).fill(false),
+  );
+
+  const canMove = (dx: number, dy: number, nv: number) => {
+    // nx,ny가 위로일때 받을수 있는 포지션은 ?
+    // 2 3 4 이다.
+    if (dx === -1 && dy === 0) {
+      return [2, 3, 4].includes(nv);
+    }
+    //nx,ny가 아래로일때 받을수 있는 포지션은 ?
+    // 2 5 6 이다.
+    if (dx === 1 && dy === 0) {
+      return [2, 5, 6].includes(nv);
+    }
+    //nx,ny가 왼쪽으로일때 받을수 있는 포지션은 ?
+    // 1 4 6 이다.
+    if (dx === 0 && dy === -1) {
+      return [1, 4, 6].includes(nv);
+    }
+    //nx,ny가 오른쪽으로일때 받을수 있는 포지션은 ?
+    // 1 3 5 이다.
+    if (dx === 0 && dy === 1) {
+      return [1, 3, 5].includes(nv);
+    }
+
+    return false;
+  };
+
+  const isValidPos = (x: number, y: number) =>
+    0 <= x && x < m && 0 <= y && y < n && !visited[x][y];
+
+  const dfs = (x: number, y: number) => {
+    if (x === m - 1 && y === n - 1) {
+      return true;
+    }
+
+    visited[x][y] = true;
+    const v = grid[x][y];
+
+    for (const [dx, dy] of moves[v]) {
+      const [nx, ny] = [x + dx, y + dy];
+      if (!isValidPos(nx, ny) || !canMove(dx, dy, grid[nx][ny])) continue;
+      if (dfs(nx, ny)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  return dfs(0, 0);
+}
+
+console.log(
+  hasValidPath([
+    [2, 6, 3],
+    [6, 5, 2],
+  ]),
+);
+
+// b
+// l u
+
 function containsCycle(grid: string[][]): boolean {
   const m = grid.length;
   const n = grid[0].length;
@@ -49,15 +143,15 @@ function containsCycle(grid: string[][]): boolean {
   return false;
 }
 
-console.log(
-  containsCycle([
-    ['c', 'a', 'd'],
-    ['a', 'a', 'a'],
-    ['a', 'a', 'd'],
-    ['a', 'c', 'd'],
-    ['a', 'b', 'c'],
-  ]),
-);
+// console.log(
+//   containsCycle([
+//     ['c', 'a', 'd'],
+//     ['a', 'a', 'a'],
+//     ['a', 'a', 'd'],
+//     ['a', 'c', 'd'],
+//     ['a', 'b', 'c'],
+//   ]),
+// );
 
 //https://leetcode.com/problems/decode-the-slanted-ciphertext/?envType=daily-question&envId=2026-04-07
 function decodeCiphertext(encodedText: string, rows: number): string {
