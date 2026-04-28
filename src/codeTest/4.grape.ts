@@ -4,6 +4,41 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+//https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid/?envType=daily-question&envId=2026-04-28
+function minOperations(grid: number[][], x: number): number {
+  const nums = grid.flat();
+
+  // 각 수의 x로 나눈 나머지가 같다면, 수는 x의 배수만큼 이동하여 동일한 값으로 만들 수 있다.
+  const mod = nums[0] % x;
+  for (let i = 1; i < nums.length; i++) {
+    const num = nums[i];
+    if (mod !== num % x) return -1;
+  }
+
+  nums.sort((a, b) => a - b);
+  const mid = Math.floor((nums.length - 1) / 2);
+  const target = nums[mid];
+
+  let count = 0;
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    const diff = Math.abs(target - num);
+    count += diff / x;
+  }
+
+  return count;
+}
+
+console.log(
+  minOperations(
+    [
+      [2, 4],
+      [6, 8],
+    ],
+    2,
+  ),
+);
+
 function hasValidPath(grid: number[][]): boolean {
   const moves: Record<number, number[][]> = {
     1: [
