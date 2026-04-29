@@ -123,16 +123,17 @@ function hasValidPath(grid: number[][]): boolean {
   return dfs(0, 0);
 }
 
-console.log(
-  hasValidPath([
-    [2, 6, 3],
-    [6, 5, 2],
-  ]),
-);
+// console.log(
+//   hasValidPath([
+//     [2, 6, 3],
+//     [6, 5, 2],
+//   ]),
+// );
 
 // b
 // l u
 
+//https://leetcode.com/problems/detect-cycles-in-2d-grid/?envType=daily-question&envId=2026-04-29
 function containsCycle(grid: string[][]): boolean {
   const m = grid.length;
   const n = grid[0].length;
@@ -147,18 +148,19 @@ function containsCycle(grid: string[][]): boolean {
 
   const canMove = (r: number, c: number) => 0 <= r && r < m && 0 <= c && c < n;
 
-  const dfs = (sx: number, sy: number, x: number, y: number, count: number) => {
+  const dfs = (px: number, py: number, x: number, y: number, count: number) => {
+    visited[x][y] = true;
+    const v = grid[x][y];
+
     for (const [dx, dy] of moves) {
       const [nx, ny] = [x + dx, y + dy];
-      if (canMove(nx, ny) && grid[sx][sy] === grid[nx][ny]) {
-        if (sx === nx && sy === ny && 3 < count) return true;
-        if (!visited[nx][ny]) {
-          visited[nx][ny] = true;
-          if (dfs(sx, sy, nx, ny, count + 1)) {
-            return true;
-          }
-        }
-      }
+
+      if (!canMove(nx, ny) || v !== grid[nx][ny]) continue;
+      if (visited[nx][ny] && (nx !== px || ny !== py) && 3 <= count)
+        return true;
+      if (visited[nx][ny]) continue;
+
+      return dfs(x, y, nx, ny, count + 1);
     }
 
     return false;
@@ -167,8 +169,6 @@ function containsCycle(grid: string[][]): boolean {
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
       if (visited[i][j]) continue;
-      visited[i][j] = true;
-
       if (dfs(i, j, i, j, 1)) {
         return true;
       }
@@ -178,15 +178,15 @@ function containsCycle(grid: string[][]): boolean {
   return false;
 }
 
-// console.log(
-//   containsCycle([
-//     ['c', 'a', 'd'],
-//     ['a', 'a', 'a'],
-//     ['a', 'a', 'd'],
-//     ['a', 'c', 'd'],
-//     ['a', 'b', 'c'],
-//   ]),
-// );
+console.log(
+  containsCycle([
+    ['d', 'd', 'a'],
+    ['d', 'd', 'c'],
+    ['d', 'c', 'c'],
+    ['d', 'd', 'c'],
+    ['d', 'a', 'b'],
+  ]),
+);
 
 //https://leetcode.com/problems/decode-the-slanted-ciphertext/?envType=daily-question&envId=2026-04-07
 function decodeCiphertext(encodedText: string, rows: number): string {
