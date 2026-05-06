@@ -4,6 +4,71 @@ export default {};
 
 const mod = Math.pow(10, 9) + 7;
 
+function maxPathScore(grid: number[][], k: number): number {
+  const m = grid.length;
+  const n = grid[0].length;
+
+  const dp = Array.from({ length: m }, () =>
+    Array.from({ length: n }, (): number[] => Array(k + 1).fill(-Infinity)),
+  );
+
+  const cost = grid[0][0] === 0 ? 0 : 1;
+  dp[0][0][cost] = grid[0][0];
+
+  for (let i = 1; i < m; i++) {
+    const num = grid[i][0];
+    const cost = num === 0 ? 0 : 1;
+
+    for (let j = k; cost <= j; j--) {
+      if (dp[i - 1][0][j - cost] === -Infinity) continue;
+      dp[i][0][j] = Math.max(dp[i][0][j], dp[i - 1][0][j - cost] + num);
+    }
+  }
+
+  for (let i = 1; i < n; i++) {
+    const num = grid[0][i];
+    const cost = num === 0 ? 0 : 1;
+    for (let j = k; cost <= j; j--) {
+      if (dp[0][i - 1][j - cost] === -Infinity) continue;
+      dp[0][i][j] = Math.max(dp[0][i][j], dp[0][i - 1][j - cost] + num);
+    }
+  }
+
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      const num = grid[i][j];
+      const cost = num === 0 ? 0 : 1;
+
+      for (let l = k; cost <= l; l--) {
+        const up = dp[i - 1][j][l - cost];
+        const left = dp[i][j - 1][l - cost];
+
+        if (up !== -Infinity) {
+          dp[i][j][l] = Math.max(dp[i][j][l], up + num);
+        }
+
+        if (left !== -Infinity) {
+          dp[i][j][l] = Math.max(dp[i][j][l], left + num);
+        }
+      }
+    }
+  }
+
+  const max = Math.max(...dp[m - 1][n - 1]);
+  return max === -Infinity ? -1 : max;
+}
+
+console.log(
+  maxPathScore(
+    [
+      [0, 0, 3],
+      [1, 2, 3],
+      [1, 2, 3],
+    ],
+    5,
+  ),
+);
+
 //https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid/?envType=daily-question&envId=2026-04-28
 function minOperations(grid: number[][], x: number): number {
   const nums = grid.flat();
@@ -29,15 +94,15 @@ function minOperations(grid: number[][], x: number): number {
   return count;
 }
 
-console.log(
-  minOperations(
-    [
-      [2, 4],
-      [6, 8],
-    ],
-    2,
-  ),
-);
+// console.log(
+//   minOperations(
+//     [
+//       [2, 4],
+//       [6, 8],
+//     ],
+//     2,
+//   ),
+// );
 
 function hasValidPath(grid: number[][]): boolean {
   const moves: Record<number, number[][]> = {
@@ -156,8 +221,7 @@ function containsCycle(grid: string[][]): boolean {
       const [nx, ny] = [x + dx, y + dy];
 
       if (!canMove(nx, ny) || v !== grid[nx][ny]) continue;
-      if (visited[nx][ny] && (nx !== px || ny !== py) && 3 <= count)
-        return true;
+      if (visited[nx][ny] && 3 <= count) return true;
       if (visited[nx][ny]) continue;
 
       return dfs(x, y, nx, ny, count + 1);
@@ -178,15 +242,15 @@ function containsCycle(grid: string[][]): boolean {
   return false;
 }
 
-console.log(
-  containsCycle([
-    ['d', 'd', 'a'],
-    ['d', 'd', 'c'],
-    ['d', 'c', 'c'],
-    ['d', 'd', 'c'],
-    ['d', 'a', 'b'],
-  ]),
-);
+// console.log(
+//   containsCycle([
+//     ['d', 'd', 'a'],
+//     ['d', 'd', 'c'],
+//     ['d', 'c', 'c'],
+//     ['d', 'd', 'c'],
+//     ['d', 'a', 'b'],
+//   ]),
+// );
 
 //https://leetcode.com/problems/decode-the-slanted-ciphertext/?envType=daily-question&envId=2026-04-07
 function decodeCiphertext(encodedText: string, rows: number): string {

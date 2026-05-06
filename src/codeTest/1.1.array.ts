@@ -526,7 +526,7 @@ function maxScoreIndices(nums: number[]): number[] {
  * 배열은 무한하므로, target 안에는 nums의 총합이 포함될 수 있다.
  * K(반복횟수) = target / totalSum
  * remain(남은 타겟, 실제 구해야하는 값) = target % totalSum
- * 이로써 전체 길이 중 k * n (n은 배열의 길이) 만큼은 이미 확보된 상태가 되며, 우리는 무한 배열 내에서 합이 rem이 되는 가장 짧은 부분 배열의 길이만 찾으면 된다.
+ * 이로써 전체 길이 중 k * n (n은 배열의 길이) 만큼은 이미 확보된 상태가 되며, 무한 배열 내에서 합이 rem이 되는 가장 짧은 부분 배열의 길이만 찾으면 된다.
  *
  * 2배 길이 배열을 탐색하는 이유?
  * 찾고자 하는 합인 remain은 항상 total_sum보다 작기 때문에, 이 합을 만드는 부분 배열의 길이는 nums의 길이 n을 넘을 수 없다.
