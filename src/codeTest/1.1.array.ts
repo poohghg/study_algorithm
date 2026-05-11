@@ -1,5 +1,32 @@
 export default {};
 
+//https://leetcode.com/problems/separate-the-digits-in-an-array/?envType=daily-question&envId=2026-05-11
+function separateDigits(nums: number[]): number[] {
+  const getNums = (num: number) => {
+    const nums: number[] = [];
+    let remain = num;
+
+    while (0 < remain) {
+      nums.push(remain % 10);
+      remain = Math.floor(remain / 10);
+    }
+
+    return nums.reverse();
+  };
+
+  const result: number[] = [];
+  for (const num of nums) {
+    result.push(...getNums(num));
+  }
+
+  return result;
+}
+
+console.log(separateDigits([]));
+
+// //https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/?envType=daily-question&envId=2026-05-07
+// function maximumProfit(prices: number[], k: number): number {}
+
 //https://leetcode.com/problems/sum-of-distances/?envType=daily-question&envId=2026-04-23
 function distance(nums: number[]): number[] {
   const numsMap = new Map<number, number[]>();
