@@ -1,5 +1,33 @@
 export default {};
 
+/**
+ * 정렬을 하는이유? : 각 작업의 실제 에너지 소모량과 최소 에너지 요구량의 차이를 기준으로 내림차순 정렬을 한다. 이렇게 하면, 가장 큰 차이를 가진 작업부터 처리하게 된다.
+ * 이렇게 정렬하는 이유는, 가장 큰 차이를 가진 작업을 먼저 처리함으로써, 초기 에너지가 부족한 경우에도 최소한의 에너지로 작업을 완료할 수 있도록 하기 위함이다. 만약 작은 차이를 가진 작업부터 처리한다면, 초기 에너지가 부족할 때 큰 차이를 가진 작업을 처리할 수 없게 되어 전체적으로 더 많은 에너지가 필요하게 될 수 있다.
+ * 작업을 처리할 때마다, 현재 에너지에서 실제 에너지 소모량을 더해주고, 최소 에너지 요구량과 비교하여 초기 에너지를 업데이트한다. 이렇게 하면, 각 작업을 처리할 때 필요한 최소 초기 에너지를 계산할 수 있다.
+ */
+
+//https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/?envType=daily-question&envId=2026-05-12
+function minimumEffort(tasks: number[][]): number {
+  tasks.sort((a, b) => b[1] - b[0] - (a[1] - a[0]));
+  let totalEnergy = 0;
+  let currentEnergy = 0;
+
+  for (const [actual, minimum] of tasks) {
+    totalEnergy = Math.max(totalEnergy, currentEnergy + minimum);
+    currentEnergy += actual;
+  }
+
+  return totalEnergy;
+}
+
+console.log(
+  minimumEffort([
+    [1, 2],
+    [2, 4],
+    [4, 8],
+  ]),
+);
+
 //https://leetcode.com/problems/separate-the-digits-in-an-array/?envType=daily-question&envId=2026-05-11
 function separateDigits(nums: number[]): number[] {
   const getNums = (num: number) => {
