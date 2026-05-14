@@ -334,10 +334,12 @@ function minDeletionSize(strs: string[]): number {
     max = Math.max(max, dp[i]);
   }
 
+  // 'abcdefghijklmnopqrstuvwxyz'
+  console.log(dp);
   return n - max;
 }
 
-// console.log(minDeletionSize(['babca', 'bbazb']));
+console.log("'test',", minDeletionSize(['abcdef', 'uvwxyz']));
 // console.log(minDeletionSize(['ghi', 'def', 'abc']));
 
 //https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/

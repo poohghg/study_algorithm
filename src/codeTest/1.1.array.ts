@@ -1,11 +1,67 @@
 export default {};
 
+//https://leetcode.com/problems/check-if-array-is-good/?envType=daily-question&envId=2026-05-14
+function isGood(nums: number[]): boolean {
+  const max = Math.max(...nums);
+
+  if (max + 1 !== nums.length) {
+    return false;
+  }
+
+  const numsMap = new Map<number, number>();
+  for (const num of nums) {
+    numsMap.set(num, (numsMap.get(num) ?? 0) + 1);
+  }
+
+  for (let i = 1; i < max; i++) {
+    if (numsMap.get(i)! !== 1) return false;
+  }
+
+  return numsMap.get(max) === 2;
+}
+
+console.log(isGood([3, 4, 4, 1, 2, 1]));
+
+//https://leetcode.com/problems/delete-columns-to-make-sorted-ii/?envType=daily-question&envId=2026-05-13
+function minDeletionSize(strs: string[]): number {
+  const n = strs.length;
+  const m = strs[0].length;
+  // n-1인 이유는 마지막 행은 비교할 필요가 없기 때문이다. 마지막 행은 항상 정렬되어 있다고 간주할 수 있다.
+  const sorted = Array(n - 1).fill(false);
+
+  let res = 0;
+  for (let c = 0; c < m; c++) {
+    let needDelete = false;
+
+    for (let r = 0; r < n - 1; r++) {
+      if (!sorted[r] && strs[r + 1][c] < strs[r][c]) {
+        needDelete = true;
+        break;
+      }
+    }
+
+    if (needDelete) {
+      res++;
+      continue;
+    }
+
+    for (let r = 0; r < n - 1; r++) {
+      if (!sorted[r] && strs[r][c] < strs[r + 1][c]) {
+        sorted[r] = true;
+      }
+    }
+  }
+
+  return res;
+}
+
+console.log(minDeletionSize(['zyx', 'wvu', 'tsr']));
+
 /**
  * 정렬을 하는이유? : 각 작업의 실제 에너지 소모량과 최소 에너지 요구량의 차이를 기준으로 내림차순 정렬을 한다. 이렇게 하면, 가장 큰 차이를 가진 작업부터 처리하게 된다.
  * 이렇게 정렬하는 이유는, 가장 큰 차이를 가진 작업을 먼저 처리함으로써, 초기 에너지가 부족한 경우에도 최소한의 에너지로 작업을 완료할 수 있도록 하기 위함이다. 만약 작은 차이를 가진 작업부터 처리한다면, 초기 에너지가 부족할 때 큰 차이를 가진 작업을 처리할 수 없게 되어 전체적으로 더 많은 에너지가 필요하게 될 수 있다.
  * 작업을 처리할 때마다, 현재 에너지에서 실제 에너지 소모량을 더해주고, 최소 에너지 요구량과 비교하여 초기 에너지를 업데이트한다. 이렇게 하면, 각 작업을 처리할 때 필요한 최소 초기 에너지를 계산할 수 있다.
  */
-
 //https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/?envType=daily-question&envId=2026-05-12
 function minimumEffort(tasks: number[][]): number {
   tasks.sort((a, b) => b[1] - b[0] - (a[1] - a[0]));
@@ -20,13 +76,13 @@ function minimumEffort(tasks: number[][]): number {
   return totalEnergy;
 }
 
-console.log(
-  minimumEffort([
-    [1, 2],
-    [2, 4],
-    [4, 8],
-  ]),
-);
+// console.log(
+//   minimumEffort([
+//     [1, 2],
+//     [2, 4],
+//     [4, 8],
+//   ]),
+// );
 
 //https://leetcode.com/problems/separate-the-digits-in-an-array/?envType=daily-question&envId=2026-05-11
 function separateDigits(nums: number[]): number[] {
@@ -50,7 +106,7 @@ function separateDigits(nums: number[]): number[] {
   return result;
 }
 
-console.log(separateDigits([]));
+// console.log(separateDigits([]));
 
 // //https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/?envType=daily-question&envId=2026-05-07
 // function maximumProfit(prices: number[], k: number): number {}
@@ -97,7 +153,7 @@ function distance(nums: number[]): number[] {
   return result;
 }
 
-console.log(distance([1, 3, 1, 1, 2]));
+// console.log(distance([1, 3, 1, 1, 2]));
 
 //https://leetcode.com/problems/minimize-hamming-distance-after-swap-operations/?envType=daily-question&envId=2026-04-21
 function minimumHammingDistance(
