@@ -1,5 +1,28 @@
 export default {};
 
+//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/?envType=daily-question&envId=2026-05-15
+
+function findMin(nums: number[]): number {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left < right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (nums[right] < nums[mid]) {
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+
+  return nums[left];
+}
+
+// 5 4 3 2 1
+// console.log(findMin([4, 5, 6, 7, 0, 1, 2]));
+console.log(findMin([2, 1]));
+
 //https://leetcode.com/problems/check-if-array-is-good/?envType=daily-question&envId=2026-05-14
 function isGood(nums: number[]): boolean {
   const max = Math.max(...nums);
@@ -20,7 +43,7 @@ function isGood(nums: number[]): boolean {
   return numsMap.get(max) === 2;
 }
 
-console.log(isGood([3, 4, 4, 1, 2, 1]));
+// console.log(isGood([3, 4, 4, 1, 2, 1]));
 
 //https://leetcode.com/problems/delete-columns-to-make-sorted-ii/?envType=daily-question&envId=2026-05-13
 function minDeletionSize(strs: string[]): number {
@@ -55,7 +78,7 @@ function minDeletionSize(strs: string[]): number {
   return res;
 }
 
-console.log(minDeletionSize(['zyx', 'wvu', 'tsr']));
+// console.log(minDeletionSize(['zyx', 'wvu', 'tsr']));
 
 /**
  * 정렬을 하는이유? : 각 작업의 실제 에너지 소모량과 최소 에너지 요구량의 차이를 기준으로 내림차순 정렬을 한다. 이렇게 하면, 가장 큰 차이를 가진 작업부터 처리하게 된다.
