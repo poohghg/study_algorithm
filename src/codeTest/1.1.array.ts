@@ -1,7 +1,47 @@
 export default {};
 
-//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/?envType=daily-question&envId=2026-05-15
+function getCommon(nums1: number[], nums2: number[]): number {
+  const nums1Set = new Set(nums1);
 
+  for (const num of nums2) {
+    if (nums1Set.has(num)) {
+      return num;
+    }
+  }
+
+  return -1;
+}
+
+//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/?envType=daily-question&envId=2026-05-19
+/**
+ * 두개의 포인트  left, right를 이용하여 이진 탐색을 수행한다. mid 포인트를 계산하여, mid와 right의 값을 비교한다.
+ * nums[mid] > nums[right]인 경우, 최소값은 mid 오른쪽에 존재하므로 left를 mid + 1로 이동한다.
+ * nums[mid] < nums[right]인 경우, 최소값은 mid 왼쪽에 존재하므로 right를 mid로 이동한다.
+ * nums[mid] === nums[right]인 경우, right를 하나 줄여서 중복을 제거한다.
+ */
+
+function findMin1(nums: number[]): number {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left < right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (nums[mid] > nums[right]) {
+      left = mid + 1;
+    } else if (nums[mid] < nums[right]) {
+      right = mid;
+    } else {
+      right--;
+    }
+  }
+
+  return nums[left];
+}
+
+console.log(findMin1([1, 3, 5]));
+
+//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/?envType=daily-question&envId=2026-05-15
 function findMin(nums: number[]): number {
   let left = 0;
   let right = nums.length - 1;
@@ -19,9 +59,8 @@ function findMin(nums: number[]): number {
   return nums[left];
 }
 
-// 5 4 3 2 1
 // console.log(findMin([4, 5, 6, 7, 0, 1, 2]));
-console.log(findMin([2, 1]));
+// console.log(findMin([2, 1]));
 
 //https://leetcode.com/problems/check-if-array-is-good/?envType=daily-question&envId=2026-05-14
 function isGood(nums: number[]): boolean {
