@@ -1,5 +1,25 @@
 export default {};
 
+// https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/?envType=daily-question&envId=2026-05-20
+
+function findThePrefixCommonArray(A: number[], B: number[]): number[] {
+  const size = A.length;
+  const C = Array(size).fill(0);
+  const set = new Set(A);
+
+  for (let i = size - 1; 0 <= i; i--) {
+    C[i] = set.size;
+    if (set.has(A[i])) set.delete(A[i]);
+    if (set.has(B[i])) set.delete(B[i]);
+  }
+
+  console.log(C);
+
+  return C;
+}
+
+console.log(findThePrefixCommonArray([2, 3, 1], [3, 1, 2]));
+
 function getCommon(nums1: number[], nums2: number[]): number {
   const nums1Set = new Set(nums1);
 
