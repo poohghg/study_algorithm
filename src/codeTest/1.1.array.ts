@@ -1,7 +1,37 @@
 export default {};
 
-// https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/?envType=daily-question&envId=2026-05-20
+//https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/?envType=daily-question&envId=2026-05-21
+function longestCommonPrefix(arr1: number[], arr2: number[]): number {
+  const setPrefixes = (num: number, set: Set<number>) => {
+    while (0 < num) {
+      set.add(num);
+      num = Math.floor(num / 10);
+    }
+  };
 
+  const set1 = new Set<number>();
+  arr1.forEach((n) => {
+    setPrefixes(n, set1);
+  });
+
+  const set2 = new Set<number>();
+  arr2.forEach((n) => {
+    setPrefixes(n, set2);
+  });
+
+  let max = 0;
+  for (const number of set1) {
+    if (set2.has(number)) {
+      max = Math.max(max, number.toString().length);
+    }
+  }
+
+  return max;
+}
+
+console.log(longestCommonPrefix([10], [17, 11]));
+
+// https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/?envType=daily-question&envId=2026-05-20
 function findThePrefixCommonArray(A: number[], B: number[]): number[] {
   const size = A.length;
   const C = Array(size).fill(0);
@@ -13,12 +43,10 @@ function findThePrefixCommonArray(A: number[], B: number[]): number[] {
     if (set.has(B[i])) set.delete(B[i]);
   }
 
-  console.log(C);
-
   return C;
 }
 
-console.log(findThePrefixCommonArray([2, 3, 1], [3, 1, 2]));
+// console.log(findThePrefixCommonArray([2, 3, 1], [3, 1, 2]));
 
 function getCommon(nums1: number[], nums2: number[]): number {
   const nums1Set = new Set(nums1);
@@ -59,7 +87,7 @@ function findMin1(nums: number[]): number {
   return nums[left];
 }
 
-console.log(findMin1([1, 3, 5]));
+// console.log(findMin1([1, 3, 5]));
 
 //https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/?envType=daily-question&envId=2026-05-15
 function findMin(nums: number[]): number {
