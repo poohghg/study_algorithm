@@ -1,5 +1,35 @@
 export default {};
 
+//https://leetcode.com/problems/jump-game-vii/?envType=daily-question&envId=2026-05-26
+function canReach(s: string, minJump: number, maxJump: number): boolean {
+  const n = s.length;
+
+  if (s[n - 1] === '1') return false;
+
+  const queue = [0];
+  let head = 0;
+  let last: number = 0;
+
+  while (head < queue.length) {
+    const current = queue[head]!;
+    head++;
+
+    const min = Math.max(last + 1, current + minJump);
+    const max = Math.min(current + maxJump, n - 1);
+
+    for (let next = min; next <= max; next++) {
+      if (next === n - 1) return true;
+      if (s[next] === '0') queue.push(next);
+    }
+
+    last = Math.max(last, max);
+  }
+
+  return false;
+}
+
+console.log(canReach('0000000000', 1, 1));
+
 //https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/?envType=daily-question&envId=2026-05-21
 function longestCommonPrefix(arr1: number[], arr2: number[]): number {
   const setPrefixes = (num: number, set: Set<number>) => {
