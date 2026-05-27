@@ -1,5 +1,34 @@
 export default {};
 
+//https://leetcode.com/problems/count-the-number-of-special-characters-ii/?envType=daily-question&envId=2026-05-27
+function numberOfSpecialChars(word: string): number {
+  const lower = Array(26).fill(Infinity);
+  const upper = Array(26).fill(-Infinity);
+
+  for (let i = 0; i < word.length; i++) {
+    const char = word[i];
+    if ('a' <= char && char <= 'z') {
+      const code = char.charCodeAt(0) - 97;
+      lower[code] = i;
+    } else {
+      // 대문자 케이스는 첫번째로
+      const code = char.charCodeAt(0) - 65;
+      if (upper[code] === -Infinity) upper[code] = i;
+    }
+  }
+
+  let count = 0;
+  for (let i = 0; i < 26; i++) {
+    const low = lower[i];
+    const up = upper[i];
+    if (low < up) count++;
+  }
+
+  return count;
+}
+
+console.log(numberOfSpecialChars('AbBCab'));
+
 //https://leetcode.com/problems/jump-game-vii/?envType=daily-question&envId=2026-05-26
 function canReach(s: string, minJump: number, maxJump: number): boolean {
   const n = s.length;
@@ -28,7 +57,7 @@ function canReach(s: string, minJump: number, maxJump: number): boolean {
   return false;
 }
 
-console.log(canReach('0000000000', 1, 1));
+// console.log(canReach('0000000000', 1, 1));
 
 //https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/?envType=daily-question&envId=2026-05-21
 function longestCommonPrefix(arr1: number[], arr2: number[]): number {
@@ -59,7 +88,7 @@ function longestCommonPrefix(arr1: number[], arr2: number[]): number {
   return max;
 }
 
-console.log(longestCommonPrefix([10], [17, 11]));
+// console.log(longestCommonPrefix([10], [17, 11]));
 
 // https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/?envType=daily-question&envId=2026-05-20
 function findThePrefixCommonArray(A: number[], B: number[]): number[] {
