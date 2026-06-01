@@ -1,5 +1,33 @@
 export default {};
 
+//https://leetcode.com/problems/destroying-asteroids/?envType=daily-question&envId=2026-06-01
+function asteroidsDestroyed(mass: number, asteroids: number[]): boolean {
+  asteroids.sort((a, b) => a - b);
+
+  for (const asteroid of asteroids) {
+    if (mass < asteroid) {
+      return false;
+    }
+    mass += asteroid;
+  }
+
+  return true;
+}
+
+//https://leetcode.com/problems/minimum-cost-of-buying-candies-with-discount/?envType=daily-question&envId=2026-06-01
+function minimumCost(cost: number[]): number {
+  cost.sort((a, b) => b - a);
+  let total = cost.reduce((a, b) => a + b);
+
+  for (let i = 2; i < cost.length; i += 3) {
+    total -= cost[i];
+  }
+
+  return total;
+}
+
+console.log(minimumCost([6, 5, 7, 9, 2, 2]));
+
 //https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/?envType=daily-question&envId=2026-05-29
 function check(nums: number[]): boolean {
   const n = nums.length;
@@ -14,8 +42,7 @@ function check(nums: number[]): boolean {
   return breaks <= 1;
 }
 
-// [2, 1, 3, 4];
-console.log(check([6, 10, 6]));
+// console.log(check([6, 10, 6]));
 
 //https://leetcode.com/problems/minimum-element-after-replacement-with-digit-sum/?envType=daily-question&envId=2026-05-29
 function minElement(nums: number[]): number {
