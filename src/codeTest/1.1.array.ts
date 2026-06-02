@@ -1,5 +1,62 @@
 export default {};
 
+function earliestFinishTime(
+  landStartTime: number[],
+  landDuration: number[],
+  waterStartTime: number[],
+  waterDuration: number[],
+): number {
+  const getMinEndTime = (startTime: number[], durationTime: number[]) => {
+    let minTime = Infinity;
+
+    for (let i = 0; i < startTime.length; i++) {
+      minTime = Math.min(minTime, startTime[i] + durationTime[i]);
+    }
+
+    return minTime;
+  };
+
+  const calcMinTime = (
+    endTime: number,
+    startTime: number[],
+    durationTime: number[],
+  ) => {
+    for (let i = 0; i < startTime.length; i++) {
+      if (startTime[i] <= endTime) {
+        min = Math.min(min, endTime + durationTime[i]);
+      } else {
+        min = Math.min(min, startTime[i] + durationTime[i]);
+      }
+    }
+  };
+
+  // land를 먼저 시작할때 가장 빨리 끝나는 land타임엔드 시간을 찾는다.
+  let min = Infinity;
+  calcMinTime(
+    getMinEndTime(landStartTime, landDuration),
+    waterStartTime,
+    waterDuration,
+  );
+
+  calcMinTime(
+    getMinEndTime(waterStartTime, waterDuration),
+    landStartTime,
+    landDuration,
+  );
+
+  return min;
+}
+
+console.log(earliestFinishTime([94, 46], [59, 97], [7], [13]));
+
+//https://leetcode.com/problems/longest-balanced-substring-ii/?envType=daily-question&envId=2026-06-01
+function longestBalanced(s: string): number {
+  // a b c로만 구성되어 있음.
+  return 1;
+}
+
+// console.log(longestBalanced('baacc'));
+
 //https://leetcode.com/problems/destroying-asteroids/?envType=daily-question&envId=2026-06-01
 function asteroidsDestroyed(mass: number, asteroids: number[]): boolean {
   asteroids.sort((a, b) => a - b);
@@ -26,7 +83,7 @@ function minimumCost(cost: number[]): number {
   return total;
 }
 
-console.log(minimumCost([6, 5, 7, 9, 2, 2]));
+// console.log(minimumCost([6, 5, 7, 9, 2, 2]));
 
 //https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/?envType=daily-question&envId=2026-05-29
 function check(nums: number[]): boolean {
