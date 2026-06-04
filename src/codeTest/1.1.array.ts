@@ -1,5 +1,24 @@
 export default {};
 
+function totalWaviness(num1: number, num2: number): number {
+  let count = 0;
+
+  for (let i = num1; i <= num2; i++) {
+    if (i < 100) continue;
+    const num = i.toString();
+    for (let j = 1; j < num.length - 1; j++) {
+      if (
+        (num[j - 1] < num[j] && num[j + 1] < num[j]) ||
+        (num[j] < num[j - 1] && num[j] < num[j + 1])
+      ) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
 function earliestFinishTime(
   landStartTime: number[],
   landDuration: number[],
