@@ -1,5 +1,33 @@
 export default {};
 
+//https://leetcode.com/problems/maximum-total-subarray-value-i/?envType=daily-question&envId=2026-06-09
+function maxTotalValue(nums: number[], k: number): number {
+  // const n = nums.length;
+  // const prefixMax = Array(n).fill(0);
+  // const prefixMin = Array(n).fill(Infinity);
+  //
+  // prefixMax[0] = nums[0];
+  // prefixMin[0] = nums[0];
+  // for (let i = 1; i < n; i++) {
+  //   const num = nums[i];
+  //   prefixMax[i] = Math.max(prefixMax[i - 1], num);
+  //   prefixMin[i] = Math.min(prefixMin[i - 1], num);
+  // }
+  //
+  // // 우선순위큐로 관리?
+  // let max = 0;
+  // for (let i = 0; i < n; i++) {
+  //   const diff = prefixMax[i] - prefixMin[i];
+  //   if (diff > max) {
+  //     max = diff;
+  //   }
+  // }
+
+  return (Math.max(...nums) - Math.min(...nums)) * k;
+}
+
+console.log(maxTotalValue([4, 2, 5, 1], 3));
+
 function totalWaviness(num1: number, num2: number): number {
   let count = 0;
 
@@ -66,7 +94,7 @@ function earliestFinishTime(
   return min;
 }
 
-console.log(earliestFinishTime([94, 46], [59, 97], [7], [13]));
+// console.log(earliestFinishTime([94, 46], [59, 97], [7], [13]));
 
 //https://leetcode.com/problems/longest-balanced-substring-ii/?envType=daily-question&envId=2026-06-01
 function longestBalanced(s: string): number {
