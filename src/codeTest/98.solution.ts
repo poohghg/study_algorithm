@@ -23,7 +23,7 @@ const getLottoNums = (fixedNums: number[] = [], count: number = 1) => {
   return result;
 };
 
-console.log(getLottoNums([2, 22, 44], 5));
+console.log(getLottoNums([17, 5], 5));
 
 const solution1 = (nums: number[]) => {
   const result: number[][] = Array.from({ length: 6 }, (): number[] =>
