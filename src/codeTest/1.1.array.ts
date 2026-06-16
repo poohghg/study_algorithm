@@ -1,29 +1,58 @@
+import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
+
 export default {};
 
 //https://leetcode.com/problems/maximum-total-subarray-value-i/?envType=daily-question&envId=2026-06-09
 function maxTotalValue(nums: number[], k: number): number {
-  // const n = nums.length;
-  // const prefixMax = Array(n).fill(0);
-  // const prefixMin = Array(n).fill(Infinity);
-  //
-  // prefixMax[0] = nums[0];
-  // prefixMin[0] = nums[0];
-  // for (let i = 1; i < n; i++) {
-  //   const num = nums[i];
-  //   prefixMax[i] = Math.max(prefixMax[i - 1], num);
-  //   prefixMin[i] = Math.min(prefixMin[i - 1], num);
-  // }
-  //
-  // // 우선순위큐로 관리?
-  // let max = 0;
-  // for (let i = 0; i < n; i++) {
-  //   const diff = prefixMax[i] - prefixMin[i];
-  //   if (diff > max) {
-  //     max = diff;
-  //   }
-  // }
+  const n = nums.length;
+  const prefixMax = Array(n).fill(0);
+  const prefixMin = Array(n).fill(Infinity);
+  const suffixMax = Array(n).fill(0);
+  const suffixMin = Array(n).fill(Infinity);
 
-  return (Math.max(...nums) - Math.min(...nums)) * k;
+  prefixMax[0] = nums[0];
+  prefixMin[0] = nums[0];
+  for (let i = 1; i < n; i++) {
+    const num = nums[i];
+    prefixMax[i] = Math.max(prefixMax[i - 1], num);
+    prefixMin[i] = Math.min(prefixMin[i - 1], num);
+  }
+
+  suffixMax[n - 1] = nums[n - 1];
+  suffixMin[n - 1] = nums[n - 1];
+  for (let i = n - 2; 0 <= i; i--) {
+    const num = nums[i];
+    suffixMax[i] = Math.max(suffixMax[i + 1], num);
+    suffixMin[i] = Math.min(suffixMin[i + 1], num);
+  }
+
+  const prefixDiffs = prefixMax.map((max, i) => max - prefixMin[i]);
+  const suffixDiffs = suffixMax.map((max, i) => max - suffixMin[i]);
+  const minHeap = new MyPriorityQueue<number>((a, b) => a < b);
+
+  for (let i = 0; i < n; i++) {
+    if (minHeap.size < k) {
+      minHeap.push(prefixDiffs[i]);
+    } else {
+      if (prefixDiffs[i] > minHeap.peak!) {
+        minHeap.pop();
+        minHeap.push(prefixDiffs[i]);
+      }
+    }
+  }
+
+  for (let i = 0; i < n; i++) {
+    if (minHeap.size < k) {
+      minHeap.push(suffixDiffs[i]);
+    } else {
+      if (suffixDiffs[i] > minHeap.peak!) {
+        minHeap.pop();
+        minHeap.push(suffixDiffs[i]);
+      }
+    }
+  }
+
+  return minHeap.data.reduce((a, b) => a + b, 0);
 }
 
 console.log(maxTotalValue([4, 2, 5, 1], 3));
