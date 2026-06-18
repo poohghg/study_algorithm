@@ -2,6 +2,41 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/partition-array-according-to-given-pivot/?envType=daily-question&envId=2026-06-18
+function pivotArray(nums: number[], pivot: number): number[] {
+  const left = [];
+  const right = [];
+  const same = [];
+
+  for (const num of nums) {
+    if (num === pivot) {
+      same.push(num);
+    } else if (num < pivot) {
+      left.push(num);
+    } else {
+      right.push(num);
+    }
+  }
+
+  return left.concat(right, same);
+}
+
+console.log(pivotArray([9, 12, 5, 10, 14, 3, 10], 10));
+
+//https://leetcode.com/problems/left-and-right-sum-differences/?envType=daily-question&envId=2026-06-18
+function leftRightDifference(nums: number[]): number[] {
+  let sum = nums.reduce((a, b) => a + b);
+  let prefix = 0;
+  return nums.reduce((acc, n, i) => {
+    prefix += n;
+    acc[i] = Math.abs(sum - prefix);
+    sum -= n;
+    return acc;
+  }, Array(nums.length).fill(0));
+}
+
+// console.log(leftRightDifference([10, 4, 8, 3]));
+
 //https://leetcode.com/problems/maximum-total-subarray-value-i/?envType=daily-question&envId=2026-06-09
 function maxTotalValue(nums: number[], k: number): number {
   const n = nums.length;
@@ -55,7 +90,7 @@ function maxTotalValue(nums: number[], k: number): number {
   return minHeap.data.reduce((a, b) => a + b, 0);
 }
 
-console.log(maxTotalValue([4, 2, 5, 1], 3));
+// console.log(maxTotalValue([4, 2, 5, 1], 3));
 
 function totalWaviness(num1: number, num2: number): number {
   let count = 0;
