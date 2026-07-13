@@ -2,6 +2,42 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/maximum-ice-cream-bars/?envType=daily-question&envId=2026-07-13
+function maxIceCream(costs: number[], coins: number): number {
+  const freq = new Map<number, number>();
+  let min = Infinity;
+  let max = 1;
+
+  for (const cost of costs) {
+    freq.set(cost, (freq.get(cost) || 0) + 1);
+    if (cost < min) min = cost;
+    if (max < cost) max = cost;
+  }
+
+  let count = 0;
+  for (let cost = min; cost <= max; cost++) {
+    if (!freq.has(cost)) continue;
+    const buyCount = Math.min(freq.get(cost)!, Math.floor(coins / cost));
+    count += buyCount;
+    coins -= buyCount * cost;
+    if (coins < cost) break;
+  }
+
+  return count;
+}
+
+function largestAltitude(gain: number[]): number {
+  let max = 0;
+  let prefix = 0;
+
+  for (const n of gain) {
+    prefix += n;
+    max = Math.max(prefix, max);
+  }
+
+  return max;
+}
+
 //https://leetcode.com/problems/partition-array-according-to-given-pivot/?envType=daily-question&envId=2026-06-18
 function pivotArray(nums: number[], pivot: number): number[] {
   const left = [];
