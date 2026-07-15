@@ -2,12 +2,47 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function sequentialDigits(low: number, high: number): number[] {
+  const str = '123456789';
+  const min = String(low).length;
+  const max = String(high).length;
+
+  const result: number[] = [];
+  for (let size = min; size <= max; size++) {
+    for (let first = 0; first < 10 - size; first++) {
+      const num = Number(str.slice(first, first + size));
+      if (low <= num && num <= high) {
+        result.push(num);
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(sequentialDigits(1000, 13000));
+
+//https://leetcode.com/problems/count-subarrays-with-majority-element-i/?envType=daily-question&envId=2026-07-15
+function countMajoritySubarrays(nums: number[], target: number): number {
+  const n = nums.length;
+  let result = 0;
+
+  for (let l = 0; l < n; l++) {
+    let count = 0;
+    for (let r = l; r < n; r++) {
+      if (nums[r] === target) count++;
+      if ((r - l + 1) / 2 < count) result++;
+    }
+  }
+
+  return result;
+}
+
 //https://leetcode.com/problems/maximum-ice-cream-bars/?envType=daily-question&envId=2026-07-13
 function maxIceCream(costs: number[], coins: number): number {
   const freq = new Map<number, number>();
   let min = Infinity;
   let max = 1;
-
   for (const cost of costs) {
     freq.set(cost, (freq.get(cost) || 0) + 1);
     if (cost < min) min = cost;
