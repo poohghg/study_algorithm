@@ -2,6 +2,13 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/concatenate-non-zero-digits-and-multiply-by-sum-ii/?envType=daily-question&envId=2026-07-16
+function sumAndMultiply(s: string, queries: number[][]): number[] {
+  const result: number[] = [];
+  return result;
+}
+
+//https://leetcode.com/problems/sequential-digits/submissions/2068393436/?envType=daily-question&envId=2026-07-15
 function sequentialDigits(low: number, high: number): number[] {
   const str = '123456789';
   const min = String(low).length;
