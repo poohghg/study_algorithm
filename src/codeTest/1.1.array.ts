@@ -2,6 +2,111 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/?envType=daily-question&envId=2026-07-22
+function smallestSubsequence(s: string): string {
+  const counts = new Map<string, number>();
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    counts.set(char, (counts.get(char) ?? 0) + 1);
+  }
+
+  const stack: string[] = [];
+  const stackSet = new Set<string>();
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    counts.set(char, counts.get(char)! - 1);
+
+    if (!stackSet.has(char)) {
+      let top = stack[stack.length - 1];
+      while (char < top && 0 < counts.get(top)!) {
+        stack.pop();
+        stackSet.delete(top);
+        top = stack[stack.length - 1];
+      }
+
+      stackSet.add(char);
+      stack.push(char);
+    }
+  }
+
+  return stack.join('');
+}
+console.log(smallestSubsequence('cbaacabcaaccaacababa'));
+// console.log(smallestSubsequence('cbac'));
+
+//https://leetcode.com/problems/find-the-maximum-number-of-elements-in-subset/description/?envType=daily-question&envId=2026-07-21
+function maximumLength(nums: number[]): number {
+  const counts = nums.reduce((counts, num) => {
+    counts.set(num, (counts.get(num) ?? 0) + 1);
+    return counts;
+  }, new Map<number, number>());
+
+  let max = 1;
+  if (counts.has(1)) {
+    const freq = counts.get(1)!;
+    max = freq % 2 === 0 ? freq - 1 : freq;
+    counts.delete(1);
+  }
+
+  for (let num of counts.keys()) {
+    let count = 0;
+    while (2 <= (counts.get(num) ?? 0) && counts.has(num * num)) {
+      count += 2;
+      num = num * num;
+    }
+    max = Math.max(count + 1, max);
+  }
+
+  return max;
+}
+
+console.log(maximumLength([5, 4, 1, 2, 2]));
+
+//https://leetcode.com/problems/remove-covered-intervals/?envType=daily-question&envId=2026-07-21
+function removeCoveredIntervals(intervals: number[][]): number {
+  const isInInterval = (a: number[], b: number[]) => {
+    const [a1, a2] = a;
+    const [b1, b2] = b;
+    return a1 <= b1 && b2 <= a2;
+  };
+
+  // a-b 올림차순
+  intervals.sort(([a1, a2], [b1, b2]) => {
+    if (a1 < b1) return -1;
+    if (b1 < a1) return 1;
+    return b2 - a2;
+  });
+
+  const n = intervals.length;
+  let left = 0;
+  let removeCount = 0;
+
+  for (let i = 1; i < n; i++) {
+    while (i < n && isInInterval(intervals[left], intervals[i])) {
+      removeCount++;
+      i++;
+    }
+    left = i;
+  }
+
+  return n - removeCount;
+}
+
+// console.log(
+//   removeCoveredIntervals([
+//     [14041, 32641],
+//     [24914, 51477],
+//     [4983, 81235],
+//     [62018, 77987],
+//     [31523, 32192],
+//     [74196, 96194],
+//     [16126, 52652],
+//     [59901, 67707],
+//     [36502, 51366],
+//     [56437, 86744],
+//   ]),
+// );
+
 //https://leetcode.com/problems/concatenate-non-zero-digits-and-multiply-by-sum-ii/?envType=daily-question&envId=2026-07-16
 function sumAndMultiply(s: string, queries: number[][]): number[] {
   const result: number[] = [];
@@ -27,7 +132,7 @@ function sequentialDigits(low: number, high: number): number[] {
   return result;
 }
 
-console.log(sequentialDigits(1000, 13000));
+// console.log(sequentialDigits(1000, 13000));
 
 //https://leetcode.com/problems/count-subarrays-with-majority-element-i/?envType=daily-question&envId=2026-07-15
 function countMajoritySubarrays(nums: number[], target: number): number {
@@ -99,7 +204,7 @@ function pivotArray(nums: number[], pivot: number): number[] {
   return left.concat(right, same);
 }
 
-console.log(pivotArray([9, 12, 5, 10, 14, 3, 10], 10));
+// console.log(pivotArray([9, 12, 5, 10, 14, 3, 10], 10));
 
 //https://leetcode.com/problems/left-and-right-sum-differences/?envType=daily-question&envId=2026-06-18
 function leftRightDifference(nums: number[]): number[] {
