@@ -2,6 +2,46 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/rank-transform-of-an-array/?envType=daily-question&envId=2026-07-23
+function arrayRankTransform(arr: number[]): number[] {
+  const sortedArr = Array.from(new Set(arr)).sort((a, b) => a - b);
+  const rankMap = new Map<number, number>();
+
+  for (let i = 0; i < sortedArr.length; i++) {
+    rankMap.set(sortedArr[i], i + 1);
+  }
+
+  return arr.map((x) => rankMap.get(x)!);
+}
+
+console.log(arrayRankTransform([37, 12, 28, 9, 100, 56, 80, 5, 12]));
+
+//https://leetcode.com/problems/maximum-building-height/?envType=daily-question&envId=2026-07-23
+function maxBuilding(n: number, restrictions: number[][]): number {
+  // const maxHeights: number[] = Array.from({ length: n - 1 }, (_, i) => i + 1);
+  const maxHeights: number[] = [];
+
+  for (let i = 0; i < n - 2; i++) {
+    maxHeights[i] = i;
+  }
+
+  for (const [i, max] of restrictions) {
+    maxHeights[i - 1] = Math.min(max, maxHeights[i - 1]);
+  }
+
+  for (let i = 1; i < n; i++) {
+    maxHeights[i] = Math.min(maxHeights[i - 1] + 1, maxHeights[i]);
+  }
+
+  for (let i = n - 2; 0 <= i; i--) {
+    maxHeights[i] = Math.min(maxHeights[i + 1] + 1, maxHeights[i]);
+  }
+
+  return Math.max(...maxHeights);
+}
+
+// console.log(maxBuilding(1000000000, []));
+
 //https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/?envType=daily-question&envId=2026-07-22
 function smallestSubsequence(s: string): string {
   const counts = new Map<string, number>();
@@ -31,7 +71,8 @@ function smallestSubsequence(s: string): string {
 
   return stack.join('');
 }
-console.log(smallestSubsequence('cbaacabcaaccaacababa'));
+
+// console.log(smallestSubsequence('cbaacabcaaccaacababa'));
 // console.log(smallestSubsequence('cbac'));
 
 //https://leetcode.com/problems/find-the-maximum-number-of-elements-in-subset/description/?envType=daily-question&envId=2026-07-21
