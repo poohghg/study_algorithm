@@ -2,6 +2,21 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function findGCD(nums: number[]): number {
+  let minNum = Math.min(...nums);
+  let maxNum = Math.max(...nums);
+
+  while (maxNum !== 0) {
+    const temp = maxNum;
+    maxNum = minNum % maxNum;
+    minNum = temp;
+  }
+
+  return minNum;
+}
+
+console.log(findGCD([2, 5, 6, 9, 10]));
+
 //https://leetcode.com/problems/rank-transform-of-an-array/?envType=daily-question&envId=2026-07-23
 function arrayRankTransform(arr: number[]): number[] {
   const sortedArr = Array.from(new Set(arr)).sort((a, b) => a - b);
@@ -14,7 +29,7 @@ function arrayRankTransform(arr: number[]): number[] {
   return arr.map((x) => rankMap.get(x)!);
 }
 
-console.log(arrayRankTransform([37, 12, 28, 9, 100, 56, 80, 5, 12]));
+// console.log(arrayRankTransform([37, 12, 28, 9, 100, 56, 80, 5, 12]));
 
 //https://leetcode.com/problems/maximum-building-height/?envType=daily-question&envId=2026-07-23
 function maxBuilding(n: number, restrictions: number[][]): number {
@@ -101,7 +116,7 @@ function maximumLength(nums: number[]): number {
   return max;
 }
 
-console.log(maximumLength([5, 4, 1, 2, 2]));
+// console.log(maximumLength([5, 4, 1, 2, 2]));
 
 //https://leetcode.com/problems/remove-covered-intervals/?envType=daily-question&envId=2026-07-21
 function removeCoveredIntervals(intervals: number[][]): number {
