@@ -2,6 +2,29 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/maximum-product-of-two-digits/?envType=daily-question&envId=2026-07-25
+function maxProduct(n: number): number {
+  const counts = new Map<number, number>();
+  while (0 < n) {
+    const res = n % 10;
+    counts.set(res, (counts.get(res) ?? 0) + 1);
+    n = Math.floor(n / 10);
+  }
+
+  for (let i = 9; 0 <= i; i--) {
+    if (2 <= counts.get(i)!) return i * i;
+    if (counts.has(i)) {
+      for (let j = i - 1; 0 <= j; j--) {
+        if (counts.has(j)) return i * j;
+      }
+    }
+  }
+
+  return 0;
+}
+
+console.log(maxProduct(124));
+
 function findGCD(nums: number[]): number {
   let minNum = Math.min(...nums);
   let maxNum = Math.max(...nums);
@@ -15,7 +38,7 @@ function findGCD(nums: number[]): number {
   return minNum;
 }
 
-console.log(findGCD([2, 5, 6, 9, 10]));
+// console.log(findGCD([2, 5, 6, 9, 10]));
 
 //https://leetcode.com/problems/rank-transform-of-an-array/?envType=daily-question&envId=2026-07-23
 function arrayRankTransform(arr: number[]): number[] {
