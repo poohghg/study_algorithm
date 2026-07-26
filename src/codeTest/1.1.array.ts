@@ -2,6 +2,21 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function maximumProduct(nums: number[]): number {
+  // 1.만약에 모두 양수 또는 음수라면
+  // 최대값 3개를 곱한다.
+  // 2.음수와 양수가 석여있다면
+  // 양수 최대값 * 음수 최소값, 음수 최소값-1 || 최대값 3개를 곱한다.
+  nums.sort((a, b) => b - a);
+  const n = nums.length;
+  return Math.max(
+    nums[0] * nums[1] * nums[2],
+    nums[0] * nums[n - 1] * nums[n - 2],
+  );
+}
+
+console.log(maximumProduct([-100, -98, -1, 2, 3, 4]));
+
 //https://leetcode.com/problems/maximum-product-of-two-digits/?envType=daily-question&envId=2026-07-25
 function maxProduct(n: number): number {
   const counts = new Map<number, number>();
@@ -128,12 +143,12 @@ function maximumLength(nums: number[]): number {
   }
 
   for (let num of counts.keys()) {
-    let count = 0;
+    let count = 1;
     while (2 <= (counts.get(num) ?? 0) && counts.has(num * num)) {
       count += 2;
       num = num * num;
     }
-    max = Math.max(count + 1, max);
+    max = Math.max(count, max);
   }
 
   return max;
