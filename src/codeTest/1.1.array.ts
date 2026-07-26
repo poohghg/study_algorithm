@@ -2,6 +2,27 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function maxSubArray(nums: number[]): number {
+  let maxSum = -Infinity;
+  let currSum = 0;
+
+  for (const n of nums) {
+    currSum += n;
+
+    if (maxSum < currSum) {
+      maxSum = currSum;
+    }
+
+    if (currSum < 0) {
+      currSum = 0;
+    }
+  }
+
+  return maxSum;
+}
+
+console.log(maxSubArray([-7, -5, 1, 3, -1, 5, 2]));
+
 function maximumProduct(nums: number[]): number {
   // 1.만약에 모두 양수 또는 음수라면
   // 최대값 3개를 곱한다.
