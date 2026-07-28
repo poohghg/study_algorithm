@@ -2,6 +2,35 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function smallestPalindrome(s: string): string {
+  const counts = new Map<number, number>();
+  for (let i = 0; i < s.length; i++) {
+    const charCode = s[i].charCodeAt(0);
+    counts.set(charCode, (counts.get(charCode) ?? 0) + 1);
+  }
+
+  let left = '';
+  let right = '';
+  let center = '';
+
+  for (let i = 97; i <= 122; i++) {
+    if (!counts.has(i)) continue;
+
+    const count = counts.get(i)!;
+
+    if (count % 2 !== 0) center = String.fromCharCode(i);
+
+    for (let j = 0; j < Math.floor(count / 2); j++) {
+      left += String.fromCharCode(i);
+      right = String.fromCharCode(i) + right;
+    }
+  }
+
+  return left + center + right;
+}
+
+console.log('test', smallestPalindrome('inini'));
+
 function maxSubArray(nums: number[]): number {
   let maxSum = -Infinity;
   let currSum = 0;
@@ -21,7 +50,7 @@ function maxSubArray(nums: number[]): number {
   return maxSum;
 }
 
-console.log(maxSubArray([-7, -5, 1, 3, -1, 5, 2]));
+// console.log(maxSubArray([-7, -5, 1, 3, -1, 5, 2]));
 
 function maximumProduct(nums: number[]): number {
   // 1.만약에 모두 양수 또는 음수라면
@@ -36,7 +65,7 @@ function maximumProduct(nums: number[]): number {
   );
 }
 
-console.log(maximumProduct([-100, -98, -1, 2, 3, 4]));
+// console.log(maximumProduct([-100, -98, -1, 2, 3, 4]));
 
 //https://leetcode.com/problems/maximum-product-of-two-digits/?envType=daily-question&envId=2026-07-25
 function maxProduct(n: number): number {
