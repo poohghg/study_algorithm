@@ -2,6 +2,49 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/combination-sum/
+function combinationSum(candidates: number[], target: number): number[][] {
+  const n = candidates.length;
+  const result: number[][] = [];
+
+  const dfs = (start: number = 0, sum: number = 0, arr: number[] = []) => {
+    if (target <= sum) {
+      if (sum === target) result.push([...arr]);
+      return;
+    }
+
+    for (let i = start; i < n; i++) {
+      arr.push(candidates[i]);
+      dfs(i, sum + candidates[i], arr);
+      arr.pop();
+    }
+  };
+
+  dfs();
+  return result;
+}
+
+console.log(combinationSum([2, 3, 6, 7], 7));
+
+function maxProduct1(nums: number[]): number {
+  let max = 0;
+  const counts = nums.reduce((acc, n) => {
+    acc.set(n, (acc.get(n) ?? 0) + 1);
+    if (max < n) max = n;
+    return acc;
+  }, new Map<number, number>());
+
+  for (let i = max; 0 <= i; i--) {
+    if (!counts.has(i)) continue;
+    if (2 <= counts.get(i)!) return (i - 1) * (i - 1);
+    for (let j = i - 1; 0 <= j; j--) {
+      if (counts.has(j)) return (i - 1) * (j - 1);
+    }
+  }
+
+  return 0;
+}
+
 function smallestPalindrome(s: string): string {
   const counts = new Map<number, number>();
   for (let i = 0; i < s.length; i++) {
