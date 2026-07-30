@@ -2,6 +2,21 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function minimumPushes(word: string): number {
+  let size = word.length;
+  let n = 1;
+  let result = 0;
+
+  while (8 <= size) {
+    size -= 8;
+    result += n * 8;
+    n++;
+  }
+  return result + n * size;
+}
+
+console.log(minimumPushes('acolkxjbizfmhnrdq'));
+
 //https://leetcode.com/problems/combination-sum/
 function combinationSum(candidates: number[], target: number): number[][] {
   const n = candidates.length;
@@ -24,7 +39,7 @@ function combinationSum(candidates: number[], target: number): number[][] {
   return result;
 }
 
-console.log(combinationSum([2, 3, 6, 7], 7));
+// console.log(combinationSum([2, 3, 6, 7], 7));
 
 function maxProduct1(nums: number[]): number {
   let max = 0;
@@ -72,7 +87,7 @@ function smallestPalindrome(s: string): string {
   return left + center + right;
 }
 
-console.log('test', smallestPalindrome('inini'));
+// console.log('test', smallestPalindrome('inini'));
 
 function maxSubArray(nums: number[]): number {
   let maxSum = -Infinity;
@@ -131,7 +146,7 @@ function maxProduct(n: number): number {
   return 0;
 }
 
-console.log(maxProduct(124));
+// console.log(maxProduct(124));
 
 function findGCD(nums: number[]): number {
   let minNum = Math.min(...nums);
