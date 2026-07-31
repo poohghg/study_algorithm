@@ -2,6 +2,25 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function minimumPushes1(word: string): number {
+  const counts = new Map<string, number>();
+  for (let i = 0; i < word.length; i++) {
+    const char = word[i];
+    counts.set(char, (counts.get(char) ?? 0) + 1);
+  }
+
+  const sortedCounts = Array.from(counts).sort((a, b) => b[1] - a[1]);
+  let result = 0;
+  for (let i = 0; i < sortedCounts.length; i++) {
+    const [_, count] = sortedCounts[i];
+    result += count * (Math.floor(i / 8) + 1);
+  }
+
+  return result;
+}
+
+console.log(minimumPushes1('aabbccddeeffgghhiiiiii'));
+
 function minimumPushes(word: string): number {
   let size = word.length;
   let n = 1;
@@ -15,7 +34,7 @@ function minimumPushes(word: string): number {
   return result + n * size;
 }
 
-console.log(minimumPushes('acolkxjbizfmhnrdq'));
+// console.log(minimumPushes('acolkxjbizfmhnrdq'));
 
 //https://leetcode.com/problems/combination-sum/
 function combinationSum(candidates: number[], target: number): number[][] {
