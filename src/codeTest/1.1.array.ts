@@ -2,6 +2,30 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/predict-the-winner/solutions/8433726/easy-to-understand-basic-recursive-funct-x0wa/?envType=daily-question&envId=2026-08-03
+
+function predictTheWinner(nums: number[]): boolean {
+  const n = nums.length;
+  const memo = Array.from({ length: n }, () => Array(n).fill(undefined));
+
+  // 1 5 3
+  const dfs = (left: number, right: number): number => {
+    if (left === right) return nums[left];
+    if (memo[left][right] !== undefined) return memo[left][right];
+
+    const pickLeft = nums[left] - dfs(left + 1, right);
+    const pickRight = nums[right] - dfs(left, right - 1);
+    memo[left][right] = Math.max(pickLeft, pickRight);
+    return memo[left][right];
+  };
+
+  const result = dfs(0, n - 1);
+  console.log(memo);
+  return result >= 0;
+}
+
+console.log(predictTheWinner([1, 5, 3, 4]));
+
 function minimumPushes1(word: string): number {
   const counts = new Map<string, number>();
   for (let i = 0; i < word.length; i++) {
@@ -19,7 +43,7 @@ function minimumPushes1(word: string): number {
   return result;
 }
 
-console.log(minimumPushes1('aabbccddeeffgghhiiiiii'));
+// console.log(minimumPushes1('aabbccddeeffgghhiiiiii'));
 
 function minimumPushes(word: string): number {
   let size = word.length;
