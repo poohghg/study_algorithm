@@ -4,6 +4,37 @@ export default {};
 
 //https://leetcode.com/problems/predict-the-winner/solutions/8433726/easy-to-understand-basic-recursive-funct-x0wa/?envType=daily-question&envId=2026-08-03
 
+function uniquePaths(m: number, n: number): number {
+  const dp = Array.from({ length: m }, () => Array(n).fill(0));
+
+  for (let i = 0; i < m; i++) dp[i][0] = 1;
+
+  for (let i = 0; i < n; i++) dp[0][i] = 1;
+
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+    }
+  }
+
+  return dp[m - 1][n - 1];
+}
+
+console.log(uniquePaths(3, 7));
+
+function findMissingElements(nums: number[]): number[] {
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+  const set = new Set(nums);
+  const result: number[] = [];
+
+  for (let i = min; i <= max; i++) {
+    if (!set.has(i)) result.push(i);
+  }
+
+  return result;
+}
+
 function predictTheWinner(nums: number[]): boolean {
   const n = nums.length;
   const memo = Array.from({ length: n }, () => Array(n).fill(undefined));
@@ -20,11 +51,10 @@ function predictTheWinner(nums: number[]): boolean {
   };
 
   const result = dfs(0, n - 1);
-  console.log(memo);
   return result >= 0;
 }
 
-console.log(predictTheWinner([1, 5, 3, 4]));
+// console.log(predictTheWinner([1, 5, 3, 4]));
 
 function minimumPushes1(word: string): number {
   const counts = new Map<string, number>();
