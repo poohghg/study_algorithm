@@ -2,8 +2,51 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
-//https://leetcode.com/problems/predict-the-winner/solutions/8433726/easy-to-understand-basic-recursive-funct-x0wa/?envType=daily-question&envId=2026-08-03
+//https://leetcode.com/problems/remove-methods-from-project/description/?envType=daily-question&envId=2026-08-05
+function remainingMethods(
+  n: number,
+  k: number,
+  invocations: number[][],
+): number[] {
+  const graph: number[][] = Array.from({ length: n }, () => []);
+  for (let i = 0; i < invocations.length; i++) {
+    const [s, e] = invocations[i];
+    graph[s].push(e);
+  }
 
+  const visited = new Set<number>();
+  const dfs = (node: number) => {
+    visited.add(node);
+    for (const nextNode of graph[node]) {
+      if (!visited.has(nextNode)) dfs(nextNode);
+    }
+  };
+  dfs(k);
+
+  // 정상적인 메서드에서 의심스러운 메서드를 단 하나라도 호출 한다면 삭제할 수 없다.
+  for (const [s, e] of invocations) {
+    if (!visited.has(s) && visited.has(e))
+      return Array.from({ length: n }, (_, i) => i);
+  }
+
+  const result: number[] = [];
+  for (let i = 0; i < n; i++) {
+    if (!visited.has(i)) result.push(i);
+  }
+
+  return result;
+}
+
+console.log(
+  remainingMethods(5, 0, [
+    [1, 2],
+    [0, 2],
+    [0, 1],
+    [3, 4],
+  ]),
+);
+
+//https://leetcode.com/problems/predict-the-winner/solutions/8433726/easy-to-understand-basic-recursive-funct-x0wa/?envType=daily-question&envId=2026-08-03
 function uniquePaths(m: number, n: number): number {
   const dp = Array.from({ length: m }, () => Array(n).fill(0));
 
