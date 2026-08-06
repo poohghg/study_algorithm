@@ -2,6 +2,25 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/smallest-divisible-digit-product-i/?envType=daily-question&envId=2026-08-06
+function smallestNumber(n: number, t: number): number {
+  for (let i = n; i <= 100; i++) {
+    let temp = i;
+    let product = 1;
+
+    while (0 < temp) {
+      const digit = temp % 10;
+      if (digit === 0) return i;
+      product *= digit;
+      temp = Math.floor(temp / 10);
+    }
+
+    if (product % t === 0) return i;
+  }
+
+  return n;
+}
+
 //https://leetcode.com/problems/remove-methods-from-project/description/?envType=daily-question&envId=2026-08-05
 function remainingMethods(
   n: number,
@@ -37,14 +56,14 @@ function remainingMethods(
   return result;
 }
 
-console.log(
-  remainingMethods(5, 0, [
-    [1, 2],
-    [0, 2],
-    [0, 1],
-    [3, 4],
-  ]),
-);
+// console.log(
+//   remainingMethods(5, 0, [
+//     [1, 2],
+//     [0, 2],
+//     [0, 1],
+//     [3, 4],
+//   ]),
+// );
 
 //https://leetcode.com/problems/predict-the-winner/solutions/8433726/easy-to-understand-basic-recursive-funct-x0wa/?envType=daily-question&envId=2026-08-03
 function uniquePaths(m: number, n: number): number {
