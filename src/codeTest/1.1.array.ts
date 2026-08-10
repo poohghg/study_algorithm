@@ -2,6 +2,69 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function stoneGameII(piles: number[]): number {
+  const n = piles.length;
+  const suffixSum = Array(n).fill(0);
+
+  suffixSum[n - 1] = piles[n - 1];
+  for (let i = n - 2; 0 <= i; i--) {
+    suffixSum[i] = suffixSum[i + 1] + piles[i];
+  }
+
+  const memo = Array.from({ length: n }, (): number[] => Array(n + 1).fill(-1));
+
+  const dfs = (i: number, m: number) => {
+    if (i === n) return 0;
+    if (n <= i + 2 * m) return suffixSum[i];
+    if (memo[i][m] !== -1) return memo[i][m];
+
+    let max = 0;
+    for (let x = 1; x <= 2 * m; x++) {
+      const opponent = dfs(i + x, Math.max(x, m));
+      max = Math.max(max, suffixSum[i] - opponent);
+    }
+
+    memo[i][m] = max;
+    return max;
+  };
+
+  const result = dfs(0, 1);
+  return result;
+}
+
+console.log(stoneGameII([2, 7, 9, 4, 4]));
+
+function countAndSay(n: number): string {
+  const encode = (s: string) => {
+    const n = s.length;
+    let prev = s[0];
+    let count = 1;
+    let result = '';
+
+    for (let i = 1; i < n; i++) {
+      const char = s[i];
+      if (char === prev) {
+        count++;
+      } else {
+        result += `${count}${prev}`;
+        count = 1;
+        prev = char;
+      }
+    }
+
+    result += `${count}${prev}`;
+    return result;
+  };
+
+  let result = '1';
+  for (let i = 1; i < n; i++) {
+    result = encode(result);
+  }
+  return result;
+}
+
+// console.log(countAndSay(4));
+
 //https://leetcode.com/problems/smallest-divisible-digit-product-i/?envType=daily-question&envId=2026-08-06
 function smallestNumber(n: number, t: number): number {
   for (let i = n; i <= 100; i++) {
