@@ -2,6 +2,25 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/smallest-missing-integer-greater-than-sequential-prefix-sum/?envType=daily-question&envId=2026-08-11
+
+function missingInteger(nums: number[]): number {
+  let sum = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i - 1] + 1 === nums[i]) sum += nums[i];
+    else break;
+  }
+
+  const set = new Set(nums);
+  while (set.has(sum)) {
+    sum++;
+  }
+  return sum;
+}
+
+console.log(missingInteger([37, 1, 2, 9, 5, 8, 5, 2, 9, 4]));
+
+//https://leetcode.com/problems/stone-game-ii/?envType=daily-question&envId=2026-08-11
 function stoneGameII(piles: number[]): number {
   const n = piles.length;
   const suffixSum = Array(n).fill(0);
@@ -32,7 +51,7 @@ function stoneGameII(piles: number[]): number {
   return result;
 }
 
-console.log(stoneGameII([2, 7, 9, 4, 4]));
+// console.log(stoneGameII([2, 7, 9, 4, 4]));
 
 function countAndSay(n: number): string {
   const encode = (s: string) => {
