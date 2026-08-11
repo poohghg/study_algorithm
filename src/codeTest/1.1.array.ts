@@ -2,8 +2,40 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
-//https://leetcode.com/problems/smallest-missing-integer-greater-than-sequential-prefix-sum/?envType=daily-question&envId=2026-08-11
+//https://leetcode.com/problems/find-the-lexicographically-smallest-valid-sequence/?envType=daily-question&envId=2026-08-11
+function validSequence(word1: string, word2: string): number[] {
+  const n1 = word1.length;
+  const n2 = word2.length;
+  const last = Array(n2).fill(-1);
 
+  let j = n2 - 1;
+  for (let i = word1.length - 1; 0 <= i && 0 <= j; i--) {
+    if (word1[i] === word2[j]) {
+      last[j] = i;
+      j--;
+    }
+  }
+
+  const result: number[] = [];
+  let canSkip = false;
+  j = 0;
+  for (let i = 0; i < n1 && j < n2; i++) {
+    if (word1[i] === word2[j]) {
+      result.push(i);
+      j++;
+    } else if (!canSkip && (j === n2 - 1 || i < last[j + 1])) {
+      canSkip = true;
+      result.push(i);
+      j++;
+    }
+  }
+
+  return result.length === n2 ? result : [];
+}
+
+console.log(validSequence('abcb', 'bc'));
+
+//https://leetcode.com/problems/smallest-missing-integer-greater-than-sequential-prefix-sum/?envType=daily-question&envId=2026-08-11
 function missingInteger(nums: number[]): number {
   let sum = nums[0];
   for (let i = 1; i < nums.length; i++) {
