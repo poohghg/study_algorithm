@@ -2,6 +2,31 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/length-of-longest-subarray-with-at-most-k-frequency/?envType=daily-question&envId=2026-08-12
+function maxSubarrayLength(nums: number[], k: number): number {
+  const counts = new Map<number, number>();
+  counts.set(nums[0], 1);
+
+  let maxSize = 1;
+  let l = 0;
+  for (let r = 1; r < nums.length; r++) {
+    const num = nums[r];
+    counts.set(num, (counts.get(num) ?? 0) + 1);
+
+    while (k < counts.get(num)!) {
+      const lNum = nums[l];
+      counts.set(lNum, counts.get(lNum)! - 1);
+      l++;
+    }
+
+    maxSize = Math.max(maxSize, r - l + 1);
+  }
+
+  return maxSize;
+}
+
+console.log(maxSubarrayLength([1, 2, 3, 1, 2, 3, 1, 2], 2));
+
 //https://leetcode.com/problems/find-the-lexicographically-smallest-valid-sequence/?envType=daily-question&envId=2026-08-11
 function validSequence(word1: string, word2: string): number[] {
   const n1 = word1.length;
@@ -33,7 +58,7 @@ function validSequence(word1: string, word2: string): number[] {
   return result.length === n2 ? result : [];
 }
 
-console.log(validSequence('abcb', 'bc'));
+// console.log(validSequence('abcb', 'bc'));
 
 //https://leetcode.com/problems/smallest-missing-integer-greater-than-sequential-prefix-sum/?envType=daily-question&envId=2026-08-11
 function missingInteger(nums: number[]): number {
@@ -50,7 +75,7 @@ function missingInteger(nums: number[]): number {
   return sum;
 }
 
-console.log(missingInteger([37, 1, 2, 9, 5, 8, 5, 2, 9, 4]));
+// console.log(missingInteger([37, 1, 2, 9, 5, 8, 5, 2, 9, 4]));
 
 //https://leetcode.com/problems/stone-game-ii/?envType=daily-question&envId=2026-08-11
 function stoneGameII(piles: number[]): number {
