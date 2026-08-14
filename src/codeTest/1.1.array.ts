@@ -2,6 +2,28 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/maximize-active-section-with-trade-i/description/
+function maxActiveSectionsAfterTrade(s: string): number {
+  let count = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '1') count++;
+  }
+
+  const zeros = s
+    .split('1')
+    .filter((c) => c)
+    .map((c) => c.length);
+
+  let max = 0;
+  for (let i = 1; i < zeros.length; i++) {
+    max = Math.max(max, zeros[i - 1] + zeros[i]);
+  }
+
+  return count + max;
+}
+
+console.log(maxActiveSectionsAfterTrade('100110'));
+
 //https://leetcode.com/problems/length-of-longest-subarray-with-at-most-k-frequency/?envType=daily-question&envId=2026-08-12
 function maxSubarrayLength(nums: number[], k: number): number {
   const counts = new Map<number, number>();
@@ -25,7 +47,7 @@ function maxSubarrayLength(nums: number[], k: number): number {
   return maxSize;
 }
 
-console.log(maxSubarrayLength([1, 2, 3, 1, 2, 3, 1, 2], 2));
+// console.log(maxSubarrayLength([1, 2, 3, 1, 2, 3, 1, 2], 2));
 
 //https://leetcode.com/problems/find-the-lexicographically-smallest-valid-sequence/?envType=daily-question&envId=2026-08-11
 function validSequence(word1: string, word2: string): number[] {
