@@ -2,6 +2,25 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/?envType=daily-question&envId=2026-08-14
+function maximumLengthSubstring(s: string): number {
+  let max = 1;
+  let left = 0;
+  const counts = new Map<string, number>();
+  for (let right = 0; right < s.length; right++) {
+    const c = s[right];
+    counts.set(c, (counts.get(c) ?? 0) + 1);
+    while (2 < counts.get(c)!) {
+      counts.set(s[left], counts.get(s[left])! - 1);
+      left++;
+    }
+
+    max = Math.max(max, right - left + 1);
+  }
+
+  return max;
+}
+
 //https://leetcode.com/problems/maximize-active-section-with-trade-i/description/
 function maxActiveSectionsAfterTrade(s: string): number {
   let count = 0;
