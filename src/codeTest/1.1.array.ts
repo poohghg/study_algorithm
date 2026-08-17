@@ -2,6 +2,29 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/?envType=daily-question&envId=2026-08-17
+function numberOfSubstrings(s: string): number {
+  const n = s.length;
+  const counts = [0, 0, 0];
+
+  let left = 0;
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    counts[s.charCodeAt(i) - 97]++;
+
+    while (counts.every((v) => 0 < v)) {
+      result += n - i;
+      counts[s.charCodeAt(left) - 97]--;
+      left++;
+    }
+  }
+
+  return result;
+}
+
+// 각 자리 이후 처음 나타나는 a b c의 위치
+console.log(numberOfSubstrings('aaaabbcc'));
+
 //https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/?envType=daily-question&envId=2026-08-14
 function maximumLengthSubstring(s: string): number {
   let max = 1;
@@ -41,7 +64,7 @@ function maxActiveSectionsAfterTrade(s: string): number {
   return count + max;
 }
 
-console.log(maxActiveSectionsAfterTrade('100110'));
+// console.log(maxActiveSectionsAfterTrade('100110'));
 
 //https://leetcode.com/problems/length-of-longest-subarray-with-at-most-k-frequency/?envType=daily-question&envId=2026-08-12
 function maxSubarrayLength(nums: number[], k: number): number {
@@ -262,7 +285,7 @@ function uniquePaths(m: number, n: number): number {
   return dp[m - 1][n - 1];
 }
 
-console.log(uniquePaths(3, 7));
+// console.log(uniquePaths(3, 7));
 
 function findMissingElements(nums: number[]): number[] {
   const min = Math.min(...nums);
