@@ -2,6 +2,40 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/find-the-largest-almost-missing-integer/?envType=daily-question&envId=2026-08-18
+function largestInteger(nums: number[], k: number): number {
+  const n = nums.length;
+
+  if (k === n) return Math.max(...nums);
+
+  if (k === 1) {
+    const counts = nums.reduce((acc, n) => {
+      acc.set(n, (acc.get(n) ?? 0) + 1);
+      return acc;
+    }, new Map<number, number>());
+
+    let max = -1;
+    for (const [k, v] of counts) {
+      if (v === 1) max = Math.max(k, max);
+    }
+
+    return max;
+  }
+
+  const left = nums[0];
+  const right = nums[n - 1];
+  const copy = nums.slice(1, n - 1);
+  const hasLeft = copy.includes(left);
+  const hasRight = copy.includes(right);
+
+  if (left === right) return -1;
+  if (!hasLeft && !hasRight) return Math.max(left, right);
+  if (hasLeft && !hasRight) return right;
+  if (!hasLeft && hasRight) return left;
+
+  return -1;
+}
+
 //https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/?envType=daily-question&envId=2026-08-17
 function numberOfSubstrings(s: string): number {
   const n = s.length;
