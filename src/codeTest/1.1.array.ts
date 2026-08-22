@@ -2,6 +2,63 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/set-matrix-zeroes/
+function setZeroes(matrix: number[][]): void {
+  const m = matrix.length;
+  const n = matrix[0].length;
+
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (matrix[i][j] === 0) {
+        for (let k = 0; k < m; k++) {
+          if (matrix[k][j] !== 0) matrix[k][j] = 0.5;
+        }
+        for (let k = 0; k < n; k++) {
+          if (matrix[i][k] !== 0) matrix[i][k] = 0.5;
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (matrix[i][j] === 0.5) {
+        matrix[i][j] = 0;
+      }
+    }
+  }
+}
+
+console.log(
+  setZeroes([
+    [0, 1, 2, 0],
+    [3, 4, 5, 2],
+    [1, 3, 1, 5],
+  ]),
+);
+
+//https://leetcode.com/problems/distribute-elements-into-two-arrays-i/?envType=daily-question&envId=2026-08-22
+function resultArray(nums: number[]): number[] {
+  const array1: number[] = [nums[0]];
+  const array2: number[] = [nums[1]];
+
+  let i = 0;
+  let j = 0;
+  for (let k = 2; k < nums.length; k++) {
+    if (array2[j] < array1[i]) {
+      array1.push(nums[k]);
+      i++;
+    } else {
+      array2.push(nums[k]);
+      j++;
+    }
+  }
+
+  return [...array1, ...array2];
+}
+
+// console.log(resultArray([5, 4, 3, 8]));
+
 //https://leetcode.com/problems/find-the-largest-almost-missing-integer/?envType=daily-question&envId=2026-08-18
 function largestInteger(nums: number[], k: number): number {
   const n = nums.length;
