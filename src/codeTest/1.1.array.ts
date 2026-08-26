@@ -2,6 +2,36 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/check-divisibility-by-digit-sum-and-product/?envType=daily-question&envId=2026-08-26
+function checkDivisibility(n: number): boolean {
+  let res = n;
+  let sum = 0;
+  let multiple = 1;
+
+  while (0 < res) {
+    const last = res % 10;
+    sum += last;
+    multiple *= last;
+    res = Math.floor(res / 10);
+  }
+
+  return n % (sum + multiple) === 0;
+}
+
+console.log(checkDivisibility(992));
+
+//https://leetcode.com/problems/smallest-missing-multiple-of-k/?envType=daily-question&envId=2026-08-26
+function missingMultiple(nums: number[], k: number): number {
+  const set = new Set(nums);
+
+  let i = 1;
+  while (set.has(i * k)) {
+    i++;
+  }
+
+  return k * i;
+}
+
 //https://leetcode.com/problems/set-matrix-zeroes/
 function setZeroes(matrix: number[][]): void {
   const m = matrix.length;
@@ -29,13 +59,13 @@ function setZeroes(matrix: number[][]): void {
   }
 }
 
-console.log(
-  setZeroes([
-    [0, 1, 2, 0],
-    [3, 4, 5, 2],
-    [1, 3, 1, 5],
-  ]),
-);
+// console.log(
+//   setZeroes([
+//     [0, 1, 2, 0],
+//     [3, 4, 5, 2],
+//     [1, 3, 1, 5],
+//   ]),
+// );
 
 //https://leetcode.com/problems/distribute-elements-into-two-arrays-i/?envType=daily-question&envId=2026-08-22
 function resultArray(nums: number[]): number[] {
