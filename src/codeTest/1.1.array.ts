@@ -2,6 +2,24 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/construct-uniform-parity-array-ii/description/?envType=daily-question&envId=2026-09-03
+function uniformArray(nums1: number[]): boolean {
+  let minOdd = Infinity;
+  let minEven = Infinity;
+  for (const number of nums1) {
+    if (number % 2 === 0) {
+      minEven = Math.min(minEven, number);
+    } else {
+      minOdd = Math.min(minOdd, number);
+    }
+  }
+
+  if (minOdd === Infinity || minEven === Infinity) return true;
+  return minOdd < minEven;
+}
+
+console.log(uniformArray([4, 6]));
+
 //https://leetcode.com/problems/check-divisibility-by-digit-sum-and-product/?envType=daily-question&envId=2026-08-26
 function checkDivisibility(n: number): boolean {
   let res = n;
@@ -18,7 +36,7 @@ function checkDivisibility(n: number): boolean {
   return n % (sum + multiple) === 0;
 }
 
-console.log(checkDivisibility(992));
+// console.log(checkDivisibility(992));
 
 //https://leetcode.com/problems/smallest-missing-multiple-of-k/?envType=daily-question&envId=2026-08-26
 function missingMultiple(nums: number[], k: number): number {
