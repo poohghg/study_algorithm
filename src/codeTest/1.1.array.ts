@@ -2,6 +2,48 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function searchInsert(nums: number[], target: number): number {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (nums[mid] === target) {
+      return mid;
+    }
+
+    if (nums[mid] < target) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+
+  return left;
+}
+
+//https://leetcode.com/problems/smallest-stable-index-i/description/?envType=daily-question&envId=2026-09-04
+function firstStableIndex(nums: number[], k: number): number {
+  const n = nums.length;
+  const mins = Array(n).fill(Infinity);
+  let min = Infinity;
+  for (let i = n - 1; 0 <= i; i--) {
+    min = Math.min(min, nums[i]);
+    mins[i] = min;
+  }
+
+  let max = 0;
+  for (let i = 0; i < n; i++) {
+    max = Math.max(max, nums[i]);
+    if (max - mins[i] <= k) return i;
+  }
+
+  return -1;
+}
+
+console.log(firstStableIndex([6, 1, 4], 5));
+
 //https://leetcode.com/problems/construct-uniform-parity-array-ii/description/?envType=daily-question&envId=2026-09-03
 function uniformArray(nums1: number[]): boolean {
   let minOdd = Infinity;
@@ -18,7 +60,7 @@ function uniformArray(nums1: number[]): boolean {
   return minOdd < minEven;
 }
 
-console.log(uniformArray([4, 6]));
+// console.log(uniformArray([4, 6]));
 
 //https://leetcode.com/problems/check-divisibility-by-digit-sum-and-product/?envType=daily-question&envId=2026-08-26
 function checkDivisibility(n: number): boolean {
