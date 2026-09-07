@@ -2,6 +2,35 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/shortest-and-lexicographically-smallest-beautiful-string/?envType=daily-question&envId=2026-09-07
+function shortestBeautifulSubstring(s: string, k: number): string {
+  let result: string = '';
+  let minSize = Infinity;
+  let count = 0;
+  let l = 0;
+  for (let r = 0; r < s.length; r++) {
+    const c = s[r];
+    if (c === '1') count++;
+
+    while (k <= count) {
+      const size = r - l + 1;
+      if (size < minSize) {
+        minSize = size;
+        result = s.substring(l, r + 1);
+      } else if (size === minSize && s.substring(l, r + 1) < result) {
+        result = s.substring(l, r + 1);
+      }
+
+      if (s[l] === '1') count--;
+      l++;
+    }
+  }
+
+  return result;
+}
+
+console.log(shortestBeautifulSubstring('100011001', 3));
+
 function searchInsert(nums: number[], target: number): number {
   let left = 0;
   let right = nums.length - 1;
