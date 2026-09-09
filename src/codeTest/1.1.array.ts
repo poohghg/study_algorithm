@@ -2,6 +2,61 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/lexicographically-smallest-permutation-greater-than-target/?envType=daily-question&envId=2026-09-09
+function lexGreaterPermutation(s: string, target: string): string {
+  const hasUpperCode = (code: number) => {
+    for (let j = code; j < 26; j++) {
+      if (counts[j]) return true;
+    }
+    return false;
+  };
+
+  // target보다 커야하는 가장 작은 문자열
+  const n = target.length;
+  let result = '';
+  const counts = Array(122 - 97 + 1).fill(0);
+
+  for (let i = 0; i < n; i++) {
+    const code = s.charCodeAt(i);
+    counts[code - 97] = counts[code - 97] + 1;
+  }
+
+  //dfs로 체크해야하네.
+  // 결국 target보다 큰자리수를 먼저 찾아내는게 포인트
+  for (let i = 0; i < n; i++) {
+    const targetCode = target.charCodeAt(i) - 97;
+
+    // 다음 코드중에 큰게 있어여한다.
+    if (counts[targetCode] && hasUpperCode(target.charCodeAt(i + 1) - 97)) {
+      result += target[i];
+      counts[targetCode]--;
+      continue;
+    }
+
+    let isBreak = false;
+    for (let j = targetCode + 1; j < 26; j++) {
+      if (counts[j]) {
+        result += String.fromCharCode(j + 97);
+        counts[j]--;
+        isBreak = true;
+        break;
+      }
+    }
+    if (isBreak) break;
+    return '';
+  }
+
+  for (let i = 0; i < 26; i++) {
+    if (counts[i]) {
+      result += String.fromCharCode(i + 97).repeat(counts[i]);
+    }
+  }
+
+  return target < result ? result : '';
+}
+
+console.log(lexGreaterPermutation('ab', 'ab'));
+
 //https://leetcode.com/problems/shortest-and-lexicographically-smallest-beautiful-string/?envType=daily-question&envId=2026-09-07
 function shortestBeautifulSubstring(s: string, k: number): string {
   let result: string = '';
@@ -14,6 +69,7 @@ function shortestBeautifulSubstring(s: string, k: number): string {
 
     while (k <= count) {
       const size = r - l + 1;
+
       if (size < minSize) {
         minSize = size;
         result = s.substring(l, r + 1);
@@ -29,7 +85,7 @@ function shortestBeautifulSubstring(s: string, k: number): string {
   return result;
 }
 
-console.log(shortestBeautifulSubstring('100011001', 3));
+// console.log(shortestBeautifulSubstring('100011001', 3));
 
 function searchInsert(nums: number[], target: number): number {
   let left = 0;
