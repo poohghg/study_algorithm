@@ -2,6 +2,36 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/?envType=daily-question&envId=2026-09-10
+function lexicographicallySmallestArray(
+  nums: number[],
+  limit: number,
+): number[] {
+  const paris = nums.map((v, index) => [v, index]).sort((a, b) => a[0] - b[0]);
+  const n = nums.length;
+  const result: number[] = Array(n).fill(0);
+  let l = 0;
+
+  while (l < n) {
+    let r = l + 1;
+    while (r < n && paris[r][0] - paris[r - 1][0] <= limit) {
+      r++;
+    }
+
+    // 그룹 내 인덱스를 정렬한다.
+    const group = paris.slice(l, r).sort((a, b) => a[1] - b[1]);
+    for (let i = 0; i < group.length; i++) {
+      const idx = group[i][1];
+      // 그룹 내 작은 인덱스에 현재 그룹의 값을 넣는다.
+      result[idx] = paris[l + i][0];
+    }
+
+    l = r;
+  }
+
+  return result;
+}
+
 //https://leetcode.com/problems/lexicographically-smallest-permutation-greater-than-target/?envType=daily-question&envId=2026-09-09
 function lexGreaterPermutation(s: string, target: string): string {
   const hasUpperCode = (code: number) => {
