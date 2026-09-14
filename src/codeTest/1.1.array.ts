@@ -2,6 +2,50 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function mirrorDistance(n: number): number {
+  let rest = n;
+  let reverse = 0;
+  while (0 < rest) {
+    reverse = reverse * 10 + (rest % 10);
+    rest = Math.floor(rest / 10);
+  }
+
+  return Math.abs(reverse - n);
+}
+
+console.log(mirrorDistance(25));
+
+//https://leetcode.com/problems/unique-3-digit-even-numbers/?envType=daily-question&envId=2026-09-14
+function totalNumbers(digits: number[]): number {
+  const freq = Array(10).fill(0);
+
+  for (const digit of digits) {
+    freq[digit]++;
+  }
+
+  let result = 0;
+  for (let i = 1; i < 10; i++) {
+    if (!freq[i]) continue;
+    freq[i]--;
+
+    for (let j = 0; j < 10; j++) {
+      if (!freq[j]) continue;
+      freq[j]--;
+
+      for (let k = 0; k < 10; k += 2) {
+        if (!freq[k]) continue;
+        result++;
+      }
+      freq[j]++;
+    }
+    freq[i]++;
+  }
+
+  return result;
+}
+
+// console.log(totalNumbers([1, 2, 3, 4]));
+
 //https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/?envType=daily-question&envId=2026-09-10
 function lexicographicallySmallestArray(
   nums: number[],
@@ -85,7 +129,7 @@ function lexGreaterPermutation(s: string, target: string): string {
   return target < result ? result : '';
 }
 
-console.log(lexGreaterPermutation('ab', 'ab'));
+// console.log(lexGreaterPermutation('ab', 'ab'));
 
 //https://leetcode.com/problems/shortest-and-lexicographically-smallest-beautiful-string/?envType=daily-question&envId=2026-09-07
 function shortestBeautifulSubstring(s: string, k: number): string {
