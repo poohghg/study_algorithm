@@ -2,6 +2,35 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/removing-minimum-and-maximum-from-array/?envType=daily-question&envId=2026-09-16
+function minimumDeletions1(nums: number[]): number {
+  const n = nums.length;
+  let minIndex = 0;
+  let maxIndex = 0;
+  for (let i = 0; i < n; i++) {
+    const num = nums[i];
+
+    if (num < nums[minIndex]) {
+      minIndex = i;
+    }
+
+    if (nums[maxIndex] < num) {
+      maxIndex = i;
+    }
+  }
+
+  const leftIndex = Math.min(minIndex, maxIndex);
+  const rightIndex = Math.max(minIndex, maxIndex);
+  let min = n;
+  min = Math.min(min, rightIndex + 1);
+  min = Math.min(min, n - leftIndex);
+  min = Math.min(min, leftIndex + 1 + n - rightIndex);
+
+  return min;
+}
+
+console.log(minimumDeletions1([2, 10, 7, 5, 4, 1, 8, 6]));
+
 function mirrorDistance(n: number): number {
   let rest = n;
   let reverse = 0;
@@ -13,7 +42,7 @@ function mirrorDistance(n: number): number {
   return Math.abs(reverse - n);
 }
 
-console.log(mirrorDistance(25));
+// console.log(mirrorDistance(25));
 
 //https://leetcode.com/problems/unique-3-digit-even-numbers/?envType=daily-question&envId=2026-09-14
 function totalNumbers(digits: number[]): number {
@@ -201,7 +230,7 @@ function firstStableIndex(nums: number[], k: number): number {
   return -1;
 }
 
-console.log(firstStableIndex([6, 1, 4], 5));
+// console.log(firstStableIndex([6, 1, 4], 5));
 
 //https://leetcode.com/problems/construct-uniform-parity-array-ii/description/?envType=daily-question&envId=2026-09-03
 function uniformArray(nums1: number[]): boolean {

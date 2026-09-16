@@ -27,7 +27,7 @@ function compareVersion(version1: string, version2: string): number {
   return 0;
 }
 
-console.log(compareVersion('1.2', '1.0101'));
+// console.log(compareVersion('1.2', '1.0101'));
 
 function longestBalancedNum(nums: number[]): number {
   const n = nums.length;
