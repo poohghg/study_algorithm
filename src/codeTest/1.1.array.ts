@@ -6,49 +6,33 @@ export default {};
 function minSumOfLengths(arr: number[], target: number): number {
   // 겹치지 않아야함.
   const n = arr.length;
+  const dp = Array(n + 1).fill(Infinity);
 
-  const prefix = Array(n).fill(Infinity);
+  let min = n + 1;
   let sum = 0;
-  let minSize = Infinity;
   let l = 0;
-  for (let r = 0; r < n - 1; r++) {
+
+  for (let r = 0; r < n; r++) {
     sum += arr[r];
 
-    while (l < r && target < sum) {
+    while (target < sum) {
       sum -= arr[l];
       l++;
     }
 
-    if (sum === target) minSize = Math.min(minSize, r - l + 1);
-    prefix[r] = minSize;
-  }
-
-  const suffix = Array(n).fill(Infinity);
-  let r = n - 1;
-  sum = 0;
-  minSize = Infinity;
-  for (let l = n - 1; 1 <= l; l--) {
-    sum += arr[l];
-
-    while (l < r && target < sum) {
-      sum -= arr[r];
-      r--;
+    if (sum === target) {
+      const size = r - l + 1;
+      min = Math.min(min, dp[l] + size);
+      dp[r + 1] = Math.min(dp[r], size);
+    } else {
+      dp[r + 1] = dp[r];
     }
-
-    if (sum === target) minSize = Math.min(minSize, r - l + 1);
-    suffix[l] = minSize;
   }
 
-  let min = Infinity;
-  for (let i = 0; i < n - 1; i++) {
-    if (prefix[i] === Infinity || suffix[i + 1] === Infinity) continue;
-    min = Math.min(min, prefix[i] + suffix[i + 1]);
-  }
-
-  return min === Infinity ? -1 : min;
+  return min === n + 1 ? -1 : min;
 }
 
-console.log(minSumOfLengths([4, 3, 2, 6, 2, 3, 4], 6));
+console.log(minSumOfLengths([1, 7, 6, 1], 7));
 
 //https://leetcode.com/problems/removing-minimum-and-maximum-from-array/?envType=daily-question&envId=2026-09-16
 function minimumDeletions1(nums: number[]): number {
