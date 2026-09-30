@@ -2,6 +2,51 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/?envType=daily-question&envId=2026-09-30
+function maxDepth(s: string): number {
+  let max = 0;
+  let dep = 0;
+
+  for (const e of s) {
+    if (e === ')') {
+      max = Math.max(max, dep);
+      dep--;
+      continue;
+    }
+
+    if (e === '(') dep++;
+  }
+
+  return max;
+}
+
+console.log(maxDepth('()(())((()()))'));
+
+//https://leetcode.com/problems/smallest-index-with-digit-sum-equal-to-index/?envType=daily-question&envId=2026-09-30
+function smallestIndex(nums: number[]): number {
+  const sumOfDigits = (num: number) => {
+    let res = num;
+    let sum = 0;
+
+    while (0 < res) {
+      sum += res % 10;
+      res = Math.floor(res / 10);
+    }
+
+    return sum;
+  };
+
+  const n = nums.length;
+
+  for (let i = 0; i < n; i++) {
+    if (sumOfDigits(nums[i]) === i) return i;
+  }
+
+  return -1;
+}
+
+// console.log(smallestIndex([1, 10, 11]));
+
 //https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/?envType=daily-question&envId=2026-09-18
 function minSumOfLengths(arr: number[], target: number): number {
   // 겹치지 않아야함.
@@ -32,7 +77,7 @@ function minSumOfLengths(arr: number[], target: number): number {
   return min === n + 1 ? -1 : min;
 }
 
-console.log(minSumOfLengths([1, 7, 6, 1], 7));
+// console.log(minSumOfLengths([1, 7, 6, 1], 7));
 
 //https://leetcode.com/problems/removing-minimum-and-maximum-from-array/?envType=daily-question&envId=2026-09-16
 function minimumDeletions1(nums: number[]): number {
