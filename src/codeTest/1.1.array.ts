@@ -2,6 +2,39 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+//https://leetcode.com/problems/evaluate-the-bracket-pairs-of-a-string/?envType=daily-question&envId=2026-10-01
+function evaluate(s: string, knowledge: string[][]): string {
+  const keys = new Map(knowledge as [string, string][]);
+  let result = '';
+
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    if (char === '(') {
+      let temp = '';
+      let j = i + 1;
+
+      while (s[j] !== ')') {
+        temp += s[j];
+        j++;
+      }
+
+      result += keys.has(temp) ? keys.get(temp)! : '?';
+      i = j;
+    } else {
+      result += char;
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  evaluate('(name)is(age)yearsold', [
+    ['name', 'bob'],
+    ['age', 'two'],
+  ]),
+);
+
 //https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/?envType=daily-question&envId=2026-09-30
 function maxDepth(s: string): number {
   let max = 0;
