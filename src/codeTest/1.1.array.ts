@@ -2,6 +2,30 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function generateParenthesis(n: number): string[] {
+  const result: string[] = [];
+
+  const dfs = (s: string, open: number, close: number) => {
+    if (open === n && close === n) {
+      result.push(s);
+      return;
+    }
+
+    if (open < n) {
+      dfs(s + '(', open + 1, close);
+    }
+
+    if (close < open) {
+      dfs(s + ')', open, close + 1);
+    }
+  };
+
+  dfs('', 0, 0);
+  return result;
+}
+
+console.log(generateParenthesis(3));
+
 //https://leetcode.com/problems/evaluate-the-bracket-pairs-of-a-string/?envType=daily-question&envId=2026-10-01
 function evaluate(s: string, knowledge: string[][]): string {
   const keys = new Map(knowledge as [string, string][]);
@@ -28,12 +52,12 @@ function evaluate(s: string, knowledge: string[][]): string {
   return result;
 }
 
-console.log(
-  evaluate('(name)is(age)yearsold', [
-    ['name', 'bob'],
-    ['age', 'two'],
-  ]),
-);
+// console.log(
+//   evaluate('(name)is(age)yearsold', [
+//     ['name', 'bob'],
+//     ['age', 'two'],
+//   ]),
+// );
 
 //https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/?envType=daily-question&envId=2026-09-30
 function maxDepth(s: string): number {
