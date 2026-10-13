@@ -2,6 +2,71 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function removeOuterParentheses(s: string): string {
+  let result = '';
+  let count = 1;
+  let str = '(';
+
+  for (let i = 1; i < s.length; i++) {
+    const char = s[i];
+
+    str += s[i];
+
+    if (char === '(') count++;
+    else count--;
+
+    if (count === 0) {
+      result += str.substring(1, str.length - 1);
+      str = '';
+    }
+  }
+
+  return result;
+}
+
+console.log(removeOuterParentheses('(()())(())(()(()))'));
+
+function maxAlternatingSum(nums: number[]): number {
+  // 짝수에 가장 큰수들 ?
+  // 홀수에 가장 작은수들 ?
+  const n = nums.length;
+  const mid = Math.ceil(n / 2);
+  const squares: number[] = nums.map((n) => n ** 2).sort((a, b) => b - a);
+
+  let result = 0;
+  for (let i = 0; i < mid; i++) {
+    result += squares[i];
+  }
+
+  for (let i = mid; i < n; i++) {
+    result -= squares[i];
+  }
+
+  return result;
+}
+
+// console.log(maxAlternatingSum([-1, -1, 2, -2, 3, -3]));
+function minAddToMakeValid(s: string): number {
+  let result = 0;
+  let open = 0;
+
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '(') {
+      open++;
+    } else {
+      if (0 < open) {
+        open--;
+      } else {
+        result++;
+      }
+    }
+  }
+
+  return open + result;
+}
+
+// console.log(minAddToMakeValid('(()('));
+
 function generateParenthesis(n: number): string[] {
   const result: string[] = [];
 
@@ -24,7 +89,7 @@ function generateParenthesis(n: number): string[] {
   return result;
 }
 
-console.log(generateParenthesis(3));
+// console.log(generateParenthesis(3));
 
 //https://leetcode.com/problems/evaluate-the-bracket-pairs-of-a-string/?envType=daily-question&envId=2026-10-01
 function evaluate(s: string, knowledge: string[][]): string {
@@ -77,7 +142,7 @@ function maxDepth(s: string): number {
   return max;
 }
 
-console.log(maxDepth('()(())((()()))'));
+// console.log(maxDepth('()(())((()()))'));
 
 //https://leetcode.com/problems/smallest-index-with-digit-sum-equal-to-index/?envType=daily-question&envId=2026-09-30
 function smallestIndex(nums: number[]): number {
@@ -526,7 +591,7 @@ function numberOfSubstrings(s: string): number {
 }
 
 // 각 자리 이후 처음 나타나는 a b c의 위치
-console.log(numberOfSubstrings('aaaabbcc'));
+// console.log(numberOfSubstrings('aaaabbcc'));
 
 //https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/?envType=daily-question&envId=2026-08-14
 function maximumLengthSubstring(s: string): number {
