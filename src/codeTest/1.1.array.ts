@@ -4,20 +4,15 @@ export default {};
 
 function removeOuterParentheses(s: string): string {
   let result = '';
-  let count = 1;
-  let str = '(';
+  let count = 0;
 
-  for (let i = 1; i < s.length; i++) {
-    const char = s[i];
-
-    str += s[i];
-
-    if (char === '(') count++;
-    else count--;
-
-    if (count === 0) {
-      result += str.substring(1, str.length - 1);
-      str = '';
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '(') {
+      if (count > 0) result += '(';
+      count++;
+    } else {
+      count--;
+      if (count > 0) result += ')';
     }
   }
 
