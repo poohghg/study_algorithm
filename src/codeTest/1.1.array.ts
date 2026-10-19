@@ -2,6 +2,44 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function sumCounts(nums: number[]): number {
+  let result = 0;
+  const n = nums.length;
+
+  for (let i = 0; i < n; i++) {
+    const set = new Set<number>();
+    for (let j = i; j < n; j++) {
+      set.add(nums[j]);
+      const size = set.size;
+      result += size * size;
+    }
+  }
+
+  return result;
+}
+
+console.log(sumCounts([1, 2, 3]));
+
+function targetIndices(nums: number[], target: number): number[] {
+  const result: number[] = [];
+
+  let less = 0;
+  let equal = 0;
+
+  for (const num of nums) {
+    if (num < target) less++;
+    if (num === target) equal++;
+  }
+
+  for (let i = less; i < less + equal; i++) {
+    result.push(i);
+  }
+
+  return result;
+}
+
+// console.log(targetIndices([1, 2, 2, 3, 2, 2, 2, 2], 2));
+
 function removeOuterParentheses(s: string): string {
   let result = '';
   let count = 0;
@@ -19,7 +57,7 @@ function removeOuterParentheses(s: string): string {
   return result;
 }
 
-console.log(removeOuterParentheses('(()())(())(()(()))'));
+// console.log(removeOuterParentheses('(()())(())(()(()))'));
 
 function maxAlternatingSum(nums: number[]): number {
   // 짝수에 가장 큰수들 ?
