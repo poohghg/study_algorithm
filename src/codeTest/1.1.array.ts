@@ -2,6 +2,20 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function scoreOfParentheses(s: string): number {
+  const stack = [0];
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '(') {
+      stack.push(0);
+    } else {
+      const score = Math.max(1, stack.pop()! * 2);
+      stack[stack.length - 1] += score;
+    }
+  }
+
+  return stack[stack.length - 1];
+}
+
 function sumCounts(nums: number[]): number {
   let result = 0;
   const n = nums.length;
@@ -18,7 +32,7 @@ function sumCounts(nums: number[]): number {
   return result;
 }
 
-console.log(sumCounts([1, 2, 3]));
+// console.log(sumCounts([1, 2, 3]));
 
 function targetIndices(nums: number[], target: number): number[] {
   const result: number[] = [];
