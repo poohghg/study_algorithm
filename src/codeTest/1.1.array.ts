@@ -2,6 +2,63 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function closedIsland(grid: number[][]): number {
+  const n = grid.length;
+  const m = grid[0].length;
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  const canMove = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
+
+  const island = (x: number, y: number) => {
+    const q: [number, number][] = [[x, y]];
+    let isClose = true;
+
+    while (q.length) {
+      const [cx, cy] = q.pop()!;
+
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [cx + dx, cy + dy];
+        if (!canMove(nx, ny)) {
+          isClose = false;
+          continue;
+        }
+
+        if (grid[nx][ny] === 0) {
+          grid[nx][ny] = 1;
+          q.push([nx, ny]);
+        }
+      }
+    }
+
+    return isClose ? 1 : 0;
+  };
+
+  let result = 0;
+  for (let i = 1; i < n - 1; i++) {
+    for (let j = 1; j < m - 1; j++) {
+      if (grid[i][j] === 0) {
+        grid[i][j] = 1;
+        result += island(i, j);
+      }
+    }
+  }
+
+  return result;
+}
+
+console.log(
+  closedIsland([
+    [1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1],
+  ]),
+);
+
 function scoreOfParentheses(s: string): number {
   const stack = [0];
   for (let i = 0; i < s.length; i++) {
