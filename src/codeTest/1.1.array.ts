@@ -14,7 +14,8 @@ function shortestPath(
     graph[s].push([e, w]);
   }
 
-  const dist = Array.from({ length: n }, () => Infinity);
+  const dist = Array.from({ length: n }, () => Array(k + 1).fill(Infinity));
+  dist[0][1] = 0;
   // start,총점,cnt
   const queue = new MyPriorityQueue<[number, number, number]>(
     (a, b) => a[1] < b[1],
@@ -36,7 +37,7 @@ function shortestPath(
 
       const newCost = cost + weight;
 
-      if (dist[next][nextCnt] < newCost) continue;
+      if (dist[next][nextCnt] <= newCost) continue;
       dist[next][nextCnt] = newCost;
       queue.push([next, newCost, nextCnt]);
     }
