@@ -2,6 +2,122 @@ import MyPriorityQueue from '../dataStructure/MyPriorityQueue';
 
 export default {};
 
+function shortestPath(
+  n: number,
+  edges: number[][],
+  labels: string,
+  k: number,
+): number {
+  const graph: number[][][] = Array.from({ length: n }, () => []);
+
+  for (const [s, e, w] of edges) {
+    graph[s].push([e, w]);
+  }
+
+  const dist = Array.from({ length: n }, () => Infinity);
+  // start,총점,cnt
+  const queue = new MyPriorityQueue<[number, number, number]>(
+    (a, b) => a[1] < b[1],
+  );
+
+  queue.push([0, 0, 1]);
+
+  while (queue.size) {
+    const [node, cost, cnt] = queue.pop()!;
+
+    if (dist[node][cnt] < cost) continue;
+
+    if (node === n - 1) return cost;
+
+    for (const [next, weight] of graph[node]) {
+      const nextCnt = labels[node] === labels[next] ? cnt + 1 : 1;
+
+      if (k < nextCnt) continue;
+
+      const newCost = cost + weight;
+
+      if (dist[next][nextCnt] < newCost) continue;
+      dist[next][nextCnt] = newCost;
+      queue.push([next, newCost, nextCnt]);
+    }
+  }
+
+  return -1;
+}
+
+console.log(
+  shortestPath(
+    3,
+    [
+      [0, 1, 1],
+      [1, 2, 1],
+      [0, 2, 3],
+    ],
+    'aab',
+    1,
+  ),
+);
+
+function countIslands(grid: number[][], k: number): number {
+  const canMove = (x: number, y: number) => 0 <= x && x < n && 0 <= y && y < m;
+
+  const sumOfLand = (x: number, y: number) => {
+    const queue: [number, number][] = [[x, y]];
+    let sum = grid[x][y];
+    grid[x][y] = 0;
+
+    while (queue.length) {
+      const [cx, cy] = queue.pop()!;
+
+      for (const [dx, dy] of moves) {
+        const [nx, ny] = [cx + dx, cy + dy];
+
+        if (!canMove(nx, ny) || grid[nx][ny] === 0) continue;
+
+        sum += grid[nx][ny];
+        grid[nx][ny] = 0;
+        queue.push([nx, ny]);
+      }
+    }
+
+    return sum;
+  };
+
+  const n = grid.length;
+  const m = grid[0].length;
+  const moves = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (grid[i][j] !== 0) {
+        const sum = sumOfLand(i, j);
+        result += sum % k === 0 ? 1 : 0;
+      }
+    }
+  }
+
+  return result;
+}
+
+// console.log(
+//   countIslands(
+//     [
+//       [0, 2, 1, 0, 0],
+//       [0, 5, 0, 0, 5],
+//       [0, 0, 1, 0, 0],
+//       [0, 1, 4, 7, 0],
+//       [0, 2, 0, 0, 8],
+//     ],
+//     5,
+//   ),
+// );
+
 function closedIsland(grid: number[][]): number {
   const n = grid.length;
   const m = grid[0].length;
@@ -51,13 +167,13 @@ function closedIsland(grid: number[][]): number {
   return result;
 }
 
-console.log(
-  closedIsland([
-    [1, 0, 1, 1, 1],
-    [1, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1],
-  ]),
-);
+// console.log(
+//   closedIsland([
+//     [1, 0, 1, 1, 1],
+//     [1, 0, 0, 0, 1],
+//     [1, 1, 1, 1, 1],
+//   ]),
+// );
 
 function scoreOfParentheses(s: string): number {
   const stack = [0];
